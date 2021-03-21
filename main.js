@@ -56,9 +56,25 @@ function generateName(){
 		return;
 	}
 
+	let text = stringEncoder(name);
+
+	if (text.indexOf('�') != -1){
+		alert("Invalid character detected! Please only use letters, numbers, spaces, and basic punctuation.");
+		return;
+	}
+
 
 	let charID = document.getElementById('charID').value;
+
+	charID = charID.replace(/\s/g,'');
+
 	charID = parseInt(charID, 16);
+
+	if (isNaN(charID)){
+		alert("Error in character ID! Please make sure you've entered a proper ID.");
+		return;
+	}
+	
 
 	for (let i = 0; i < charArr.length; i++){
 		if (charID == charArr[i]){
@@ -83,7 +99,7 @@ function generateName(){
 
 	let offset1, offset2, offest3, offest4, offest5, offest6, offest7, offest8;
 
-	let text = stringEncoder(name);
+
 
 	if (text.length % 8 != 0){
 		text += "0000";
