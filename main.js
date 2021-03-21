@@ -1,6 +1,12 @@
 // JavaScript Document
 let result = "";
 
+let firstPass = true;
+
+let file = "";
+
+let charArr = [];
+
 function startConvert(){
 	if (document.getElementById('stringSelect').value == "Encode"){
 		document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
@@ -50,8 +56,18 @@ function generateName(){
 		return;
 	}
 
+
 	let charID = document.getElementById('charID').value;
 	charID = parseInt(charID, 16);
+
+	for (let i = 0; i < charArr.length; i++){
+		if (charID == charArr[i]){
+			alert("ID already has name changed");
+			return;
+		}
+	}
+
+	charArr.push(charID);
 
 	let jackOffset = 0xD1C8;
 
@@ -171,14 +187,20 @@ function generateName(){
 		}
 	}
 
-	console.log(offset1);
-	console.log(offset2);
-	console.log(offset7);
-	console.log(offset8);
+	//console.log(offset1);
+	//console.log(offset2);
+	//console.log(offset7);
+	//console.log(offset8);
 
 	let pnach;
-	pnach = "gametitle=Radiata Stories\n";
-	pnach += "comment=Character Name Changer. Character ID: " + charID.toString(16) + " changed to: " + name + "\n\n";
+	if (firstPass){
+		pnach = "gametitle=Radiata Stories\n";
+		pnach += "comment=Character Name Changer" + "\n\n";
+		firstPass = false;
+	} else {
+		pnach = "";
+	}
+	pnach += "//Character ID: " + charID.toString(16).toUpperCase() + " changed name to: " + name + "\n";
 	pnach += "patch=1,EE,60328CE0,extended," + add1 + "\n";
 	pnach += "patch=1,EE,00020000,extended," + offset1 + "\n";
 	pnach += "patch=1,EE,60328CE0,extended," + add2 + "\n";
@@ -194,15 +216,26 @@ function generateName(){
 	pnach += "patch=1,EE,60328CE0,extended," + add7 + "\n";
 	pnach += "patch=1,EE,00020000,extended," + offset7 + "\n";
 	pnach += "patch=1,EE,60328CE0,extended," + add8 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset8 + "\n";
+	pnach += "patch=1,EE,00020000,extended," + offset8 + "\n\n";
 
+	//console.log(pnach);
+	document.getElementById("results").innerHTML = "Added."
+	file += pnach;
+}
+
+function download(){
+	if (firstPass){
+		alert("Nothing added.");
+		return;
+	}
 	let a = document.createElement('a');
-	a.href = "data:application/octet-stream,"+encodeURIComponent(pnach);
+	a.href = "data:application/octet-stream,"+encodeURIComponent(file);
 	a.download = '47B9B2FD.pnach';
 	a.click();
-
-
-	console.log(pnach);
+	document.getElementById("results").innerHTML = "Downloaded. List has been cleared.";
+	file = "";
+	charArr = [];
+	firstPass = true;
 }
 
 function stringEncoder(text) {
