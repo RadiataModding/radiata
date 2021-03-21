@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+	  <script src="../js/convert.js"></script>
+      <title>Decoder | Radiata</title>
+   </head>
+   <body>
+      <a href="/">Home</a>
+      <a href="../name">Name Generator</a>
+      <br>
+      <select id = "stringSelect">
+         <option>Decode</option>
+         <option>Encode</option>
+      </select>
+      <input id = "text">
+      <input type = "checkbox" id = "clipboard"><label for = "clipboard">Decode Copied Hex (for decode)</label>
+      <input type = "checkbox" id = "download"><label for = "download">Download File (for decode)</label>
+      <input type = "checkbox" id = "display"><label for = "display">Preview Result (for decode)</label>
+      <input type = "button" onClick = "startConvert()" value = "Go">
+      <br>
+      <pre id = "results"></pre>
+   </body>
+</html>
