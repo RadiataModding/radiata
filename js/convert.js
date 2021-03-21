@@ -212,6 +212,7 @@ function generateName(){
 	if (firstPass){
 		pnach = "gametitle=Radiata Stories\n";
 		pnach += "comment=Character Name Changer" + "\n\n";
+		document.getElementById("results").innerHTML = "Currently Added:"
 		firstPass = false;
 	} else {
 		pnach = "";
@@ -234,8 +235,8 @@ function generateName(){
 	pnach += "patch=1,EE,60328CE0,extended," + add8 + "\n";
 	pnach += "patch=1,EE,00020000,extended," + offset8 + "\n\n";
 
+	document.getElementById("results").innerHTML += "\nCharacter ID: " + charID.toString(16).toUpperCase() + " changed name to: " + name;
 	//console.log(pnach);
-	document.getElementById("results").innerHTML = "Added."
 	file += pnach;
 }
 
