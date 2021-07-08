@@ -3,13 +3,68 @@ let result = "";
 
 let firstPass = true;
 
-let file = "";
+let fileD = "";
 
 let charArr = [];
+
+let lineArr = [];
+
+let pointerArr = [];
+
+$("#myfile").on("change", function (changeEvent) {
+  for (var i = 0; i < changeEvent.target.files.length; ++i) {
+    (function (file) {               // Wrap current file in a closure.
+      var loader = new FileReader();
+      loader.onload = function (loadEvent) {
+        if (loadEvent.target.readyState != 2)
+          return;
+        if (loadEvent.target.error) {
+          alert("Error while reading file " + file.name + ": " + loadEvent.target.error);
+          return;
+        }
+        console.log(loadEvent.target.result.length); // Your text is in loadEvent.target.result
+      };
+      loader.readAsBinaryString(file);
+    })(changeEvent.target.files[i]);
+  }
+});
 
 function startConvert(){
 	if (document.getElementById('stringSelect').value == "Encode"){
 		document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
+	} else if (document.getElementById('stringSelect').value == "Trim") {
+		if (document.getElementById("clipboard").checked){
+			navigator.clipboard.readText()
+  				.then(text => {
+  					hexTrim(text);
+  					if (document.getElementById("download").checked){
+						let a = document.createElement('a');
+						a.href = "data:application/octet-stream,"+encodeURIComponent(result);
+						a.download = 'result.txt';
+						a.click();
+					}
+					if (document.getElementById("display").checked){
+						document.getElementById("results").innerHTML = result;
+					}	
+  				})
+  				.catch(err => {
+    				console.error('Failed to read clipboard contents: ', err);
+  				});
+  	} else {
+			hexTrim(document.getElementById('text').value);
+			if (document.getElementById("download").checked){
+			let a = document.createElement('a');
+			a.href = "data:application/octet-stream,"+encodeURIComponent(result);
+			a.download = 'result.txt';
+			a.click();
+			}
+			if (document.getElementById("display").checked){
+				document.getElementById("results").innerHTML = result;
+			}
+		}	
+
+	} else if (document.getElementById('stringSelect').value == "Line Build"){
+			document.getElementById("results").innerHTML = lineBuild(document.getElementById('text').value, document.getElementById('char').value, document.getElementById('lineNum').value); 
 	} else {
 		if (document.getElementById("clipboard").checked){
 			navigator.clipboard.readText()
@@ -212,7 +267,6 @@ function generateName(){
 	if (firstPass){
 		pnach = "gametitle=Radiata Stories\n";
 		pnach += "comment=Character Name Changer" + "\n\n";
-		document.getElementById("results").innerHTML = "Currently Added:"
 		firstPass = false;
 	} else {
 		pnach = "";
@@ -235,9 +289,9 @@ function generateName(){
 	pnach += "patch=1,EE,60328CE0,extended," + add8 + "\n";
 	pnach += "patch=1,EE,00020000,extended," + offset8 + "\n\n";
 
-	document.getElementById("results").innerHTML += "\nCharacter ID: " + charID.toString(16).toUpperCase() + " changed name to: " + name;
 	//console.log(pnach);
-	file += pnach;
+	document.getElementById("results").innerHTML = "Added."
+	fileD += pnach;
 }
 
 function download(){
@@ -246,11 +300,11 @@ function download(){
 		return;
 	}
 	let a = document.createElement('a');
-	a.href = "data:application/octet-stream,"+encodeURIComponent(file);
+	a.href = "data:application/octet-stream,"+encodeURIComponent(fileD);
 	a.download = '47B9B2FD.pnach';
 	a.click();
 	document.getElementById("results").innerHTML = "Downloaded. List has been cleared.";
-	file = "";
+	fileD = "";
 	charArr = [];
 	firstPass = true;
 }
@@ -626,6 +680,241 @@ function stringEncoder(text) {
 				result += "����";
 		}
 
+	}
+	return result;
+}
+
+const changeEndianness = (string) => {
+        const result = [];
+        let len = string.length - 2;
+        while (len >= 0) {
+          result.push(string.substr(len, 2));
+          len -= 2;
+        }
+        return result.join('');
+}
+
+function posCalculator(text) {
+	let decimal = 18;
+	decimal += -text.length*7
+	for (let i = 0; i < text.length; i++){
+			if (text.charAt(i) == "." || text.charAt(i) == "," || text.charAt(i) == "?" || text.charAt(i) == "!"){
+        decimal += 5;            
+			}
+	}
+  var size = 8;
+
+  if (decimal >= 0) {
+    var hexadecimal = decimal.toString(16);
+
+    while ((hexadecimal.length % size) != 0) {
+      hexadecimal = "" + 0 + hexadecimal;
+    }
+
+    return hexadecimal;
+  } else {
+    var hexadecimal = Math.abs(decimal).toString(16);
+    while ((hexadecimal.length % size) != 0) {
+      hexadecimal = "" + 0 + hexadecimal;
+    }
+
+    var output = '';
+    for (i = 0; i < hexadecimal.length; i++) {
+      output += (0x0F - parseInt(hexadecimal[i], 16)).toString(16);
+    }
+
+    output = (0x01 + parseInt(output, 16)).toString(16);
+    return changeEndianness(output.substring(4, 8).toUpperCase());
+  }
+}
+
+
+function lineBuild(){
+	let text = document.getElementById('text').value;
+	if (text.length < 3){
+		alert("Text must be at least 3 characters long.")
+		return;
+	}
+	let bustup = document.getElementById("bustup").checked
+	let char = document.getElementById('char').value;
+	char = parseInt(char, 16);
+	char = char.toString(16).padStart(4, '0').toUpperCase();
+	let lineNum = document.getElementById('lineNum').value;
+	lineNum = parseInt(lineNum);
+	lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+	result = "";
+	let textArr = text.split("|");
+	if (textArr.length == 1){
+		let textLength = text.length;
+		textLength = Math.round(textLength /= 2) + 4;
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 00 00 01 00 00 00";
+		result += changeEndianness(char);
+		result += "00 00 0F 25 00 00";
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 0E 20 01 00";
+		if (bustup) {
+			result += "00";
+		} else {
+			result += "01";
+		}
+		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+		result += posCalculator(textArr[0]);
+		result += "BE 00 0F 28 1F 00";
+		result += changeEndianness(lineNum);
+		result += "0E 4E 01 00 01 00 76 00 00 00";
+		result += stringEncoder(textArr[0]);
+		result += "0F 20 78 00 03 00 00 00";
+		result = result.replace(/\s/g,''); 
+		lineArr.push(result);
+		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
+	} else if (textArr.length == 2){
+		let textLength = text.length - textArr.length;
+		textLength = Math.round(textLength /= 2) + 4;
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 00 00 01 00 00 00";
+		result += changeEndianness(char);
+		result += "00 00 0F 25 00 00";
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 0E 20 01 00";
+		if (bustup) {
+			result += "00";
+		} else {
+			result += "01";
+		}
+		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+		result += posCalculator(textArr[0]);
+		result += "A8 00 0F 28 1F 00";
+		result += changeEndianness(lineNum);
+		result += "0E 4E 01 00 01 00 60 00 00 00";
+		result += stringEncoder(textArr[0]);
+		result += "0A 00 04 20";
+		result += posCalculator(textArr[1]);
+		result += "D0 00";
+		result += stringEncoder(textArr[1]);
+		result += "0F 20 78 00 03 00 00 00";
+		result = result.replace(/\s/g,''); 
+		lineArr.push(result);
+		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
+	} else if (textArr.length == 3){
+		let textLength = text.length - textArr.length;
+		textLength = Math.round(textLength /= 2) + 4;
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 00 00 01 00 00 00";
+		result += changeEndianness(char);
+		result += "00 00 0F 25 00 00";
+		result += textLength.toString(16).padStart(2, '0').toUpperCase();
+		result += "00 0E 20 01 00";
+		if (bustup) {
+			result += "00";
+		} else {
+			result += "01";
+		}
+		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+		result += posCalculator(textArr[0]);
+		result += "88 00 0F 28 1F 00";
+		result += changeEndianness(lineNum);
+		result += "0E 4E 01 00 01 00 40 00 00 00";
+		result += stringEncoder(textArr[0]);
+		result += "0A 00 04 20";
+		result += posCalculator(textArr[1]);
+		result += "B0 00";
+		result += stringEncoder(textArr[1]);
+		result += "0A 00 04 20";
+		result += posCalculator(textArr[2]);
+		result += "D8 00";
+		result += stringEncoder(textArr[2]);
+		result += "0F 20 78 00 03 00 00 00";
+		result = result.replace(/\s/g,''); 
+		lineArr.push(result);
+		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
+	} else {
+		return "Too many lines.";
+	}
+}
+
+function download2(){
+	if (lineArr.length == 0){
+		alert("Nothing added.");
+		return;
+	}
+	if (document.getElementById("null").checked){
+		lineArr.unshift("0000000001000000010000000F25000000000E200100010002206A695F800221000000000320330B661605010710000304200000BE000E4E01000100760000000E24010002010000");
+	}
+	let totalSize = 0;
+	let currentLength = 0;
+	let baseLength = 48;
+	baseLength += 8*lineArr.length;
+	for (let i = 0; i < lineArr.length; i++){
+		if(i == 0){
+			currentLength = baseLength/2;
+			totalSize += currentLength + (lineArr[0].length / 2);
+			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
+			temp = changeEndianness(temp);
+			pointerArr.push(temp);
+		} else {
+			currentLength += (lineArr[i-1].length / 2);
+			totalSize += lineArr[i].length / 2;
+			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
+			temp = changeEndianness(temp);
+			pointerArr.push(temp);
+		}
+	}
+	totalSize = totalSize.toString(16).padStart(8, '0').toUpperCase();
+	totalSize = changeEndianness(totalSize);
+	let lineCount = lineArr.length;
+	lineCount = lineCount.toString(16).padStart(8, '0').toUpperCase();
+	lineCount = changeEndianness(lineCount);
+	let output = "52 4D 46 31 CE 00 00 00 00 00 00 00";
+	output += totalSize;
+	output += lineCount;
+	output += totalSize;
+	for (let i = 0; i < pointerArr.length; i++){
+		output += pointerArr[i];
+	}
+	for (let i = 0; i < lineArr.length; i++){
+		output += lineArr[i];
+	}
+	output = output.replace(/\s/g,'');
+	navigator.clipboard.writeText(output)
+  .then(() => {
+  	if (document.getElementById("null").checked){
+  		lineArr.shift();
+  	}
+  	pointerArr = [];
+    alert("Data copied to clipboard.");
+  })
+  .catch(err => {
+  	if (document.getElementById("null").checked){
+  		lineArr.shift();
+  	}
+  	pointerArr = [];
+    console.log('Error: ', err);
+  });
+	//document.getElementById("results").innerHTML = output;
+}
+
+function hexTrim(text){
+	result = "";
+	rmf = false;
+	text = text.replace(/\s/g,''); 
+	while (text.length > 0) {
+		if (!rmf) {
+			id = text.substring(0, 8);
+			if (id == "524D4631") {
+				rmf = true;
+				result += text.substring(0,2);
+			}
+			text = text.substring(2);
+		} else if (rmf) {
+			id = text.substring(0,8);
+			if (id == "4B6F6473"){
+				rmf = false;
+			} else {
+				result += text.substring(0,2);
+			}
+			text = text.substring(2);
+		}
 	}
 	return result;
 }
