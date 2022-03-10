@@ -1,5 +1,8 @@
 let battles = [];
 
+let allyPos = 0x96;
+let enemyPos = 0xA0;
+
 
 function charAdd(){
    if (battles.length >= 10) {
@@ -8,9 +11,6 @@ function charAdd(){
    
    if (document.getElementById('char1').value == ''){
       return alert("Character ID is blank.");
-   }
-   if (document.getElementById('char2').value == ''){
-      return alert("Character Position is blank.");
    }
    if (document.getElementById('char3').value == ''){
       return alert("Visual Apperance is blank.");
@@ -32,9 +32,6 @@ function charAdd(){
    char1 = parseInt(char1, 16);
    char1 = char1.toString(16).padStart(4, '0').toUpperCase();
 
-   let char2 = document.getElementById('char2').value;
-   char2 = parseInt(char2, 16);
-   char2 = char2.toString(16).padStart(4, '0').toUpperCase();
 
    let char3 = document.getElementById('char3').value;
    char3 = parseInt(char3, 16);
@@ -47,6 +44,14 @@ function charAdd(){
    let char5 = document.getElementById('char5').value;
    char5 = parseInt(char5, 16);
    char5 = char5.toString(16).padStart(4, '0').toUpperCase();
+
+   if (char5 == "0011"){
+      char2 = enemyPos.toString(16).padStart(4, '0').toUpperCase();
+      enemyPos++;
+   } else {
+      char2 = allyPos.toString(16).padStart(4, '0').toUpperCase();
+      allyPos++;
+   }
 
    let code = 'patch=1,EE,' + charAddress.toString(16).toUpperCase() + ',extended,0000';
    code += char1 + '\n';
@@ -81,12 +86,12 @@ function download(){
    let bgmCheck = false;
 
 
-   if (document.getElementById('bgm').value != ''){
+   if (document.getElementById('bgm').value != '00'){
       bgmCheck = true;
       count++;
    }
 
-   if (document.getElementById('arena').value != ''){
+   if (document.getElementById('arena').value != '00'){
       arenaCheck = true;
       count++;
    }
@@ -143,4 +148,6 @@ function download(){
    a.click();
    document.getElementById("results").innerHTML = "Downloaded. Data has been cleared.";
    battles = [];
+   allyPos = 0x96;
+   enemyPos = 0xA0;
 }

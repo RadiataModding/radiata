@@ -13,30 +13,16 @@
          This replaces the first 'Defeat Enemy' battle in the training dummy. Note that you cannot switch armour/weapons mid battle.
       </h2>
       <p>
-         USAGE: The first character you add will be the one you will be playing. I highly recommend sticking to Jack as other characters are not stable. You also have to add your allies, anyone in your party will not be in the battle unless added.
+         NOTES: The first character you add will be the one you will be playing. I highly recommend sticking to Jack as other characters are not stable. You also have to add your allies, anyone in your party will not be in the battle unless added.
          <br>
          <br>
-         The first field is the character id, which you can find below. Please keep it to just the value and nothing else (ex. 035 for Kain)
+         Most of the time, visual apperance should be set to Default. Only change it if you know what you're doing, or the character requires it. (For example, Aphelion needs to be 05 for Silver Dragon form.)
          <br>
          <br>
-         The second field is the character's position. You should start off with 96 for the first character. For allies, continue from 96 (97, 98, 99, 9A, 9B, etc). For enemies, start from A0 and continue onwards (A1, A2, A3, A4, A5, etc).
+         Once you have everything selected, press add and it will add that character to the battle. You can start the process over adding more to a maximum of 10 total.
          <br>
          <br>
-         The third field is the characters apperance. For most cases you can just have this at 0. Some characters might need a different value to function in battle. (Aphelion needs to be 05 for Silver Dragon form). If you are unsure, put 0.
-         <br>
-         <br>
-         The fourth field is vulnerability status. You will probably just want to have this at 0. If you want to be unkillable/make the enemy unkillable, put 80, otherwise put 0.
-         <br>
-         <br>
-         The fifth field determines if the character is an ally or enemy. If you want it to be an ally put 0, otherwise put 11 to make them an enemy.
-
-         <br>
-         <br>
-         Once you've filled out those five fields you can press add and it will add that character to the battle. You can start the process over adding more to a maximum of 10 total.
-
-         <br>
-         <br>
-         The arena and bgm fields determine the battle arena you play in as well as the music that plays. You can leave this blank to have the generic training dummy arena/music. Values for this can be found below.
+         The arena and bgm fields determine the battle arena you play in as well as the music that plays. You can leave this on Default to have the generic training dummy arena/music.
 
          <br>
          <br>
@@ -44,1219 +30,607 @@
 
       </p>
       <br>
-      <label>Character ID (Hex) </label><input id = "char1">
-      <label>Character Position (Hex) </label><input id = "char2">
-      <label>Visual Apperance (Hex) (put 0 if unknown) </label><input id = "char3">
-      <label>Vulnerability (0 = normal, 80 = invulnerable (???? hp)) </label><input id = "char4">
-      <label>Ally/Enemy (0 = ally, 11 = enemy) </label><input id = "char5">
+      <label>Character </label>
+        <select id="char1">
+          <option value="03A">Achilles</option>
+          <option value="118">Adele</option>
+          <option value="041">Adina</option>
+          <option value="0AE">Aegenhart</option>
+          <option value="0D2">Aesop</option>
+          <option value="02C">Aidan</option>
+          <option value="064">Al</option>
+          <option value="0B9">Alan</option>
+          <option value="04D">Alba</option>
+          <option value="0A4">Albert</option>
+          <option value="016">Aldo</option>
+          <option value="42F">Alesnoi</option>
+          <option value="00F">Alicia</option>
+          <option value="03D">Alvin</option>
+          <option value="037">Anastasia</option>
+          <option value="0A2">Aphelion</option>
+          <option value="440">Apprentice</option>
+          <option value="47B">Aqua Cell</option>
+          <option value="441">Archdemon</option>
+          <option value="02A">Ardoph</option>
+          <option value="11B">Astor</option>
+          <option value="0A0">Baade</option>
+          <option value="06D">Barbena</option>
+          <option value="460">Beetle</option>
+          <option value="058">Belflower</option>
+          <option value="0D1">Ben</option>
+          <option value="45E">Bichir</option>
+          <option value="3EE">Big Jaws</option>
+          <option value="40D">Birdcage Insect</option>
+          <option value="449">Bison</option>
+          <option value="44A">Bison</option>
+          <option value="44B">Bison</option>
+          <option value="44C">Bison</option>
+          <option value="44D">Bison</option>
+          <option value="44E">Bison</option>
+          <option value="44F">Bison</option>
+          <option value="450">Bison</option>
+          <option value="3F0">Bitty Ant</option>
+          <option value="40E">Bitty Hopper</option>
+          <option value="404">Black Cat</option>
+          <option value="478">Black Goblin</option>
+          <option value="488">Black Tiger</option>
+          <option value="108">Blackjack</option>
+          <option value="3F7">Blauniebel</option>
+          <option value="07B">Bligh</option>
+          <option value="46B">Blood Orc</option>
+          <option value="46C">Blood Orc</option>
+          <option value="408">Blue Crow</option>
+          <option value="43C">Bone Goblin</option>
+          <option value="0E2">Bosso</option>
+          <option value="125">Bran</option>
+          <option value="0CC">Brie</option>
+          <option value="0A9">Brockle</option>
+          <option value="085">Brood</option>
+          <option value="018">Bruce</option>
+          <option value="41D">Bubble Frogger</option>
+          <option value="470">Bubu</option>
+          <option value="45C">Bug-Eye Goldfish</option>
+          <option value="0FE">Bull</option>
+          <option value="484">Burglar</option>
+          <option value="0ED">Buta</option>
+          <option value="420">Buta</option>
+          <option value="090">Butch</option>
+          <option value="464">Butterfly</option>
+          <option value="45D">Butterflyfish</option>
+          <option value="00E">Caesar</option>
+          <option value="0F2">Cairn</option>
+          <option value="074">Camuse</option>
+          <option value="01D">Carlos</option>
+          <option value="3FC">Carnivorat</option>
+          <option value="022">Cecil</option>
+          <option value="09F">Cepheid</option>
+          <option value="458">Char</option>
+          <option value="05F">Charlie</option>
+          <option value="0BF">Chatt</option>
+          <option value="07E">Cherie</option>
+          <option value="402">Chick</option>
+          <option value="028">Christoph</option>
+          <option value="0BC">Clarence</option>
+          <option value="029">Claudia</option>
+          <option value="044">Clive</option>
+          <option value="0C5">Coco</option>
+          <option value="117">Cody</option>
+          <option value="3EB">Colossalizard</option>
+          <option value="453">Common Toad</option>
+          <option value="01A">Conrad</option>
+          <option value="471">Copperfish</option>
+          <option value="02D">Cornelia</option>
+          <option value="03F">Cosmo</option>
+          <option value="3FA">Crocogator</option>
+          <option value="106">Cross</option>
+          <option value="40B">Crow</option>
+          <option value="424">Crunchy Shell</option>
+          <option value="480">Crystal Ball</option>
+          <option value="491">Crystaria</option>
+          <option value="021">Curtis</option>
+          <option value="415">Cute Dog</option>
+          <option value="422">Dagol Tortoise</option>
+          <option value="080">Dan</option>
+          <option value="01C">Daniel</option>
+          <option value="0E0">Danny</option>
+          <option value="128">Daria</option>
+          <option value="47E">Dark Cell</option>
+          <option value="476">Dark Elf</option>
+          <option value="46F">Darksoul</option>
+          <option value="019">David</option>
+          <option value="3F4">Deathclover</option>
+          <option value="0D0">Den</option>
+          <option value="010">Dennis</option>
+          <option value="027">Derek</option>
+          <option value="02B">Dimitri</option>
+          <option value="0E1">Dominic</option>
+          <option value="0D7">Donkey</option>
+          <option value="0B0">Donovitch</option>
+          <option value="0DB">Doppio</option>
+          <option value="0FD">Drago</option>
+          <option value="465">Dragonfly</option>
+          <option value="0D9">Drew</option>
+          <option value="474">Dwarf</option>
+          <option value="038">Dwight</option>
+          <option value="12D">Dynas</option>
+          <option value="0AA">Dyvad</option>
+          <option value="47D">Earth Cell</option>
+          <option value="043">Edgar</option>
+          <option value="089">Elef</option>
+          <option value="03C">Elena</option>
+          <option value="055">Elmo</option>
+          <option value="00C">Elwen</option>
+          <option value="054">Eon</option>
+          <option value="12E">Epoch</option>
+          <option value="030">Ernest</option>
+          <option value="0F1">Ethereal Queen</option>
+          <option value="046">Eugene</option>
+          <option value="109">Event Watcher</option>
+          <option value="0F8">FC Glitch</option>
+          <option value="0B5">Fan</option>
+          <option value="02E">Faraus</option>
+          <option value="024">Felix</option>
+          <option value="425">Female Knight</option>
+          <option value="3EA">Female Smilodon</option>
+          <option value="41F">Fennec Fox</option>
+          <option value="036">Fernando</option>
+          <option value="0B8">Few</option>
+          <option value="435">Fire</option>
+          <option value="47A">Fire Cell</option>
+          <option value="3F2">Flame Ant</option>
+          <option value="414">Flame Lizard</option>
+          <option value="47F">Flash Cell</option>
+          <option value="48F">Flash Monkey</option>
+          <option value="455">Flat-Tail Gecko</option>
+          <option value="005">Flau</option>
+          <option value="03B">Flora</option>
+          <option value="031">Franklin</option>
+          <option value="0C1">Franz</option>
+          <option value="07C">Freija</option>
+          <option value="0D4">Gabe</option>
+          <option value="0F4">Gabriel Celesta</option>
+          <option value="0F7">Galvados</option>
+          <option value="002">Ganz</option>
+          <option value="086">Garbella</option>
+          <option value="12C">Garcia</option>
+          <option value="011">Gareth</option>
+          <option value="00A">Gawain</option>
+          <option value="454">Gecko</option>
+          <option value="0AB">Gehrman</option>
+          <option value="01E">Gene</option>
+          <option value="008">Genius</option>
+          <option value="0E3">Georgio</option>
+          <option value="00D">Gerald</option>
+          <option value="459">Ghar</option>
+          <option value="3F1">Giga Ant</option>
+          <option value="40F">Giga Hopper</option>
+          <option value="0B3">Gil</option>
+          <option value="0E6">Giovanni</option>
+          <option value="06E">Giske</option>
+          <option value="09C">Glitch</option>
+          <option value="0F5">Glitch</option>
+          <option value="0F6">Glitch</option>
+          <option value="0FF">Glitch</option>
+          <option value="42E">Glyptodon</option>
+          <option value="0CA">Gob</option>
+          <option value="122">Gobblehope IX</option>
+          <option value="41C">Goblin Elefant</option>
+          <option value="466">Goblin Elefant</option>
+          <option value="487">Gobpakken</option>
+          <option value="0CF">Gobrey</option>
+          <option value="039">Godwin</option>
+          <option value="463">Gold Beetle</option>
+          <option value="433">Gold Box Turtle</option>
+          <option value="45A">Goldfish</option>
+          <option value="0CE">Golly</option>
+          <option value="08F">Golye</option>
+          <option value="096">Gonber</option>
+          <option value="0CD">Gonn</option>
+          <option value="0A3">Gonovitch</option>
+          <option value="0D6">Goo</option>
+          <option value="017">Gordon</option>
+          <option value="040">Grant</option>
+          <option value="41A">Greek Tortoise</option>
+          <option value="477">Green Goblin</option>
+          <option value="468">Green Orc</option>
+          <option value="469">Green Orc</option>
+          <option value="46A">Green Orc</option>
+          <option value="012">Gregory</option>
+          <option value="0A8">Grigory</option>
+          <option value="46E">Grim Reaper</option>
+          <option value="0DA">Gruel</option>
+          <option value="0B2">Hap</option>
+          <option value="062">Heavy Guardsman</option>
+          <option value="10E">Heavy Guardsman</option>
+          <option value="10F">Heavy Guardsman</option>
+          <option value="110">Heavy Guardsman</option>
+          <option value="111">Heavy Guardsman</option>
+          <option value="112">Heavy Guardsman</option>
+          <option value="113">Heavy Guardsman</option>
+          <option value="114">Heavy Guardsman</option>
+          <option value="115">Heavy Guardsman</option>
+          <option value="116">Heavy Guardsman</option>
+          <option value="428">Heavy Guardsman</option>
+          <option value="46D">Hellraiser</option>
+          <option value="445">Hemud</option>
+          <option value="401">Hen</option>
+          <option value="04C">Herz</option>
+          <option value="08B">Hip</option>
+          <option value="48E">Hollywoody</option>
+          <option value="48C">Holy Quetzal</option>
+          <option value="119">Howard</option>
+          <option value="3FF">Hunterwolf</option>
+          <option value="0BE">Hyann</option>
+          <option value="3F6">Ice Lizard</option>
+          <option value="482">Iceburg</option>
+          <option value="051">Interlude</option>
+          <option value="04A">Iris</option>
+          <option value="3F9">Ivory Goat</option>
+          <option value="0E8">J.J.</option>
+          <option value="001" selected>Jack</option>
+          <option value="105">Jack Bookshelf</option>
+          <option value="0DD">Jan</option>
+          <option value="04F">Jared</option>
+          <option value="014">Jarvis</option>
+          <option value="073">Jasmine</option>
+          <option value="059">Jasne</option>
+          <option value="025">Jill</option>
+          <option value="056">Jiorus</option>
+          <option value="053">Joaquel</option>
+          <option value="032">Johan</option>
+          <option value="06C">Jorn</option>
+          <option value="078">Josef</option>
+          <option value="05C">Junazburo</option>
+          <option value="035">Kain</option>
+          <option value="0BA">Keane</option>
+          <option value="094">Keaton</option>
+          <option value="0F3">Kelvin</option>
+          <option value="3F3">Killer Queen</option>
+          <option value="3EF">King Serpent</option>
+          <option value="08D">Kira</option>
+          <option value="075">Lantana</option>
+          <option value="05A">Larks</option>
+          <option value="12A">Lauren</option>
+          <option value="0EA">Leann</option>
+          <option value="409">Leaping Crow</option>
+          <option value="097">Leban</option>
+          <option value="434">Lemon Box Turtle</option>
+          <option value="0E9">Leona</option>
+          <option value="060">Leonard</option>
+          <option value="0EF">Lezard</option>
+          <option value="103">Library</option>
+          <option value="475">Light Elf</option>
+          <option value="00B">Light Guardsman</option>
+          <option value="015">Light Guardsman</option>
+          <option value="01F">Light Guardsman</option>
+          <option value="034">Light Guardsman</option>
+          <option value="061">Light Guardsman</option>
+          <option value="10B">Light Guardsman</option>
+          <option value="10C">Light Guardsman</option>
+          <option value="10D">Light Guardsman</option>
+          <option value="427">Light Guardsman</option>
+          <option value="04E">Lily</option>
+          <option value="0CB">Lin</option>
+          <option value="410">Little Oily</option>
+          <option value="479">Living Totem</option>
+          <option value="130">Louis</option>
+          <option value="0C4">Lufa</option>
+          <option value="0E4">Luka</option>
+          <option value="045">Lulu</option>
+          <option value="082">Lunbar</option>
+          <option value="076">Lyle</option>
+          <option value="11C">Maddock</option>
+          <option value="426">Male Knight</option>
+          <option value="3E9">Male Smilodon</option>
+          <option value="0DE">Marco</option>
+          <option value="065">Margaret</option>
+          <option value="02F">Marietta</option>
+          <option value="0AF">Marke</option>
+          <option value="0C3">Marsha</option>
+          <option value="0C6">Martinez</option>
+          <option value="0D5">Mason</option>
+          <option value="48B">Matango</option>
+          <option value="43E">Melissa</option>
+          <option value="43F">Melissa II</option>
+          <option value="419">Metal Tortoise</option>
+          <option value="0C9">Mikey</option>
+          <option value="3FE">Militarat</option>
+          <option value="127">Mint</option>
+          <option value="042">Miranda</option>
+          <option value="41E">Mist Frogger</option>
+          <option value="457">Mole</option>
+          <option value="0D3">Monki</option>
+          <option value="098">Mook</option>
+          <option value="07A">Morfinn</option>
+          <option value="023">Morgan</option>
+          <option value="418">Mount Tortoise</option>
+          <option value="42A">Mountain Goat</option>
+          <option value="42B">Mountain Goat</option>
+          <option value="42C">Mountain Goat</option>
+          <option value="439">Mountain Goat</option>
+          <option value="43A">Mountain Goat</option>
+          <option value="447">Mud Bone</option>
+          <option value="448">Mud Dile</option>
+          <option value="443">Mud Fighter</option>
+          <option value="444">Mud Mage</option>
+          <option value="442">Mud Pawn</option>
+          <option value="451">Mud Ponbabar</option>
+          <option value="123">Nalshay</option>
+          <option value="0AD">Naom</option>
+          <option value="07D">Nask</option>
+          <option value="05D">Natalie</option>
+          <option value="08C">Nick</option>
+          <option value="0DF">Niko</option>
+          <option value="05E">Nina</option>
+          <option value="04B">Nocturne</option>
+          <option value="0BB">Nogueira</option>
+          <option value="100">Null</option>
+          <option value="101">Null</option>
+          <option value="102">Null</option>
+          <option value="06B">Nuse</option>
+          <option value="047">Nyx</option>
+          <option value="403">Ogre</option>
+          <option value="411">Oily Bug</option>
+          <option value="0A7">Oleg</option>
+          <option value="048">Ortoroz</option>
+          <option value="406">Owl</option>
+          <option value="3FD">Pararat</option>
+          <option value="10A">Parsec</option>
+          <option value="11F">Patrick</option>
+          <option value="067">Paul</option>
+          <option value="48A">Phantom</option>
+          <option value="104">Phonograph</option>
+          <option value="0DC">Pietro</option>
+          <option value="40A">Pigeon Crow</option>
+          <option value="050">Pinky</option>
+          <option value="0EC">Pinta</option>
+          <option value="0B7">Pitt</option>
+          <option value="481">Pointura</option>
+          <option value="3F5">Poisonous Lizard</option>
+          <option value="0E7">Polpo</option>
+          <option value="09D">Pomemelie</option>
+          <option value="120">Putt</option>
+          <option value="0A1">Quasar</option>
+          <option value="436">Quetzalcoatl</option>
+          <option value="08E">Rabi</option>
+          <option value="0F0">Radian</option>
+          <option value="11A">Ravil</option>
+          <option value="0EB">Ray C Ross</option>
+          <option value="063">Raymond</option>
+          <option value="407">Red Crow</option>
+          <option value="121">Reynos</option>
+          <option value="0D8">Ricky</option>
+          <option value="003">Ridley</option>
+          <option value="0C8">Rika</option>
+          <option value="3FB">Ripple Bat</option>
+          <option value="071">Robin</option>
+          <option value="430">Robo Dwarf B</option>
+          <option value="431">Robo Dwarf R</option>
+          <option value="43D">RoboStar</option>
+          <option value="033">Roche</option>
+          <option value="43B">Rockdigger</option>
+          <option value="009">Rocky</option>
+          <option value="01B">Rolec</option>
+          <option value="412">Rolly Polly</option>
+          <option value="0C2">Romaria</option>
+          <option value="400">Rooster</option>
+          <option value="077">Rose</option>
+          <option value="437">Round Knight</option>
+          <option value="438">Round Knight</option>
+          <option value="0B6">Row</option>
+          <option value="12F">Roy</option>
+          <option value="08A">Ryan</option>
+          <option value="004">Rynka</option>
+          <option value="05B">Sakurazaki</option>
+          <option value="0C7">Santos</option>
+          <option value="057">Sarasenia</option>
+          <option value="09E">Saron</option>
+          <option value="091">Sarval</option>
+          <option value="124">Sayna</option>
+          <option value="007">Sebastian</option>
+          <option value="0AC">Sergei</option>
+          <option value="0BD">Serva</option>
+          <option value="081">Servia</option>
+          <option value="072">Sheila</option>
+          <option value="3F8">Shell Lizard</option>
+          <option value="446">Shemud</option>
+          <option value="0B4">Shin</option>
+          <option value="492">Shrine Knight</option>
+          <option value="087">Silvia</option>
+          <option value="483">Skullhead</option>
+          <option value="456">Skyfish</option>
+          <option value="486">Skypulsar</option>
+          <option value="052">Solo</option>
+          <option value="049">Sonata</option>
+          <option value="083">Sonia</option>
+          <option value="0E5">Sonny</option>
+          <option value="093">Sora</option>
+          <option value="40C">Sparrow</option>
+          <option value="413">Speckled Bug</option>
+          <option value="461">Spider</option>
+          <option value="421">Spray Snake</option>
+          <option value="462">Stag Beetle</option>
+          <option value="006">Star</option>
+          <option value="084">Startis</option>
+          <option value="126">Stefan</option>
+          <option value="107">Stein</option>
+          <option value="472">Subordinate Mage</option>
+          <option value="092">Sunset</option>
+          <option value="11D">Synelia</option>
+          <option value="416">Tall Beast</option>
+          <option value="095">Tarkin</option>
+          <option value="41B">Tawny Rat</option>
+          <option value="06A">Testa</option>
+          <option value="020">Thanos</option>
+          <option value="12B">Theresa</option>
+          <option value="429">Therosaurus</option>
+          <option value="490">Thundercorn</option>
+          <option value="088">Thyme</option>
+          <option value="068">Toma</option>
+          <option value="11E">Tony</option>
+          <option value="069">Torenia</option>
+          <option value="467">Trap Octopus</option>
+          <option value="452">Tree Frog</option>
+          <option value="473">Treeman</option>
+          <option value="485">Trent</option>
+          <option value="3ED">Tsuchinoko</option>
+          <option value="3EC">Tusky Mammoth</option>
+          <option value="417">Twin Horn</option>
+          <option value="026">Ursula</option>
+          <option value="0EE">Valkyrie</option>
+          <option value="079">Virginia</option>
+          <option value="03E">Vitas</option>
+          <option value="0A5">Vladimir</option>
+          <option value="099">Wal</option>
+          <option value="013">Walter</option>
+          <option value="070">Warc</option>
+          <option value="45B">Water Bubblefish</option>
+          <option value="45F">Water Strider</option>
+          <option value="423">Whip Turtle</option>
+          <option value="489">Whirlwind</option>
+          <option value="405">White Cat</option>
+          <option value="48D">Willow</option>
+          <option value="47C">Wind Cell</option>
+          <option value="42D">Wolf</option>
+          <option value="09A">Wyze</option>
+          <option value="129">Yack</option>
+          <option value="0A6">Yevgeni</option>
+          <option value="06F">Yuri</option>
+          <option value="0B1">Zane</option>
+          <option value="07F">Zeke</option>
+          <option value="09B">Zeranium</option>
+          <option value="432">Zerotone</option>
+          <option value="0C0">Zida</option>
+          <option value="066">Zion</option>
+        </select>
+      <label>Visual Apperance </label>
+      <select id = "char3">
+        <option value = "00">Default</option>
+        <option value = "01">01</option>
+        <option value = "03">03</option>
+        <option value = "05">05</option>
+        <option value = "07">07</option>
+        <option value = "09">09</option>
+        <option value = "0B">0B</option>
+        <option value = "0D">0D</option>
+        <option value = "0F">0F</option>
+        <option value = "11">11</option>
+        <option value = "13">13</option>
+        <option value = "15">15</option>
+        <option value = "17">17</option>
+        <option value = "19">19</option>
+        <option value = "1B">1B</option>
+        <option value = "1D">1D</option>
+        <option value = "1F">1F</option>
+        <option value = "21">21</option>
+        <option value = "23">23</option>
+        <option value = "25">25</option>
+        <option value = "27">27</option>
+        <option value = "29">29</option>
+        <option value = "2B">2B</option>
+      </select>
+      <label>Vulnerability</label>
+      <select id = "char4">
+        <option value="00">Vulnerable</option>
+        <option value="80">Invulnerable</option>
+      </select>
+
+
+      <label>Ally/Enemy</label>
+      <select id = "char5">
+        <option value="00">Ally</option>
+        <option value="11">Enemy</option>
+      </select>
+
+
       <input type = "button" onClick = "charAdd()" value = "Add">
 
       <pre id = "results"></pre>
 
-      <label>Arena </label><input id = "arena">
-      <label>BGM </label><input id = "bgm">
+      <label>Arena </label>
+      <select id = "arena">
+        <option value="00">Default</option>
+        <option value="09">Area 01 Plains</option>
+        <option value="0F">Area 02 Tunnel Worm</option>
+        <option value="10">Area 02 Tunnel Resting Spot</option>
+        <option value="11">Area 02 Singed Plains</option>
+        <option value="12">Area 02 Tunnel</option>
+        <option value="13">Area 02 Dwarf Village Square</option>
+        <option value="38">Area 02 Plains</option>
+        <option value="39">Area 02 Cliff</option>
+        <option value="3A">Area 02 Mountain Path</option>
+        <option value="3B">Area 04 Village Square</option>
+        <option value="45">Area 04 Plains</option>
+        <option value="5A">Area 07 Cave (With water)</option>
+        <option value="5B">Area 07 Cave (No water)</option>
+        <option value="5C">Area 07 Cave Lake Bottom</option>
+        <option value="5D">Area 07 Savanna</option>
+        <option value="5E">Area 07 Cliff</option>
+        <option value="61">Area 07 Castle Summoning Room</option>
+        <option value="70">Area 16 Cliff</option>
+        <option value="80">Area 07 Castle Room</option>
+        <option value="81">Area 12 Jungle</option>
+        <option value="E5">Area 34 Fire Mountain</option>
+        <option value="EB">Area 03 Boulder Plains</option>
+        <option value="F1">Area 11 Light Elf Village</option>
+        <option value="FB">Area 16 Orc Village Interior</option>
+        <option value="FC">Area 16 Orc Village Outer Walls</option>
+        <option value="FD">Area 16 Orc Village Bottom Floor Hall</option>
+        <option value="100">Area 11 Forest</option>
+        <option value="101">Area 11 Shallow Lake</option>
+        <option value="102">Area 34 Cave Parsec's Room</option>
+        <option value="103">Area 34 Fire Mountain Cave</option>
+        <option value="118">Area 09D Elf Village</option>
+        <option value="119">Area 09 Valley</option>
+        <option value="11A">Area 09 Forest</option>
+        <option value="12A">Area 22B Goblin Village Square</option>
+        <option value="12B">Area 22 Mushroom Forest (Upper Path)</option>
+        <option value="12C">Area 22 Mushroom Forest (Path)</option>
+        <option value="142">Area 03 Plains</option>
+        <option value="143">Area 03 Village</option>
+        <option value="144">Area 03 In from of Boulder</option>
+        <option value="145">Area 03 Boulder Plains</option>
+        <option value="146">Area 03 Boulder Interior</option>
+        <option value="149">Area 03 Grapevine</option>
+        <option value="16C">Area 12 Goblin Cemetery Room</option>
+        <option value="16D">Area 12 Goblin Village Square</option>
+        <option value="16E">Area 12 Goblin Cemetery Main Room</option>
+        <option value="16F">Area 12 Tunnel</option>
+        <option value="170">Area 12 Savanna (No Fort)</option>
+        <option value="18B">Area 36 Desert</option>
+        <option value="18D">Area 13 Spiral Corridor</option>
+        <option value="18E">Gold Dragon Castle</option>
+        <option value="18F">Aphelion Battlefield</option>
+        <option value="2B9">Wind Dragon Battlefield</option>
+        <option value="2BA">Earth Dragon Battlefield</option>
+        <option value="2BB">Water Dragon Battlefield</option>
+        <option value="2BC">Fire Dragon Battlefield</option>
+        <option value="2DC">Gabriel Celesta Battlefield</option>
+        <option value="2DD">Ethereal Queen Battlefield</option>
+      </select>
+      <label>BGM </label>
+      <select id = "bgm">
+        <option value="00">Default</option>
+        <option value="1C">Struggle I</option>
+        <option value="1D">Struggle II</option>
+        <option value="1E">Struggle III</option>
+        <option value="1F">Powerful Enemy</option>
+        <option value="20">Only For You</option>
+        <option value="21">Gloomy Dance</option>
+        <option value="27">Teach Me Please</option>
+        <option value="29">Labyrinth of Fortune</option>
+        <option value="32">Paya-Paya</option>
+        <option value="3E">Yearning For Brilliance, A Flower Blooms</option>
+        <option value="7C">Legendary Sword</option>
+        <option value="80">The Incarnation of the Devil</option>
+        <option value="82">Highbrow</option>
+        <option value="84">Billboard Attack</option>
+        <option value="85">Fortune</option>
+        <option value="86">Plod Along</option>
+      </select>
 
       <br><br>
       <input type = "button" onClick = "download()" value = "Generate">
-      <style type="text/css">
-         table.tableizer-table {
-         font-size: 12px;
-         border: 1px solid #CCC; 
-         font-family: Arial, Helvetica, sans-serif;
-         } 
-         .tableizer-table td {
-         padding: 4px;
-         margin: 3px;
-         border: 1px solid #CCC;
-         }
-         .tableizer-table th {
-         background-color: #104E8B; 
-         color: #FFF;
-         font-weight: bold;
-         }
-      </style>
-      <table class="tableizer-table">
-         <thead>
-            <tr class="tableizer-firstrow">
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-               <th>Name</th>
-               <th>HEX</th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr>
-            <td>Empty</td>
-            <td>000</td>
-            <td>Franklin</td>
-            <td>031</td>
-            <td>Heavy Guardsman</td>
-            <td>062</td>
-            <td>Sora</td>
-            <td>093</td>
-            <td>Lufa</td>
-            <td>0C4</td>
-            <td>Glitch</td>
-            <td>0F5</td>
-            <td>Lauren</td>
-            <td>12A</td>
-            <td>Speckled Bug</td>
-            <td>413</td>
-            <td>Mud Mage</td>
-            <td>444</td>
-            <td>Light Elf</td>
-            <td>475</td>
-        </tr>
-        <tr>
-            <td>Jack</td>
-            <td>001</td>
-            <td>Johan</td>
-            <td>032</td>
-            <td>Raymond</td>
-            <td>063</td>
-            <td>Keaton</td>
-            <td>094</td>
-            <td>Coco</td>
-            <td>0C5</td>
-            <td>Glitch</td>
-            <td>0F6</td>
-            <td>Theresa</td>
-            <td>12B</td>
-            <td>Flame Lizard</td>
-            <td>414</td>
-            <td>Hemud</td>
-            <td>445</td>
-            <td>Dark Elf</td>
-            <td>476</td>
-        </tr>
-        <tr>
-            <td>Ganz</td>
-            <td>002</td>
-            <td>Roche</td>
-            <td>033</td>
-            <td>Al</td>
-            <td>064</td>
-            <td>Tarkin</td>
-            <td>095</td>
-            <td>Martinez</td>
-            <td>0C6</td>
-            <td>Galvados</td>
-            <td>0F7</td>
-            <td>Garcia</td>
-            <td>12C</td>
-            <td>Cute Dog</td>
-            <td>415</td>
-            <td>Shemud</td>
-            <td>446</td>
-            <td>Green Goblin</td>
-            <td>477</td>
-        </tr>
-        <tr>
-            <td>Ridley</td>
-            <td>003</td>
-            <td>Light Guardsman</td>
-            <td>034</td>
-            <td>Margaret</td>
-            <td>065</td>
-            <td>Gonber</td>
-            <td>096</td>
-            <td>Santos</td>
-            <td>0C7</td>
-            <td>FC Glitch</td>
-            <td>0F8</td>
-            <td>Dynas</td>
-            <td>12D</td>
-            <td>Tall Beast</td>
-            <td>416</td>
-            <td>Mud Bone</td>
-            <td>447</td>
-            <td>Black Goblin</td>
-            <td>478</td>
-        </tr>
-        <tr>
-            <td>Rynka</td>
-            <td>004</td>
-            <td>Kain</td>
-            <td>035</td>
-            <td>Zion</td>
-            <td>066</td>
-            <td>Leban</td>
-            <td>097</td>
-            <td>Rika</td>
-            <td>0C8</td>
-            <td>Drago</td>
-            <td>0FD</td>
-            <td>Epoch</td>
-            <td>12E</td>
-            <td>Twin Horn</td>
-            <td>417</td>
-            <td>Mud Dile</td>
-            <td>448</td>
-            <td>Living Totem</td>
-            <td>479</td>
-        </tr>
-        <tr>
-            <td>Flau</td>
-            <td>005</td>
-            <td>Fernando</td>
-            <td>036</td>
-            <td>Paul</td>
-            <td>067</td>
-            <td>Mook</td>
-            <td>098</td>
-            <td>Mikey</td>
-            <td>0C9</td>
-            <td>Bull</td>
-            <td>0FE</td>
-            <td>Roy</td>
-            <td>12F</td>
-            <td>Mount Tortoise</td>
-            <td>418</td>
-            <td>Bison</td>
-            <td>449</td>
-            <td>Fire Cell</td>
-            <td>47A</td>
-        </tr>
-        <tr>
-            <td>Star</td>
-            <td>006</td>
-            <td>Anastasia</td>
-            <td>037</td>
-            <td>Toma</td>
-            <td>068</td>
-            <td>Wal</td>
-            <td>099</td>
-            <td>Gob</td>
-            <td>0CA</td>
-            <td>Glitch</td>
-            <td>0FF</td>
-            <td>Louis</td>
-            <td>130</td>
-            <td>Metal Tortoise</td>
-            <td>419</td>
-            <td>Bison</td>
-            <td>44A</td>
-            <td>Aqua Cell</td>
-            <td>47B</td>
-        </tr>
-        <tr>
-            <td>Sebastian</td>
-            <td>007</td>
-            <td>Dwight</td>
-            <td>038</td>
-            <td>Torenia</td>
-            <td>069</td>
-            <td>Wyze</td>
-            <td>09A</td>
-            <td>Lin</td>
-            <td>0CB</td>
-            <td>Null</td>
-            <td>100</td>
-            <td>Male Smilodon</td>
-            <td>3E9</td>
-            <td>Greek Tortoise</td>
-            <td>41A</td>
-            <td>Bison</td>
-            <td>44B</td>
-            <td>Wind Cell</td>
-            <td>47C</td>
-        </tr>
-        <tr>
-            <td>Genius</td>
-            <td>008</td>
-            <td>Godwin</td>
-            <td>039</td>
-            <td>Testa</td>
-            <td>06A</td>
-            <td>Zeranium</td>
-            <td>09B</td>
-            <td>Brie</td>
-            <td>0CC</td>
-            <td>Null</td>
-            <td>101</td>
-            <td>Female Smilodon</td>
-            <td>3EA</td>
-            <td>Tawny Rat</td>
-            <td>41B</td>
-            <td>Bison</td>
-            <td>44C</td>
-            <td>Earth Cell</td>
-            <td>47D</td>
-        </tr>
-        <tr>
-            <td>Rocky</td>
-            <td>009</td>
-            <td>Achilles</td>
-            <td>03A</td>
-            <td>Nuse</td>
-            <td>06B</td>
-            <td>Glitch</td>
-            <td>09C</td>
-            <td>Gonn</td>
-            <td>0CD</td>
-            <td>Null</td>
-            <td>102</td>
-            <td>Colossalizard</td>
-            <td>3EB</td>
-            <td>Goblin Elefant</td>
-            <td>41C</td>
-            <td>Bison</td>
-            <td>44D</td>
-            <td>Dark Cell</td>
-            <td>47E</td>
-        </tr>
-        <tr>
-            <td>Gawain</td>
-            <td>00A</td>
-            <td>Flora</td>
-            <td>03B</td>
-            <td>Jorn</td>
-            <td>06C</td>
-            <td>Pomemelie</td>
-            <td>09D</td>
-            <td>Golly</td>
-            <td>0CE</td>
-            <td>Library</td>
-            <td>103</td>
-            <td>Tusky Mammoth</td>
-            <td>3EC</td>
-            <td>Bubble Frogger</td>
-            <td>41D</td>
-            <td>Bison</td>
-            <td>44E</td>
-            <td>Flash Cell</td>
-            <td>47F</td>
-        </tr>
-        <tr>
-            <td>Light Guardsman</td>
-            <td>00B</td>
-            <td>Elena</td>
-            <td>03C</td>
-            <td>Barbena</td>
-            <td>06D</td>
-            <td>Saron</td>
-            <td>09E</td>
-            <td>Gobrey</td>
-            <td>0CF</td>
-            <td>Phonograph</td>
-            <td>104</td>
-            <td>Tsuchinoko</td>
-            <td>3ED</td>
-            <td>Mist Frogger</td>
-            <td>41E</td>
-            <td>Bison</td>
-            <td>44F</td>
-            <td>Crystal Ball</td>
-            <td>480</td>
-        </tr>
-        <tr>
-            <td>Elwen</td>
-            <td>00C</td>
-            <td>Alvin</td>
-            <td>03D</td>
-            <td>Giske</td>
-            <td>06E</td>
-            <td>Cepheid</td>
-            <td>09F</td>
-            <td>Den</td>
-            <td>0D0</td>
-            <td>Jack Bookshelf</td>
-            <td>105</td>
-            <td>Big Jaws</td>
-            <td>3EE</td>
-            <td>Fennec Fox</td>
-            <td>41F</td>
-            <td>Bison</td>
-            <td>450</td>
-            <td>Pointura</td>
-            <td>481</td>
-        </tr>
-        <tr>
-            <td>Gerald</td>
-            <td>00D</td>
-            <td>Vitas</td>
-            <td>03E</td>
-            <td>Yuri</td>
-            <td>06F</td>
-            <td>Baade</td>
-            <td>0A0</td>
-            <td>Ben</td>
-            <td>0D1</td>
-            <td>Cross</td>
-            <td>106</td>
-            <td>King Serpent</td>
-            <td>3EF</td>
-            <td>Buta</td>
-            <td>420</td>
-            <td>Mud Ponbabar</td>
-            <td>451</td>
-            <td>Iceburg</td>
-            <td>482</td>
-        </tr>
-        <tr>
-            <td>Caesar</td>
-            <td>00E</td>
-            <td>Cosmo</td>
-            <td>03F</td>
-            <td>Warc</td>
-            <td>070</td>
-            <td>Quasar</td>
-            <td>0A1</td>
-            <td>Aesop</td>
-            <td>0D2</td>
-            <td>Stein</td>
-            <td>107</td>
-            <td>Bitty Ant</td>
-            <td>3F0</td>
-            <td>Spray Snake</td>
-            <td>421</td>
-            <td>Tree Frog</td>
-            <td>452</td>
-            <td>Skullhead</td>
-            <td>483</td>
-        </tr>
-        <tr>
-            <td>Alicia</td>
-            <td>00F</td>
-            <td>Grant</td>
-            <td>040</td>
-            <td>Robin</td>
-            <td>071</td>
-            <td>Aphelion</td>
-            <td>0A2</td>
-            <td>Monki</td>
-            <td>0D3</td>
-            <td>Blackjack</td>
-            <td>108</td>
-            <td>Giga Ant</td>
-            <td>3F1</td>
-            <td>Dagol Tortoise</td>
-            <td>422</td>
-            <td>Common Toad</td>
-            <td>453</td>
-            <td>Burglar</td>
-            <td>484</td>
-        </tr>
-        <tr>
-            <td>Dennis</td>
-            <td>010</td>
-            <td>Adina</td>
-            <td>041</td>
-            <td>Sheila</td>
-            <td>072</td>
-            <td>Gonovitch</td>
-            <td>0A3</td>
-            <td>Gabe</td>
-            <td>0D4</td>
-            <td>Event Watcher</td>
-            <td>109</td>
-            <td>Flame Ant</td>
-            <td>3F2</td>
-            <td>Whip Turtle</td>
-            <td>423</td>
-            <td>Gecko</td>
-            <td>454</td>
-            <td>Trent</td>
-            <td>485</td>
-        </tr>
-        <tr>
-            <td>Gareth</td>
-            <td>011</td>
-            <td>Miranda</td>
-            <td>042</td>
-            <td>Jasmine</td>
-            <td>073</td>
-            <td>Albert</td>
-            <td>0A4</td>
-            <td>Mason</td>
-            <td>0D5</td>
-            <td>Parsec</td>
-            <td>10A</td>
-            <td>Killer Queen</td>
-            <td>3F3</td>
-            <td>Crunchy Shell</td>
-            <td>424</td>
-            <td>Flat-Tail Gecko</td>
-            <td>455</td>
-            <td>Skypulsar</td>
-            <td>486</td>
-        </tr>
-        <tr>
-            <td>Gregory</td>
-            <td>012</td>
-            <td>Edgar</td>
-            <td>043</td>
-            <td>Camuse</td>
-            <td>074</td>
-            <td>Vladimir</td>
-            <td>0A5</td>
-            <td>Goo</td>
-            <td>0D6</td>
-            <td>Light Guardsman</td>
-            <td>10B</td>
-            <td>Deathclover</td>
-            <td>3F4</td>
-            <td>Female Knight</td>
-            <td>425</td>
-            <td>Skyfish</td>
-            <td>456</td>
-            <td>Gobpakken</td>
-            <td>487</td>
-        </tr>
-        <tr>
-            <td>Walter</td>
-            <td>013</td>
-            <td>Clive</td>
-            <td>044</td>
-            <td>Lantana</td>
-            <td>075</td>
-            <td>Yevgeni</td>
-            <td>0A6</td>
-            <td>Donkey</td>
-            <td>0D7</td>
-            <td>Light Guardsman</td>
-            <td>10C</td>
-            <td>Poisonous Lizard</td>
-            <td>3F5</td>
-            <td>Male Knight</td>
-            <td>426</td>
-            <td>Mole</td>
-            <td>457</td>
-            <td>Black Tiger</td>
-            <td>488</td>
-        </tr>
-        <tr>
-            <td>Jarvis</td>
-            <td>014</td>
-            <td>Lulu</td>
-            <td>045</td>
-            <td>Lyle</td>
-            <td>076</td>
-            <td>Oleg</td>
-            <td>0A7</td>
-            <td>Ricky</td>
-            <td>0D8</td>
-            <td>Light Guardsman</td>
-            <td>10D</td>
-            <td>Ice Lizard</td>
-            <td>3F6</td>
-            <td>Light Guardsman</td>
-            <td>427</td>
-            <td>Char</td>
-            <td>458</td>
-            <td>Whirlwind</td>
-            <td>489</td>
-        </tr>
-        <tr>
-            <td>Light Guardsman</td>
-            <td>015</td>
-            <td>Eugene</td>
-            <td>046</td>
-            <td>Rose</td>
-            <td>077</td>
-            <td>Grigory</td>
-            <td>0A8</td>
-            <td>Drew</td>
-            <td>0D9</td>
-            <td>Heavy Guardsman</td>
-            <td>10E</td>
-            <td>Blauniebel</td>
-            <td>3F7</td>
-            <td>Heavy Guardsman</td>
-            <td>428</td>
-            <td>Ghar</td>
-            <td>459</td>
-            <td>Phantom</td>
-            <td>48A</td>
-        </tr>
-        <tr>
-            <td>Aldo</td>
-            <td>016</td>
-            <td>Nyx</td>
-            <td>047</td>
-            <td>Josef</td>
-            <td>078</td>
-            <td>Brockle</td>
-            <td>0A9</td>
-            <td>Gruel</td>
-            <td>0DA</td>
-            <td>Heavy Guardsman</td>
-            <td>10F</td>
-            <td>Shell Lizard</td>
-            <td>3F8</td>
-            <td>Therosaurus</td>
-            <td>429</td>
-            <td>Goldfish</td>
-            <td>45A</td>
-            <td>Matango</td>
-            <td>48B</td>
-        </tr>
-        <tr>
-            <td>Gordon</td>
-            <td>017</td>
-            <td>Ortoroz</td>
-            <td>048</td>
-            <td>Virginia</td>
-            <td>079</td>
-            <td>Dyvad</td>
-            <td>0AA</td>
-            <td>Doppio</td>
-            <td>0DB</td>
-            <td>Heavy Guardsman</td>
-            <td>110</td>
-            <td>Ivory Goat</td>
-            <td>3F9</td>
-            <td>Mountain Goat</td>
-            <td>42A</td>
-            <td>Water Bubblefish</td>
-            <td>45B</td>
-            <td>Holy Quetzal</td>
-            <td>48C</td>
-        </tr>
-        <tr>
-            <td>Bruce</td>
-            <td>018</td>
-            <td>Sonata</td>
-            <td>049</td>
-            <td>Morfinn</td>
-            <td>07A</td>
-            <td>Gehrman</td>
-            <td>0AB</td>
-            <td>Pietro</td>
-            <td>0DC</td>
-            <td>Heavy Guardsman</td>
-            <td>111</td>
-            <td>Crocogator</td>
-            <td>3FA</td>
-            <td>Mountain Goat</td>
-            <td>42B</td>
-            <td>Bug-Eye Goldfish</td>
-            <td>45C</td>
-            <td>Willow</td>
-            <td>48D</td>
-        </tr>
-        <tr>
-            <td>David</td>
-            <td>019</td>
-            <td>Iris</td>
-            <td>04A</td>
-            <td>Bligh</td>
-            <td>07B</td>
-            <td>Sergei</td>
-            <td>0AC</td>
-            <td>Jan</td>
-            <td>0DD</td>
-            <td>Heavy Guardsman</td>
-            <td>112</td>
-            <td>Ripple Bat</td>
-            <td>3FB</td>
-            <td>Mountain Goat</td>
-            <td>42C</td>
-            <td>Butterflyfish</td>
-            <td>45D</td>
-            <td>Hollywoody</td>
-            <td>48E</td>
-        </tr>
-        <tr>
-            <td>Conrad</td>
-            <td>01A</td>
-            <td>Nocturne</td>
-            <td>04B</td>
-            <td>Freija</td>
-            <td>07C</td>
-            <td>Naom</td>
-            <td>0AD</td>
-            <td>Marco</td>
-            <td>0DE</td>
-            <td>Heavy Guardsman</td>
-            <td>113</td>
-            <td>Carnivorat</td>
-            <td>3FC</td>
-            <td>Wolf</td>
-            <td>42D</td>
-            <td>Bichir</td>
-            <td>45E</td>
-            <td>Flash Monkey</td>
-            <td>48F</td>
-        </tr>
-        <tr>
-            <td>Rolec</td>
-            <td>01B</td>
-            <td>Herz</td>
-            <td>04C</td>
-            <td>Nask</td>
-            <td>07D</td>
-            <td>Aegenhart</td>
-            <td>0AE</td>
-            <td>Niko</td>
-            <td>0DF</td>
-            <td>Heavy Guardsman</td>
-            <td>114</td>
-            <td>Pararat</td>
-            <td>3FD</td>
-            <td>Glyptodon</td>
-            <td>42E</td>
-            <td>Water Strider</td>
-            <td>45F</td>
-            <td>Thundercorn</td>
-            <td>490</td>
-        </tr>
-        <tr>
-            <td>Daniel</td>
-            <td>01C</td>
-            <td>Alba</td>
-            <td>04D</td>
-            <td>Cherie</td>
-            <td>07E</td>
-            <td>Marke</td>
-            <td>0AF</td>
-            <td>Danny</td>
-            <td>0E0</td>
-            <td>Heavy Guardsman</td>
-            <td>115</td>
-            <td>Militarat</td>
-            <td>3FE</td>
-            <td>Alesnoi</td>
-            <td>42F</td>
-            <td>Beetle</td>
-            <td>460</td>
-            <td>Crystaria</td>
-            <td>491</td>
-        </tr>
-        <tr>
-            <td>Carlos</td>
-            <td>01D</td>
-            <td>Lily</td>
-            <td>04E</td>
-            <td>Zeke</td>
-            <td>07F</td>
-            <td>Donovitch</td>
-            <td>0B0</td>
-            <td>Dominic</td>
-            <td>0E1</td>
-            <td>Heavy Guardsman</td>
-            <td>116</td>
-            <td>Hunterwolf</td>
-            <td>3FF</td>
-            <td>Robo Dwarf B</td>
-            <td>430</td>
-            <td>Spider</td>
-            <td>461</td>
-            <td>Shrine Knight</td>
-            <td>492</td>
-        </tr>
-        <tr>
-            <td>Gene</td>
-            <td>01E</td>
-            <td>Jared</td>
-            <td>04F</td>
-            <td>Dan</td>
-            <td>080</td>
-            <td>Zane</td>
-            <td>0B1</td>
-            <td>Bosso</td>
-            <td>0E2</td>
-            <td>Cody</td>
-            <td>117</td>
-            <td>Rooster</td>
-            <td>400</td>
-            <td>Robo Dwarf R</td>
-            <td>431</td>
-            <td>Stag Beetle</td>
-            <td>462</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Light Guardsman</td>
-            <td>01F</td>
-            <td>Pinky</td>
-            <td>050</td>
-            <td>Servia</td>
-            <td>081</td>
-            <td>Hap</td>
-            <td>0B2</td>
-            <td>Georgio</td>
-            <td>0E3</td>
-            <td>Adele</td>
-            <td>118</td>
-            <td>Hen</td>
-            <td>401</td>
-            <td>Zerotone</td>
-            <td>432</td>
-            <td>Gold Beetle</td>
-            <td>463</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Thanos</td>
-            <td>020</td>
-            <td>Interlude</td>
-            <td>051</td>
-            <td>Lunbar</td>
-            <td>082</td>
-            <td>Gil</td>
-            <td>0B3</td>
-            <td>Luka</td>
-            <td>0E4</td>
-            <td>Howard</td>
-            <td>119</td>
-            <td>Chick</td>
-            <td>402</td>
-            <td>Gold Box Turtle</td>
-            <td>433</td>
-            <td>Butterfly</td>
-            <td>464</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Curtis</td>
-            <td>021</td>
-            <td>Solo</td>
-            <td>052</td>
-            <td>Sonia</td>
-            <td>083</td>
-            <td>Shin</td>
-            <td>0B4</td>
-            <td>Sonny</td>
-            <td>0E5</td>
-            <td>Ravil</td>
-            <td>11A</td>
-            <td>Ogre</td>
-            <td>403</td>
-            <td>Lemon Box Turtle</td>
-            <td>434</td>
-            <td>Dragonfly</td>
-            <td>465</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Cecil</td>
-            <td>022</td>
-            <td>Joaquel</td>
-            <td>053</td>
-            <td>Startis</td>
-            <td>084</td>
-            <td>Fan</td>
-            <td>0B5</td>
-            <td>Giovanni</td>
-            <td>0E6</td>
-            <td>Astor</td>
-            <td>11B</td>
-            <td>Black Cat</td>
-            <td>404</td>
-            <td>Fire</td>
-            <td>435</td>
-            <td>Goblin Elefant</td>
-            <td>466</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Morgan</td>
-            <td>023</td>
-            <td>Eon</td>
-            <td>054</td>
-            <td>Brood</td>
-            <td>085</td>
-            <td>Row</td>
-            <td>0B6</td>
-            <td>Polpo</td>
-            <td>0E7</td>
-            <td>Maddock</td>
-            <td>11C</td>
-            <td>White Cat</td>
-            <td>405</td>
-            <td>Quetzalcoatl</td>
-            <td>436</td>
-            <td>Trap Octopus</td>
-            <td>467</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Felix</td>
-            <td>024</td>
-            <td>Elmo</td>
-            <td>055</td>
-            <td>Garbella</td>
-            <td>086</td>
-            <td>Pitt</td>
-            <td>0B7</td>
-            <td>J.J.</td>
-            <td>0E8</td>
-            <td>Synelia</td>
-            <td>11D</td>
-            <td>Owl</td>
-            <td>406</td>
-            <td>Round Knight</td>
-            <td>437</td>
-            <td>Green Orc</td>
-            <td>468</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Jill</td>
-            <td>025</td>
-            <td>Jiorus</td>
-            <td>056</td>
-            <td>Silvia</td>
-            <td>087</td>
-            <td>Few</td>
-            <td>0B8</td>
-            <td>Leona</td>
-            <td>0E9</td>
-            <td>Tony</td>
-            <td>11E</td>
-            <td>Red Crow</td>
-            <td>407</td>
-            <td>Round Knight</td>
-            <td>438</td>
-            <td>Green Orc</td>
-            <td>469</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Ursula</td>
-            <td>026</td>
-            <td>Sarasenia</td>
-            <td>057</td>
-            <td>Thyme</td>
-            <td>088</td>
-            <td>Alan</td>
-            <td>0B9</td>
-            <td>Leann</td>
-            <td>0EA</td>
-            <td>Patrick</td>
-            <td>11F</td>
-            <td>Blue Crow</td>
-            <td>408</td>
-            <td>Mountain Goat</td>
-            <td>439</td>
-            <td>Green Orc</td>
-            <td>46A</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Derek</td>
-            <td>027</td>
-            <td>Belflower</td>
-            <td>058</td>
-            <td>Elef</td>
-            <td>089</td>
-            <td>Keane</td>
-            <td>0BA</td>
-            <td>Ray C Ross</td>
-            <td>0EB</td>
-            <td>Putt</td>
-            <td>120</td>
-            <td>Leaping Crow</td>
-            <td>409</td>
-            <td>Mountain Goat</td>
-            <td>43A</td>
-            <td>Blood Orc</td>
-            <td>46B</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Christoph</td>
-            <td>028</td>
-            <td>Jasne</td>
-            <td>059</td>
-            <td>Ryan</td>
-            <td>08A</td>
-            <td>Nogueira</td>
-            <td>0BB</td>
-            <td>Pinta</td>
-            <td>0EC</td>
-            <td>Reynos</td>
-            <td>121</td>
-            <td>Pigeon Crow</td>
-            <td>40A</td>
-            <td>Rockdigger</td>
-            <td>43B</td>
-            <td>Blood Orc</td>
-            <td>46C</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Claudia</td>
-            <td>029</td>
-            <td>Larks</td>
-            <td>05A</td>
-            <td>Hip</td>
-            <td>08B</td>
-            <td>Clarence</td>
-            <td>0BC</td>
-            <td>Buta</td>
-            <td>0ED</td>
-            <td>Gobblehope IX</td>
-            <td>122</td>
-            <td>Crow</td>
-            <td>40B</td>
-            <td>Bone Goblin</td>
-            <td>43C</td>
-            <td>Hellraiser</td>
-            <td>46D</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Ardoph</td>
-            <td>02A</td>
-            <td>Sakurazaki</td>
-            <td>05B</td>
-            <td>Nick</td>
-            <td>08C</td>
-            <td>Serva</td>
-            <td>0BD</td>
-            <td>Valkyrie</td>
-            <td>0EE</td>
-            <td>Nalshay</td>
-            <td>123</td>
-            <td>Sparrow</td>
-            <td>40C</td>
-            <td>RoboStar</td>
-            <td>43D</td>
-            <td>Grim Reaper</td>
-            <td>46E</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Dimitri</td>
-            <td>02B</td>
-            <td>Junazburo</td>
-            <td>05C</td>
-            <td>Kira</td>
-            <td>08D</td>
-            <td>Hyann</td>
-            <td>0BE</td>
-            <td>Lezard</td>
-            <td>0EF</td>
-            <td>Sayna</td>
-            <td>124</td>
-            <td>Birdcage Insect</td>
-            <td>40D</td>
-            <td>Melissa</td>
-            <td>43E</td>
-            <td>Darksoul</td>
-            <td>46F</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Aidan</td>
-            <td>02C</td>
-            <td>Natalie</td>
-            <td>05D</td>
-            <td>Rabi</td>
-            <td>08E</td>
-            <td>Chatt</td>
-            <td>0BF</td>
-            <td>Radian</td>
-            <td>0F0</td>
-            <td>Bran</td>
-            <td>125</td>
-            <td>Bitty Hopper</td>
-            <td>40E</td>
-            <td>Melissa II</td>
-            <td>43F</td>
-            <td>Bubu</td>
-            <td>470</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Cornelia</td>
-            <td>02D</td>
-            <td>Nina</td>
-            <td>05E</td>
-            <td>Golye</td>
-            <td>08F</td>
-            <td>Zida</td>
-            <td>0C0</td>
-            <td>Ethereal Queen</td>
-            <td>0F1</td>
-            <td>Stefan</td>
-            <td>126</td>
-            <td>Giga Hopper</td>
-            <td>40F</td>
-            <td>Apprentice</td>
-            <td>440</td>
-            <td>Copperfish</td>
-            <td>471</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Faraus</td>
-            <td>02E</td>
-            <td>Charlie</td>
-            <td>05F</td>
-            <td>Butch</td>
-            <td>090</td>
-            <td>Franz</td>
-            <td>0C1</td>
-            <td>Cairn</td>
-            <td>0F2</td>
-            <td>Mint</td>
-            <td>127</td>
-            <td>Little Oily</td>
-            <td>410</td>
-            <td>Archdemon</td>
-            <td>441</td>
-            <td>Subordinate Mage</td>
-            <td>472</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Marietta</td>
-            <td>02F</td>
-            <td>Leonard</td>
-            <td>060</td>
-            <td>Sarval</td>
-            <td>091</td>
-            <td>Romaria</td>
-            <td>0C2</td>
-            <td>Kelvin</td>
-            <td>0F3</td>
-            <td>Daria</td>
-            <td>128</td>
-            <td>Oily Bug</td>
-            <td>411</td>
-            <td>Mud Pawn</td>
-            <td>442</td>
-            <td>Treeman</td>
-            <td>473</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Ernest</td>
-            <td>030</td>
-            <td>Light Guardsman</td>
-            <td>061</td>
-            <td>Sunset</td>
-            <td>092</td>
-            <td>Marsha</td>
-            <td>0C3</td>
-            <td>Gabriel Celesta</td>
-            <td>0F4</td>
-            <td>Yack</td>
-            <td>129</td>
-            <td>Rolly Polly</td>
-            <td>412</td>
-            <td>Mud Fighter</td>
-            <td>443</td>
-            <td>Dwarf</td>
-            <td>474</td>
-        </tr>
-         </tbody>
-      </table>
-<table class="tableizer-table">
-<thead><tr class="tableizer-firstrow"><th>BGM</th><th>HEX</th></tr></thead><tbody>
- <tr><td>Struggle I</td><td>1C</td></tr>
- <tr><td>Struggle II</td><td>1D</td></tr>
- <tr><td>Struggle III</td><td>1E</td></tr>
- <tr><td>Powerful Enemy</td><td>1F</td></tr>
- <tr><td>Only For You</td><td>20</td></tr>
- <tr><td>Gloomy Dance</td><td>21</td></tr>
- <tr><td>Teach Me Please</td><td>27</td></tr>
- <tr><td>Labyrinth of Fortune</td><td>29</td></tr>
- <tr><td>Paya-Paya</td><td>32</td></tr>
- <tr><td>Yearning For Brilliance, A Flower Blooms</td><td>3E</td></tr>
- <tr><td>Legendary Sword</td><td>7C</td></tr>
- <tr><td>The Incarnation of the Devil</td><td>80</td></tr>
- <tr><td>Highbrow</td><td>82</td></tr>
- <tr><td>Billboard Attack</td><td>84</td></tr>
- <tr><td>Fortune</td><td>85</td></tr>
- <tr><td>Plod Along</td><td>86</td></tr>
-</tbody></table>
-<table class="tableizer-table">
-<thead><tr class="tableizer-firstrow"><th>Arenas</th><th>HEX</th></tr></thead><tbody>
- <tr><td>Area 01 Plains</td><td>09</td></tr>
- <tr><td>Area 02 Tunnel Worm</td><td>0F</td></tr>
- <tr><td>Area 02 Tunnel Resting Spot</td><td>10</td></tr>
- <tr><td>Area 02 Singed Plains</td><td>11</td></tr>
- <tr><td>Area 02 Tunnel</td><td>12</td></tr>
- <tr><td>Area 02 Dwarf Village Square</td><td>13</td></tr>
- <tr><td>Area 02 Plains</td><td>38</td></tr>
- <tr><td>Area 02 Cliff</td><td>39</td></tr>
- <tr><td>Area 02 Mountain Path</td><td>3A</td></tr>
- <tr><td>Area 04 Village Square</td><td>3B</td></tr>
- <tr><td>Area 04 Plains</td><td>45</td></tr>
- <tr><td>Area 07 Cave (With water)</td><td>5A</td></tr>
- <tr><td>Area 07 Cave (No water)</td><td>5B</td></tr>
- <tr><td>Area 07 Cave Lake Bottom</td><td>5C</td></tr>
- <tr><td>Area 07 Savanna</td><td>5D</td></tr>
- <tr><td>Area 07 Cliff</td><td>5E</td></tr>
- <tr><td>Area 07 Castle Summoning Room</td><td>61</td></tr>
- <tr><td>Area 16 Cliff</td><td>70</td></tr>
- <tr><td>Area 07 Castle Room</td><td>80</td></tr>
- <tr><td>Area 12 Jungle</td><td>81</td></tr>
- <tr><td>Area 34 Fire Mountain</td><td>E5</td></tr>
- <tr><td>Area 03 Boulder Plains</td><td>EB</td></tr>
- <tr><td>Area 11 Light Elf Village</td><td>F1</td></tr>
- <tr><td>Area 16 Orc Village Interior</td><td>FB</td></tr>
- <tr><td>Area 16 Orc Village Outer Walls</td><td>FC</td></tr>
- <tr><td>Area 16 Orc Village Bottom Floor Hall</td><td>FD</td></tr>
- <tr><td>Area 11 Forest</td><td>100</td></tr>
- <tr><td>Area 11 Shallow Lake</td><td>101</td></tr>
- <tr><td>Area 34 Cave Parsec's Room</td><td>102</td></tr>
- <tr><td>Area 34 Fire Mountain Cave</td><td>103</td></tr>
- <tr><td>Area 09D Elf Village</td><td>118</td></tr>
- <tr><td>Area 09 Valley</td><td>119</td></tr>
- <tr><td>Area 09 Forest</td><td>11A</td></tr>
- <tr><td>Area 22B Goblin Village Square</td><td>12A</td></tr>
- <tr><td>Area 22 Mushroom Forest (Upper Path)</td><td>12B</td></tr>
- <tr><td>Area 22 Mushroom Forest (Path)</td><td>12C</td></tr>
- <tr><td>Area 03 Plains</td><td>142</td></tr>
- <tr><td>Area 03 Village</td><td>143</td></tr>
- <tr><td>Area 03 In from of Boulder</td><td>144</td></tr>
- <tr><td>Area 03 Boulder Plains</td><td>145</td></tr>
- <tr><td>Area 03 Boulder Interior</td><td>146</td></tr>
- <tr><td>Area 03 Grapevine</td><td>149</td></tr>
- <tr><td>Area 12 Goblin Cemetery Room</td><td>16C</td></tr>
- <tr><td>Area 12 Goblin Village Square</td><td>16D</td></tr>
- <tr><td>Area 12 Goblin Cemetery Main Room</td><td>16E</td></tr>
- <tr><td>Area 12 Tunnel</td><td>16F</td></tr>
- <tr><td>Area 12 Savanna (No Fort)</td><td>170</td></tr>
- <tr><td>Area 36 Desert</td><td>18B</td></tr>
- <tr><td>Area 13 Spiral Corridor</td><td>18D</td></tr>
- <tr><td>Gold Dragon Castle</td><td>18E</td></tr>
- <tr><td>Aphelion Battlefield</td><td>18F</td></tr>
- <tr><td>Wind Dragon Battlefield</td><td>2B9</td></tr>
- <tr><td>Earth Dragon Battlefield</td><td>2BA</td></tr>
- <tr><td>Water Dragon Battlefield</td><td>2BB</td></tr>
- <tr><td>Fire Dragon Battlefield</td><td>2BC</td></tr>
- <tr><td>Gabriel Celesta Battlefield</td><td>2DC</td></tr>
- <tr><td>Ethereal Queen Battlefield</td><td>2DD</td></tr>
-</tbody></table>
+      
    </body>
 </html>
