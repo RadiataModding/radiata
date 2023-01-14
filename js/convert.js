@@ -11,6 +11,8 @@ let lineArr = [];
 
 let pointerArr = [];
 
+let currentVoice = 0;
+
 $("#myfile").on("change", function (changeEvent) {
   for (var i = 0; i < changeEvent.target.files.length; ++i) {
     (function (file) {               // Wrap current file in a closure.
@@ -31,7 +33,15 @@ $("#myfile").on("change", function (changeEvent) {
 
 function startConvert(){
 	if (document.getElementById('stringSelect').value == "Encode"){
-		document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
+		if (document.getElementById("count").checked){
+			count = document.getElementById('text').value.length;
+			res = changeEndianness2(count.toString(16).padStart(4,'0')) + "000000000000";
+			res += stringEncoder(document.getElementById('text').value);
+			res += "0000"
+			document.getElementById("results").innerHTML = res;
+		} else {
+			document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
+		}
 	} else if (document.getElementById('stringSelect').value == "Trim") {
 		if (document.getElementById("clipboard").checked){
 			navigator.clipboard.readText()
@@ -553,6 +563,9 @@ function stringEncoder(text) {
 			case "]":
 				result += "2900";
 				break;
+			case "「":
+				result += "3000";
+				break;
 			/*case "3000":
 				result += "「";
 				break;
@@ -640,6 +653,36 @@ function stringEncoder(text) {
 			case "◎":
 				result += "4C00";
 				break;
+			case "è":
+				result += "510101000100";
+				break;
+			case "é":
+				result += "520101000100";
+				break;
+			case "ê":
+				result += "530101000100";
+				break;
+			case "ë":
+				result += "540101000100";
+				break;
+			case "ã":
+				result += "550101000100";
+				break;
+			case "á":
+				result += "5B0101000100";
+				break;
+			case "ç":
+				result += "5F0101000100";
+				break;
+			case "…":
+				result += "130013001300";
+				break;
+			case "µ":
+				result += "1CC0";
+				break;
+			case "\n":
+				result += "0A00";
+				break;
 			/*case "4D00":
 				result += "◇";
 				break;
@@ -678,9 +721,10 @@ function stringEncoder(text) {
 				break;*/
 			default:
 				result += "����";
+				console.log(text.charAt(i))
 		}
-
 	}
+	
 	return result;
 }
 
@@ -694,14 +738,53 @@ const changeEndianness = (string) => {
         return result.join('');
 }
 
+function changeEndianness2(string) {
+        const result = [];
+        let len = string.length - 2;
+        while (len >= 0) {
+          result.push(string.substr(len, 2));
+          len -= 2;
+        }
+        return result.join('');
+}
+
+function recruitChar(id){
+    char = changeEndianness2(id.toString(16).padStart(4, '0'));
+    full = "";
+    full += "14 03 00 80 20 0F 00 00";
+    full += char;
+    full += "00 0D 01 00 00 00 14 03 00 80 27 0F 00 00 00 00 00 1D 01 00 00 00 02 03 00 80 04 00 00 87";
+    full += char;
+    full += "48 00 00 00 00 00 14 03 00 80 20 0F 00 00";
+    full += char;
+    full += "00 48 01 00 00 00 0F 00 00 80 14 03 00 80 20 02 00 00";
+    full += char;
+    full += "00 00";
+    full += char;
+    full += "00 01 D5 04 03 80 13 90 00 00";
+    full += char;
+    full += "00 00";
+    full += char;
+    full += "00 00 00 00 00 00 0F 00 00 80 1B 02 01 80 17 00 07 00";
+    full += char;
+    full += "00 00 0F 00 00 00 1B 01 00 80 17 00 05 00 02 03 00 80 F9 FF FF 82 12 00 00 00 01 00 00 00 1B 01 00 80 17 00 02 00 14 03 00 00 21 0F 00 00";
+    full += char;
+    full += "00 09 1E 00 00 00";
+    return full
+}
+
 function posCalculator(text) {
-	let decimal = 18;
-	decimal += -text.length*7
+	let decimal = 0;
 	for (let i = 0; i < text.length; i++){
-			if (text.charAt(i) == "." || text.charAt(i) == "," || text.charAt(i) == "?" || text.charAt(i) == "!"){
-        decimal += 5;            
-			}
+			decimal += parseInt(charSpacing[text.charAt(i)]);
+			console.log(text.charAt(i) + " is " + charSpacing[text.charAt(i)]);
 	}
+	decimal = decimal / 3;
+	console.log(decimal)
+	decimal = Math.round(decimal);
+	console.log(decimal)
+	decimal = -decimal;
+	console.log(decimal)
   var size = 8;
 
   if (decimal >= 0) {
@@ -739,11 +822,19 @@ function lineBuild(){
 	let char = document.getElementById('char').value;
 	char = parseInt(char, 16);
 	char = char.toString(16).padStart(4, '0').toUpperCase();
-	let lineNum = document.getElementById('lineNum').value;
-	lineNum = parseInt(lineNum);
-	lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+	let lineOpt = document.getElementById('lineOpt').value;
+	let lineNum;
+	if (lineOpt == 1){
+		lineNum = ++currentVoice;
+		lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+	} else{
+		lineNum = document.getElementById('lineNum').value;
+		lineNum = parseInt(lineNum);
+		lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+	}
+	
 	result = "";
-	let textArr = text.split("|");
+	let textArr = text.split(/\n/);
 	if (textArr.length == 1){
 		let textLength = text.length;
 		textLength = Math.round(textLength /= 2) + 4;
@@ -829,7 +920,7 @@ function lineBuild(){
 		lineArr.push(result);
 		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
 	} else {
-		return "Too many lines.";
+		return alert("Too many line breaks, three max per line.");
 	}
 }
 
@@ -846,13 +937,20 @@ function download2(){
 	let baseLength = 48;
 	baseLength += 8*lineArr.length;
 	for (let i = 0; i < lineArr.length; i++){
+		lineArr[i] = lineArr[i].replace(/\s/g,'');
 		if(i == 0){
+			while(((lineArr[i].length / 2) % 4) != 0){
+				lineArr[i] += "00";
+			}
 			currentLength = baseLength/2;
 			totalSize += currentLength + (lineArr[0].length / 2);
 			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
 			temp = changeEndianness(temp);
 			pointerArr.push(temp);
 		} else {
+			while(((lineArr[i].length / 2) % 4) != 0){
+				lineArr[i] += "00";
+			}
 			currentLength += (lineArr[i-1].length / 2);
 			totalSize += lineArr[i].length / 2;
 			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
@@ -1326,4 +1424,314 @@ function stringDecoder(text) {
 		}
 	}
 	return result;
+}
+
+function copyClip(text){
+	navigator.clipboard.writeText(text)
+  .then(() => {
+    alert("Data copied to clipboard.");
+  })
+  .catch(err => {
+    console.log('Error: ', err);
+  });
+}
+
+function initialiseCharacter(){
+	let char1 = document.getElementById('char1').value;
+	char1 = parseInt(char1, 16);
+  char1 = char1.toString(16).padStart(8, '0').toUpperCase();
+  char1 = changeEndianness2(char1);
+  let char3 = document.getElementById('char3').value;
+  char3 = parseInt(char3, 16);
+  char3 = char3.toString(16).padStart(2, '0').toUpperCase();
+
+  let string = '';
+  string += '39 02 22 00 01 00 00 00';
+  string += char1;
+  string += 'C0 02 01 80';
+  string += char1;
+  string += '00 00 05 00 27 01 01 80';
+  string += char1;
+  string += '20 03 01 80';
+  string += char1;
+  string += '01 00 00 00';
+  string += char3;
+  string += '01 01 00';
+
+  copyClip(string);
+}
+
+let charSpacing = {
+    "0": "26",
+    "1": "12",
+    "2": "23",
+    "3": "24",
+    "4": "26",
+    "5": "24",
+    "6": "26",
+    "7": "23",
+    "8": "27",
+    "9": "25",
+    "、": "12",
+    "。": "12",
+    ",": "10",
+    ".": "10",
+    "・": "19",
+    ":": "11",
+    ";": "11",
+    "?": "20",
+    "!": "10",
+    "_": "23",
+    "ー": "30",
+    "/": "16",
+    "~": "23",
+    "…": "29",
+    "‘": "10",
+    "'": "10",
+    "“": "17",
+    "\"": "17",
+    "(": "15",
+    ")": "14",
+    "〔": "16",
+    "〕": "15",
+    "[": "16",
+    "]": "15",
+    "{": "18",
+    "}": "18",
+    "〈": "17",
+    "〉": "17",
+    "《": "21",
+    "》": "21",
+    "「": "18",
+    "」": "18",
+    "『": "19",
+    "』": "19",
+    "【": "25",
+    "】": "25",
+    "+": "22",
+    "-": "15",
+    "±": "28",
+    "×": "26",
+    "÷": "29",
+    "≠": "28",
+    "<": "21",
+    ">": "21",
+    "≦": "29",
+    "≧": "29",
+    "\\": "29",
+    "$": "21",
+    "%": "26",
+    "&": "26",
+    "*": "17",
+    "@": "30",
+    "☆": "30",
+    "★": "30",
+    "○": "30",
+    "●": "30",
+    "◎": "30",
+    "◇": "30",
+    "◆": "30",
+    "□": "28",
+    "■": "28",
+    "△": "30",
+    "▲": "30",
+    "▽": "30",
+    "▼": "30",
+    "→": "30",
+    "←": "30",
+    "↑": "19",
+    "↓": "19",
+    "A": "26",
+    "B": "25",
+    "C": "23",
+    "D": "25",
+    "E": "23",
+    "F": "21",
+    "G": "29",
+    "H": "26",
+    "I": "10",
+    "J": "22",
+    "K": "24",
+    "L": "20",
+    "M": "30",
+    "N": "26",
+    "O": "27",
+    "P": "23",
+    "Q": "28",
+    "R": "24",
+    "S": "26",
+    "T": "24",
+    "U": "24",
+    "V": "23",
+    "W": "30",
+    "X": "21",
+    "Y": "26",
+    "Z": "24",
+    "a": "22",
+    "b": "22",
+    "c": "19",
+    "d": "23",
+    "e": "20",
+    "f": "18",
+    "g": "20",
+    "h": "20",
+    "i": "11",
+    "j": "15",
+    "k": "19",
+    "l": "11",
+    "m": "30",
+    "n": "22",
+    "o": "22",
+    "p": "22",
+    "q": "25",
+    "r": "18",
+    "s": "22",
+    "t": "21",
+    "u": "20",
+    "v": "19",
+    "w": "26",
+    "x": "18",
+    "y": "22",
+    "z": "19",
+    "ぁ": "28",
+    "あ": "30",
+    "ぃ": "27",
+    "い": "29",
+    "ぅ": "26",
+    "う": "27",
+    "ぇ": "29",
+    "え": "30",
+    "ぉ": "29",
+    "お": "30",
+    "か": "30",
+    "が": "30",
+    "き": "29",
+    "ぎ": "30",
+    "く": "25",
+    "ぐ": "30",
+    "け": "30",
+    "げ": "30",
+    "こ": "29",
+    "ご": "30",
+    "さ": "30",
+    "ざ": "30",
+    "し": "30",
+    "じ": "30",
+    "す": "30",
+    "ず": "30",
+    "せ": "30",
+    "ぜ": "30",
+    "そ": "30",
+    "ぞ": "30",
+    "た": "30",
+    "だ": "30",
+    "ち": "30",
+    "ぢ": "30",
+    "っ": "27",
+    "つ": "29",
+    "づ": "30",
+    "て": "30",
+    "で": "30",
+    "と": "29",
+    "ど": "30",
+    "な": "30",
+    "に": "30",
+    "ぬ": "30",
+    "ね": "30",
+    "の": "30",
+    "は": "30",
+    "ば": "30",
+    "ぱ": "30",
+    "ひ": "30",
+    "び": "30",
+    "ぴ": "30",
+    "ふ": "30",
+    "ぶ": "30",
+    "ぷ": "30",
+    "へ": "30",
+    "べ": "30",
+    "ぺ": "30",
+    "ほ": "30",
+    "ぼ": "30",
+    "ぽ": "30",
+    "ま": "30",
+    "み": "30",
+    "む": "30",
+    "め": "29",
+    "も": "28",
+    "ゃ": "28",
+    "や": "30",
+    "ゅ": "28",
+    "ゆ": "29",
+    "ょ": "28",
+    "よ": "30",
+    "ら": "28",
+    "り": "26",
+    "る": "29",
+    "れ": "30",
+    "ろ": "28",
+    "ゎ": "28",
+    "わ": "30",
+    "ゐ": "29",
+    "ゑ": "30",
+    "を": "29",
+    "ん": "30",
+    "ァ": "28",
+    "ア": "29",
+    "ィ": "26",
+    "イ": "30",
+    "ゥ": "26",
+    "ウ": "30",
+    "ェ": "29",
+    "エ": "30",
+    "ォ": "29",
+    "オ": "30",
+    "カ": "30",
+    "キ": "30",
+    "ク": "30",
+    "ケ": "30",
+    "コ": "30",
+    "サ": "30",
+    "シ": "30",
+    "ス": "30",
+    "セ": "30",
+    "ソ": "30",
+    "タ": "30",
+    "チ": "30",
+    "ッ": "27",
+    "ツ": "30",
+    "テ": "30",
+    "ト": "29",
+    "ナ": "30",
+    "ニ": "30",
+    "ヌ": "29",
+    "ネ": "30",
+    "ノ": "25",
+    "ハ": "30",
+    "ヒ": "29",
+    "フ": "30",
+    "ヘ": "30",
+    "ホ": "30",
+    "マ": "29",
+    "ミ": "28",
+    "ム": "30",
+    "メ": "28",
+    "モ": "30",
+    "ャ": "27",
+    "ヤ": "29",
+    "ュ": "29",
+    "ユ": "30",
+    "ョ": "26",
+    "ヨ": "27",
+    "ラ": "28",
+    "リ": "26",
+    "ル": "30",
+    "レ": "30",
+    "ロ": "27",
+    "ワ": "28",
+    "ヲ": "28",
+    "ン": "30",
+    "ヵ": "27",
+    "ヶ": "29",
+    " ": "12"
 }
