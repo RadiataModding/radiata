@@ -445,14 +445,18 @@ function posCalculator(text) {
 	let decimal = 0;
 	for (let i = 0; i < text.length; i++){
 			decimal += parseInt(charSpacing[text.charAt(i)]);
+			if (isNaN(decimal)){
+				alert("Position Calculator error, unknown spacing for: " + text.charAt(i));
+				return false;
+			}
 			/*console.log(text.charAt(i) + " is " + charSpacing[text.charAt(i)]);*/
 	}
 	decimal = decimal / 3;
-	console.log(decimal)
+	/*console.log(decimal)*/
 	decimal = Math.round(decimal);
-	console.log(decimal)
+	/*console.log(decimal)*/
 	decimal = -decimal;
-	console.log(decimal)
+	/*console.log(decimal)*/
   var size = 8;
 
   if (decimal >= 0) {
@@ -508,6 +512,9 @@ function lineBuild(){
 			if (!(textArr[i].charAt(x) in charEncoding)){
 				return alert(textArr[i].charAt(x) + " is an invalid character!")
 			}
+		}
+		if (!(posCalculator(textArr[i]))){
+			return;
 		}
 	}
 	if (textArr.length == 1){
@@ -1354,39 +1361,64 @@ let charSpacing = {
     "ァ": "28",
     "ア": "29",
     "ィ": "26",
-    "イ": "30",
+    "イ": "27",
     "ゥ": "26",
-    "ウ": "30",
+    "ウ": "28",
     "ェ": "29",
     "エ": "30",
     "ォ": "29",
     "オ": "30",
-    "カ": "30",
+    "カ": "28",
+    "ガ": "30",
     "キ": "30",
-    "ク": "30",
+    "ギ": "30",
+    "ク": "28",
+    "グ": "30",
     "ケ": "30",
-    "コ": "30",
+    "ゲ": "30",
+    "コ": "27",
+    "ゴ": "30",
     "サ": "30",
-    "シ": "30",
+    "ザ": "30",
+    "シ": "29",
+    "ジ": "30",
     "ス": "30",
+    "ズ": "30",
     "セ": "30",
-    "ソ": "30",
-    "タ": "30",
+    "ゼ": "30",
+    "ソ": "28",
+    "ゾ": "30",
+    "タ": "28",
+    "ダ": "30",
     "チ": "30",
+    "ヂ": "30",
     "ッ": "27",
-    "ツ": "30",
+    "ツ": "28",
+    "ヅ": "30",
     "テ": "30",
+    "デ": "30",
     "ト": "29",
+    "ド": "29",
     "ナ": "30",
     "ニ": "30",
     "ヌ": "29",
     "ネ": "30",
     "ノ": "25",
     "ハ": "30",
+    "バ": "30",
+    "パ": "30",
     "ヒ": "29",
-    "フ": "30",
+    "ビ": "30",
+    "ピ": "29",
+    "フ": "29",
+    "ブ": "30",
+    "プ": "30",
     "ヘ": "30",
+    "ベ": "30",
+    "ペ": "30",
     "ホ": "30",
+    "ボ": "30",
+    "ポ": "30",
     "マ": "29",
     "ミ": "28",
     "ム": "30",
@@ -1403,9 +1435,13 @@ let charSpacing = {
     "ル": "30",
     "レ": "30",
     "ロ": "27",
+    "ヮ": "27",
     "ワ": "28",
+    "ヰ": "30",
+    "ヱ": "30",
     "ヲ": "28",
     "ン": "30",
+    "ヴ": "30",
     "ヵ": "27",
     "ヶ": "29",
     " ": "12",
