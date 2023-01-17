@@ -6,7 +6,7 @@ const navStart = "<a class=\"navbar-brand\" href=\"\/\">Radiata<\/a> <button cla
 
 let navGen = "<a class=\"nav-item nav-link\" href=\"..\/decoder\">Text Decoder\/Generator<\/a> ";
 
-let navId = "<a class=\"nav-item nav-link\" href=\"..\/id\">IDs/Values<\/a> ";
+let navId = "<a class=\"nav-item nav-link\" href=\"http:\/\/id.radiata.moe\/\">IDs/Values<\/a> ";
 
 let navText = "<a class=\"nav-item nav-link\" href=\"..\/textbuilder\">Text Builder<\/a> ";
 
@@ -21,17 +21,17 @@ let navRevive = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.change.org\
 const navEnd = "</div> </div>";
 
 function createNav(){
-/*	switch(document.title){
-		case "Name | Radiata":
-			navName = "<a class=\"nav-item nav-link active\" href=\"..\/name\">Name<\/a> "
-			break;	
-	}*/
+/*  switch(document.title){
+        case "Name | Radiata":
+            navName = "<a class=\"nav-item nav-link active\" href=\"..\/name\">Name<\/a> "
+            break;  
+    }*/
 
-	navBar = navStart + navGen + navId + navText + navName + navYouTube + navReddit + navRevive + navEnd;
-	
-	document.getElementById("navbar").innerHTML = navBar;
-	
-	
+    navBar = navStart + navGen + navId + navText + navName + navYouTube + navReddit + navRevive + navEnd;
+    
+    document.getElementById("navbar").innerHTML = navBar;
+    
+    
 }
 
 $(function() {
