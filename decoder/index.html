@@ -2,8 +2,9 @@
 <html>
    <head>
       <meta charset="utf-8">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	  <script src="../js/convert.js"></script>
-      <title>Decoder | Radiata</title>
+      <title>Text Decoder/Encoder | Radiata</title>
    </head>
    <body>
       <a href="/">Home</a>
@@ -12,13 +13,15 @@
       <br>
       <select id = "stringSelect">
          <option>Decode</option>
-         <option>Encode</option>
+         <option selected>Encode</option>
       </select>
-      <input id = "text">
-      <input type = "checkbox" id = "clipboard"><label for = "clipboard">Decode Copied Hex (for decode)</label>
+      <textarea id = "text" style="width: 400px; height: 200px;"></textarea>
+      <input type = "checkbox" id = "count"><label for = "count">Include Count (for encode)</label>
+      <input type = "checkbox" id = "clipboard" checked><label for = "clipboard">Decode Copied Hex (for decode)</label>
       <input type = "checkbox" id = "download"><label for = "download">Download File (for decode)</label>
-      <input type = "checkbox" id = "display"><label for = "display">Preview Result (for decode)</label>
+      <input type = "checkbox" id = "display" checked><label for = "display">Preview Result (for decode)</label>
       <input type = "button" onClick = "startConvert()" value = "Go">
+      
       <br>
       <pre id = "results"></pre>
    </body>
