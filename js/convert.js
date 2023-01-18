@@ -1570,6 +1570,7 @@ let charSpacing = {
 
 let charEncoding = {
   " ": 1,
+  "\n": 10,
   "0": 89,
   "1": 90,
   "2": 91,
