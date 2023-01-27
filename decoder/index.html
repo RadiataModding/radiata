@@ -12,14 +12,16 @@
       <a href="../name">Name Generator</a>
       <br>
       <select id = "stringSelect">
-         <option>Decode</option>
-         <option selected>Encode</option>
+         <option selected>Decode</option>
+         <option>Encode</option>
       </select>
       <textarea id = "text" style="width: 400px; height: 200px;"></textarea>
       <input type = "checkbox" id = "count"><label for = "count">Include Count (for encode)</label>
       <input type = "checkbox" id = "clipboard" checked><label for = "clipboard">Decode Copied Hex (for decode)</label>
       <input type = "checkbox" id = "download"><label for = "download">Download File (for decode)</label>
       <input type = "checkbox" id = "display" checked><label for = "display">Preview Result (for decode)</label>
+      <input type = "checkbox" id = "ptbr" checked><label for = "ptbr">PT-BR Mode (for decode)</label>
+      <input type = "checkbox" id = "enbjp"><label for = "enbjp">Include Japanese (for decode)</label>
       <input type = "button" onClick = "startConvert()" value = "Go">
       
       <br>
