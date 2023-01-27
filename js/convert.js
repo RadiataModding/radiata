@@ -13,410 +13,410 @@ let pointerArr = [];
 
 let currentVoice = 0;
 
-$("#myfile").on("change", function (changeEvent) {
-  for (var i = 0; i < changeEvent.target.files.length; ++i) {
-    (function (file) {               // Wrap current file in a closure.
-      var loader = new FileReader();
-      loader.onload = function (loadEvent) {
-        if (loadEvent.target.readyState != 2)
-          return;
-        if (loadEvent.target.error) {
-          alert("Error while reading file " + file.name + ": " + loadEvent.target.error);
-          return;
-        }
-        console.log(loadEvent.target.result.length); // Your text is in loadEvent.target.result
-      };
-      loader.readAsBinaryString(file);
-    })(changeEvent.target.files[i]);
-  }
+$("#myfile").on("change", function(changeEvent) {
+    for (var i = 0; i < changeEvent.target.files.length; ++i) {
+        (function(file) { // Wrap current file in a closure.
+            var loader = new FileReader();
+            loader.onload = function(loadEvent) {
+                if (loadEvent.target.readyState != 2)
+                    return;
+                if (loadEvent.target.error) {
+                    alert("Error while reading file " + file.name + ": " + loadEvent.target.error);
+                    return;
+                }
+                console.log(loadEvent.target.result.length); // Your text is in loadEvent.target.result
+            };
+            loader.readAsBinaryString(file);
+        })(changeEvent.target.files[i]);
+    }
 });
 
-function startConvert(){
-	if (document.getElementById('stringSelect').value == "Encode"){
-		if (document.getElementById("count").checked){
-			count = document.getElementById('text').value.length;
-			res = changeEndianness2(count.toString(16).padStart(4,'0')) + "000000000000";
-			res += stringEncoder(document.getElementById('text').value);
-			res += "0000"
-			document.getElementById("results").innerHTML = res;
-		} else {
-			document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
-		}
-	} else if (document.getElementById('stringSelect').value == "Trim") {
-		if (document.getElementById("clipboard").checked){
-			navigator.clipboard.readText()
-  				.then(text => {
-  					hexTrim(text);
-  					if (document.getElementById("download").checked){
-						let a = document.createElement('a');
-						a.href = "data:application/octet-stream,"+encodeURIComponent(result);
-						a.download = 'result.txt';
-						a.click();
-					}
-					if (document.getElementById("display").checked){
-						document.getElementById("results").innerHTML = result;
-					}	
-  				})
-  				.catch(err => {
-    				console.error('Failed to read clipboard contents: ', err);
-  				});
-  	} else {
-			hexTrim(document.getElementById('text').value);
-			if (document.getElementById("download").checked){
-			let a = document.createElement('a');
-			a.href = "data:application/octet-stream,"+encodeURIComponent(result);
-			a.download = 'result.txt';
-			a.click();
-			}
-			if (document.getElementById("display").checked){
-				document.getElementById("results").innerHTML = result;
-			}
-		}	
+function startConvert() {
+    if (document.getElementById('stringSelect').value == "Encode") {
+        if (document.getElementById("count").checked) {
+            count = document.getElementById('text').value.length;
+            res = changeEndianness2(count.toString(16).padStart(4, '0')) + "000000000000";
+            res += stringEncoder(document.getElementById('text').value);
+            res += "0000"
+            document.getElementById("results").innerHTML = res;
+        } else {
+            document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
+        }
+    } else if (document.getElementById('stringSelect').value == "Trim") {
+        if (document.getElementById("clipboard").checked) {
+            navigator.clipboard.readText()
+                .then(text => {
+                    hexTrim(text);
+                    if (document.getElementById("download").checked) {
+                        let a = document.createElement('a');
+                        a.href = "data:application/octet-stream," + encodeURIComponent(result);
+                        a.download = 'result.txt';
+                        a.click();
+                    }
+                    if (document.getElementById("display").checked) {
+                        document.getElementById("results").innerHTML = result;
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to read clipboard contents: ', err);
+                });
+        } else {
+            hexTrim(document.getElementById('text').value);
+            if (document.getElementById("download").checked) {
+                let a = document.createElement('a');
+                a.href = "data:application/octet-stream," + encodeURIComponent(result);
+                a.download = 'result.txt';
+                a.click();
+            }
+            if (document.getElementById("display").checked) {
+                document.getElementById("results").innerHTML = result;
+            }
+        }
 
-	} else if (document.getElementById('stringSelect').value == "Line Build"){
-			document.getElementById("results").innerHTML = lineBuild(document.getElementById('text').value, document.getElementById('char').value, document.getElementById('lineNum').value); 
-	} else {
-		if (document.getElementById("clipboard").checked){
-			navigator.clipboard.readText()
-  				.then(text => {
-  					stringDecoder(text);
-  					if (document.getElementById("download").checked){
-						let a = document.createElement('a');
-						a.href = "data:application/octet-stream,"+encodeURIComponent(result);
-						a.download = 'result.txt';
-						a.click();
-					}
-					if (document.getElementById("display").checked){
-						document.getElementById("results").innerHTML = result;
-					}	
-  				})
-  				.catch(err => {
-    				console.error('Failed to read clipboard contents: ', err);
-  				});
+    } else if (document.getElementById('stringSelect').value == "Line Build") {
+        document.getElementById("results").innerHTML = lineBuild(document.getElementById('text').value, document.getElementById('char').value, document.getElementById('lineNum').value);
+    } else {
+        if (document.getElementById("clipboard").checked) {
+            navigator.clipboard.readText()
+                .then(text => {
+                    stringDecoder(text);
+                    if (document.getElementById("download").checked) {
+                        let a = document.createElement('a');
+                        a.href = "data:application/octet-stream," + encodeURIComponent(result);
+                        a.download = 'result.txt';
+                        a.click();
+                    }
+                    if (document.getElementById("display").checked) {
+                        document.getElementById("results").innerHTML = result;
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to read clipboard contents: ', err);
+                });
 
-		} else {
-			stringDecoder(document.getElementById('text').value);
-			if (document.getElementById("download").checked){
-			let a = document.createElement('a');
-			a.href = "data:application/octet-stream,"+encodeURIComponent(result);
-			a.download = 'result.txt';
-			a.click();
-			}
-			if (document.getElementById("display").checked){
-				document.getElementById("results").innerHTML = result;
-			}	
-		}
-	
-	}
+        } else {
+            stringDecoder(document.getElementById('text').value);
+            if (document.getElementById("download").checked) {
+                let a = document.createElement('a');
+                a.href = "data:application/octet-stream," + encodeURIComponent(result);
+                a.download = 'result.txt';
+                a.click();
+            }
+            if (document.getElementById("display").checked) {
+                document.getElementById("results").innerHTML = result;
+            }
+        }
+
+    }
 }
 
-function generateName(){
-	let name = "";
-	name = document.getElementById('text').value;
-	if (name.length > 16) {
-		alert("Name too long!");
-		return;
-	} else if (name == "") {
-		alert("Nothing entered!");
-		return;
-	}
+function generateName() {
+    let name = "";
+    name = document.getElementById('text').value;
+    if (name.length > 16) {
+        alert("Name too long!");
+        return;
+    } else if (name == "") {
+        alert("Nothing entered!");
+        return;
+    }
 
-	let text = stringEncoder(name);
+    let text = stringEncoder(name);
 
-	if (text.indexOf('�') != -1){
-		alert("Invalid character detected! Please only use letters, numbers, spaces, and basic punctuation.");
-		return;
-	}
-
-
-	let charID = document.getElementById('charID').value;
-
-	charID = charID.replace(/\s/g,'');
-
-	charID = parseInt(charID, 16);
-
-	if (isNaN(charID)){
-		alert("Error in character ID! Please make sure you've entered a proper ID.");
-		return;
-	}
-	
-
-	for (let i = 0; i < charArr.length; i++){
-		if (charID == charArr[i]){
-			alert("ID already has name changed");
-			return;
-		}
-	}
-
-	charArr.push(charID);
-
-	let jackOffset = 0xD1C8;
-
-	let ganzBase = 0xD538;
-
-	let offset = ((charID - 0x2) * 0x370);
-
-	if (charID == 1){
-		offset = jackOffset;
-	} else {
-		offset = ganzBase + offset;
-	}
-
-	let offset1, offset2, offest3, offest4, offest5, offest6, offest7, offest8;
+    if (text.indexOf('�') != -1) {
+        alert("Invalid character detected! Please only use letters, numbers, spaces, and basic punctuation.");
+        return;
+    }
 
 
+    let charID = document.getElementById('charID').value;
 
-	if (text.length % 8 != 0){
-		text += "0000";
-	}
+    charID = charID.replace(/\s/g, '');
 
-	let add1, add2, add3, add4, add5, add6, add7, add8;
+    charID = parseInt(charID, 16);
 
-	for (let i = 0; i < 8; i++){
-		switch(i){
-			case 0:
-				let temp = text.substring(0,8);
-				text = text.substring(8);
-				add1 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				offset1 = offset.toString(16).toUpperCase();
-				offset1 = String("00000000" + offset1).slice(-8);
-				break;
-			case 1:
-				if (text.length == 0){
-					add2 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add2 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset2 = parseInt(offset1, 16) + 0x4;
-				offset2 = offset2.toString(16).toUpperCase();
-				offset2 = String("00000000" + offset2).slice(-8);
-				break;
-			case 2:
-				if (text.length == 0){
-					add3 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add3 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset3 = parseInt(offset2, 16) + 0x4;
-				offset3 = offset3.toString(16).toUpperCase();
-				offset3 = String("00000000" + offset3).slice(-8);
-				break;
-			case 3:
-				if (text.length == 0){
-					add4 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add4 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset4 = parseInt(offset3, 16) + 0x4;
-				offset4 = offset4.toString(16).toUpperCase();
-				offset4 = String("00000000" + offset4).slice(-8);
-				break;
-			case 4:
-				if (text.length == 0){
-					add5 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add5 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset5 = parseInt(offset4, 16) + 0x4;
-				offset5 = offset5.toString(16).toUpperCase();
-				offset5 = String("00000000" + offset5).slice(-8);
-				break;
-			case 5:
-				if (text.length == 0){
-					add6 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add6 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset6 = parseInt(offset5, 16) + 0x4;
-				offset6 = offset6.toString(16).toUpperCase();
-				offset6 = String("00000000" + offset6).slice(-8);
-				break;
-			case 6:
-				if (text.length == 0){
-					add7 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add7 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset7 = parseInt(offset6, 16) + 0x4;
-				offset7 = offset7.toString(16).toUpperCase();
-				offset7 = String("00000000" + offset7).slice(-8);
-				break;
-			case 7:
-				if (text.length == 0){
-					add8 = "00000000";
-				} else {
-					let temp = text.substring(0,8);
-					text = text.substring(8);
-					add8 = temp.substring(6,8) + temp.substring(4,6) + temp.substring(2,4) + temp.substring(0,2);
-				}
-				offset8 = parseInt(offset7, 16) + 0x4;
-				offset8 = offset8.toString(16).toUpperCase();
-				offset8 = String("00000000" + offset8).slice(-8);
-				break;
-		}
-	}
+    if (isNaN(charID)) {
+        alert("Error in character ID! Please make sure you've entered a proper ID.");
+        return;
+    }
 
-	//console.log(offset1);
-	//console.log(offset2);
-	//console.log(offset7);
-	//console.log(offset8);
 
-	let pnach;
-	if (firstPass){
-		pnach = "gametitle=Radiata Stories\n";
-		pnach += "comment=Character Name Changer" + "\n\n";
-		firstPass = false;
-	} else {
-		pnach = "";
-	}
-	pnach += "//Character ID: " + charID.toString(16).toUpperCase() + " changed name to: " + name + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add1 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset1 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add2 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset2 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add3 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset3 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add4 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset4 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add5 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset5 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add6 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset6 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add7 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset7 + "\n";
-	pnach += "patch=1,EE,60328CE0,extended," + add8 + "\n";
-	pnach += "patch=1,EE,00020000,extended," + offset8 + "\n\n";
+    for (let i = 0; i < charArr.length; i++) {
+        if (charID == charArr[i]) {
+            alert("ID already has name changed");
+            return;
+        }
+    }
 
-	//console.log(pnach);
-	document.getElementById("results").innerHTML = "Added."
-	fileD += pnach;
+    charArr.push(charID);
+
+    let jackOffset = 0xD1C8;
+
+    let ganzBase = 0xD538;
+
+    let offset = ((charID - 0x2) * 0x370);
+
+    if (charID == 1) {
+        offset = jackOffset;
+    } else {
+        offset = ganzBase + offset;
+    }
+
+    let offset1, offset2, offest3, offest4, offest5, offest6, offest7, offest8;
+
+
+
+    if (text.length % 8 != 0) {
+        text += "0000";
+    }
+
+    let add1, add2, add3, add4, add5, add6, add7, add8;
+
+    for (let i = 0; i < 8; i++) {
+        switch (i) {
+            case 0:
+                let temp = text.substring(0, 8);
+                text = text.substring(8);
+                add1 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                offset1 = offset.toString(16).toUpperCase();
+                offset1 = String("00000000" + offset1).slice(-8);
+                break;
+            case 1:
+                if (text.length == 0) {
+                    add2 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add2 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset2 = parseInt(offset1, 16) + 0x4;
+                offset2 = offset2.toString(16).toUpperCase();
+                offset2 = String("00000000" + offset2).slice(-8);
+                break;
+            case 2:
+                if (text.length == 0) {
+                    add3 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add3 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset3 = parseInt(offset2, 16) + 0x4;
+                offset3 = offset3.toString(16).toUpperCase();
+                offset3 = String("00000000" + offset3).slice(-8);
+                break;
+            case 3:
+                if (text.length == 0) {
+                    add4 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add4 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset4 = parseInt(offset3, 16) + 0x4;
+                offset4 = offset4.toString(16).toUpperCase();
+                offset4 = String("00000000" + offset4).slice(-8);
+                break;
+            case 4:
+                if (text.length == 0) {
+                    add5 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add5 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset5 = parseInt(offset4, 16) + 0x4;
+                offset5 = offset5.toString(16).toUpperCase();
+                offset5 = String("00000000" + offset5).slice(-8);
+                break;
+            case 5:
+                if (text.length == 0) {
+                    add6 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add6 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset6 = parseInt(offset5, 16) + 0x4;
+                offset6 = offset6.toString(16).toUpperCase();
+                offset6 = String("00000000" + offset6).slice(-8);
+                break;
+            case 6:
+                if (text.length == 0) {
+                    add7 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add7 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset7 = parseInt(offset6, 16) + 0x4;
+                offset7 = offset7.toString(16).toUpperCase();
+                offset7 = String("00000000" + offset7).slice(-8);
+                break;
+            case 7:
+                if (text.length == 0) {
+                    add8 = "00000000";
+                } else {
+                    let temp = text.substring(0, 8);
+                    text = text.substring(8);
+                    add8 = temp.substring(6, 8) + temp.substring(4, 6) + temp.substring(2, 4) + temp.substring(0, 2);
+                }
+                offset8 = parseInt(offset7, 16) + 0x4;
+                offset8 = offset8.toString(16).toUpperCase();
+                offset8 = String("00000000" + offset8).slice(-8);
+                break;
+        }
+    }
+
+    //console.log(offset1);
+    //console.log(offset2);
+    //console.log(offset7);
+    //console.log(offset8);
+
+    let pnach;
+    if (firstPass) {
+        pnach = "gametitle=Radiata Stories\n";
+        pnach += "comment=Character Name Changer" + "\n\n";
+        firstPass = false;
+    } else {
+        pnach = "";
+    }
+    pnach += "//Character ID: " + charID.toString(16).toUpperCase() + " changed name to: " + name + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add1 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset1 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add2 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset2 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add3 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset3 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add4 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset4 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add5 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset5 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add6 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset6 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add7 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset7 + "\n";
+    pnach += "patch=1,EE,60328CE0,extended," + add8 + "\n";
+    pnach += "patch=1,EE,00020000,extended," + offset8 + "\n\n";
+
+    //console.log(pnach);
+    document.getElementById("results").innerHTML = "Added."
+    fileD += pnach;
 }
 
-function download(){
-	if (firstPass){
-		alert("Nothing added.");
-		return;
-	}
-	let a = document.createElement('a');
-	a.href = "data:application/octet-stream,"+encodeURIComponent(fileD);
-	a.download = '47B9B2FD.pnach';
-	a.click();
-	document.getElementById("results").innerHTML = "Downloaded. List has been cleared.";
-	fileD = "";
-	charArr = [];
-	firstPass = true;
+function download() {
+    if (firstPass) {
+        alert("Nothing added.");
+        return;
+    }
+    let a = document.createElement('a');
+    a.href = "data:application/octet-stream," + encodeURIComponent(fileD);
+    a.download = '47B9B2FD.pnach';
+    a.click();
+    document.getElementById("results").innerHTML = "Downloaded. List has been cleared.";
+    fileD = "";
+    charArr = [];
+    firstPass = true;
 }
 
 function stringEncoder(text) {
-	result = "";
-	for (let i = 0; i < text.length; i++){
-		if (!(text.charAt(i) in charEncoding)){
-			return alert(text.charAt(i) + " is an invalid character!")
-		}
-		result += changeEndianness2(charEncoding[text.charAt(i)].toString(16).padStart(4, 0).toUpperCase());
-	}
-	return result;
-			/*case "è":
-				result += "510101000100";
-				break;
-			case "é":
-				result += "520101000100";
-				break;
-			case "ê":
-				result += "530101000100";
-				break;
-			case "ë":
-				result += "540101000100";
-				break;
-			case "ã":
-				result += "550101000100";
-				break;
-			case "á":
-				result += "5B0101000100";
-				break;
-			case "ç":
-				result += "5F0101000100";
-				break;
-			case "…":
-				result += "130013001300";
-				break;
-			case "µ":
-				result += "1CC0";
-				break;
-			case "\n":
-				result += "0A00";
-				break;*/
-			/*case "4D00":
-				result += "◇";
-				break;
-			case "4E00":
-				result += "◆";
-				break;
-			case "4F00":
-				result += "□";
-				break;
-			case "5000":
-				result += "⬛";
-				break;
-			case "5100":
-				result += "△";
-				break;
-			case "5200":
-				result += "▲";
-				break;
-			case "5300":
-				result += "▽";
-				break;
-			case "5400":
-				result += "▼";
-				break;
-			case "5500":
-				result += "→";
-				break;
-			case "5600":
-				result += "←";
-				break;
-			case "5700":
-				result += "↑";
-				break;
-			case "5800":
-				result += "↓";
-				break;*/
+    result = "";
+    for (let i = 0; i < text.length; i++) {
+        if (!(text.charAt(i) in charEncoding)) {
+            return alert(text.charAt(i) + " is an invalid character!")
+        }
+        result += changeEndianness2(charEncoding[text.charAt(i)].toString(16).padStart(4, 0).toUpperCase());
+    }
+    return result;
+    /*case "è":
+    	result += "510101000100";
+    	break;
+    case "é":
+    	result += "520101000100";
+    	break;
+    case "ê":
+    	result += "530101000100";
+    	break;
+    case "ë":
+    	result += "540101000100";
+    	break;
+    case "ã":
+    	result += "550101000100";
+    	break;
+    case "á":
+    	result += "5B0101000100";
+    	break;
+    case "ç":
+    	result += "5F0101000100";
+    	break;
+    case "…":
+    	result += "130013001300";
+    	break;
+    case "µ":
+    	result += "1CC0";
+    	break;
+    case "\n":
+    	result += "0A00";
+    	break;*/
+    /*case "4D00":
+    	result += "◇";
+    	break;
+    case "4E00":
+    	result += "◆";
+    	break;
+    case "4F00":
+    	result += "□";
+    	break;
+    case "5000":
+    	result += "⬛";
+    	break;
+    case "5100":
+    	result += "△";
+    	break;
+    case "5200":
+    	result += "▲";
+    	break;
+    case "5300":
+    	result += "▽";
+    	break;
+    case "5400":
+    	result += "▼";
+    	break;
+    case "5500":
+    	result += "→";
+    	break;
+    case "5600":
+    	result += "←";
+    	break;
+    case "5700":
+    	result += "↑";
+    	break;
+    case "5800":
+    	result += "↓";
+    	break;*/
 }
 
 const changeEndianness = (string) => {
-        const result = [];
-        let len = string.length - 2;
-        while (len >= 0) {
-          result.push(string.substr(len, 2));
-          len -= 2;
-        }
-        return result.join('');
+    const result = [];
+    let len = string.length - 2;
+    while (len >= 0) {
+        result.push(string.substr(len, 2));
+        len -= 2;
+    }
+    return result.join('');
 }
 
 function changeEndianness2(string) {
-        const result = [];
-        let len = string.length - 2;
-        while (len >= 0) {
-          result.push(string.substr(len, 2));
-          len -= 2;
-        }
-        return result.join('');
+    const result = [];
+    let len = string.length - 2;
+    while (len >= 0) {
+        result.push(string.substr(len, 2));
+        len -= 2;
+    }
+    return result.join('');
 }
 
-function recruitChar(id){
+function recruitChar(id) {
     char = changeEndianness2(id.toString(16).padStart(4, '0'));
     full = "";
     full += "14 03 00 80 20 0F 00 00";
@@ -442,705 +442,724 @@ function recruitChar(id){
 }
 
 function posCalculator(text) {
-	let decimal = 0;
-	for (let i = 0; i < text.length; i++){
-			decimal += parseInt(charSpacing[text.charAt(i)]);
-			if (isNaN(decimal)){
-				alert("Position Calculator error, unknown spacing for: " + text.charAt(i));
-				return false;
-			}
-			/*console.log(text.charAt(i) + " is " + charSpacing[text.charAt(i)]);*/
-	}
-	decimal = decimal / 3;
-	/*console.log(decimal)*/
-	decimal = Math.round(decimal);
-	/*console.log(decimal)*/
-	decimal = -decimal;
-	/*console.log(decimal)*/
-  var size = 8;
-
-  if (decimal >= 0) {
-    var hexadecimal = decimal.toString(16);
-
-    while ((hexadecimal.length % size) != 0) {
-      hexadecimal = "" + 0 + hexadecimal;
+    let decimal = 0;
+    for (let i = 0; i < text.length; i++) {
+        decimal += parseInt(charSpacing[text.charAt(i)]);
+        if (isNaN(decimal)) {
+            alert("Position Calculator error, unknown spacing for: " + text.charAt(i));
+            return false;
+        }
+        /*console.log(text.charAt(i) + " is " + charSpacing[text.charAt(i)]);*/
     }
+    decimal = decimal / 3;
+    /*console.log(decimal)*/
+    decimal = Math.round(decimal);
+    /*console.log(decimal)*/
+    decimal = -decimal;
+    /*console.log(decimal)*/
+    var size = 8;
 
-    return hexadecimal;
-  } else {
-    var hexadecimal = Math.abs(decimal).toString(16);
-    while ((hexadecimal.length % size) != 0) {
-      hexadecimal = "" + 0 + hexadecimal;
+    if (decimal >= 0) {
+        var hexadecimal = decimal.toString(16);
+
+        while ((hexadecimal.length % size) != 0) {
+            hexadecimal = "" + 0 + hexadecimal;
+        }
+
+        return hexadecimal;
+    } else {
+        var hexadecimal = Math.abs(decimal).toString(16);
+        while ((hexadecimal.length % size) != 0) {
+            hexadecimal = "" + 0 + hexadecimal;
+        }
+
+        var output = '';
+        for (i = 0; i < hexadecimal.length; i++) {
+            output += (0x0F - parseInt(hexadecimal[i], 16)).toString(16);
+        }
+
+        output = (0x01 + parseInt(output, 16)).toString(16);
+        return changeEndianness(output.substring(4, 8).toUpperCase());
     }
-
-    var output = '';
-    for (i = 0; i < hexadecimal.length; i++) {
-      output += (0x0F - parseInt(hexadecimal[i], 16)).toString(16);
-    }
-
-    output = (0x01 + parseInt(output, 16)).toString(16);
-    return changeEndianness(output.substring(4, 8).toUpperCase());
-  }
 }
 
 
-function lineBuild(){
-	let text = document.getElementById('text').value;
-	if (text.length < 3){
-		alert("Text must be at least 3 characters long.")
-		return;
-	}
-	let bustup = document.getElementById("bustup").checked
-	let char = document.getElementById('char').value;
-	char = parseInt(char, 16);
-	char = char.toString(16).padStart(4, '0').toUpperCase();
-	let lineOpt = document.getElementById('lineOpt').value;
-	let lineNum;
-	if (lineOpt == 1){
-		lineNum = ++currentVoice;
-		lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
-	} else{
-		lineNum = document.getElementById('lineNum').value;
-		lineNum = parseInt(lineNum);
-		lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
-	}
-	
-	result = "";
-	let textArr = text.split(/\n/);
-	for(let i = 0; i < textArr.length; i++){
-		for(let x = 0; x < textArr[i].length; x++){
-			if (!(textArr[i].charAt(x) in charEncoding)){
-				return alert(textArr[i].charAt(x) + " is an invalid character!")
-			}
-		}
-		if (!(posCalculator(textArr[i]))){
-			return;
-		}
-	}
-	if (textArr.length == 1){
-		let textLength = text.length;
-		textLength = Math.round(textLength /= 2) + 4;
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 00 00 01 00 00 00";
-		result += changeEndianness(char);
-		result += "00 00 0F 25 00 00";
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 0E 20 01 00";
-		if (bustup) {
-			result += "00";
-		} else {
-			result += "01";
-		}
-		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-		result += posCalculator(textArr[0]);
-		result += "BE 00 0F 28 1F 00";
-		result += changeEndianness(lineNum);
-		result += "0E 4E 01 00 01 00 76 00 00 00";
-		result += stringEncoder(textArr[0]);
-		result += "0F 20 78 00 03 00 00 00";
-		result = result.replace(/\s/g,''); 
-		lineArr.push(result);
-		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
-	} else if (textArr.length == 2){
-		let textLength = text.length - textArr.length;
-		textLength = Math.round(textLength /= 2) + 4;
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 00 00 01 00 00 00";
-		result += changeEndianness(char);
-		result += "00 00 0F 25 00 00";
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 0E 20 01 00";
-		if (bustup) {
-			result += "00";
-		} else {
-			result += "01";
-		}
-		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-		result += posCalculator(textArr[0]);
-		result += "A8 00 0F 28 1F 00";
-		result += changeEndianness(lineNum);
-		result += "0E 4E 01 00 01 00 60 00 00 00";
-		result += stringEncoder(textArr[0]);
-		result += "0A 00 04 20";
-		result += posCalculator(textArr[1]);
-		result += "D0 00";
-		result += stringEncoder(textArr[1]);
-		result += "0F 20 78 00 03 00 00 00";
-		result = result.replace(/\s/g,''); 
-		lineArr.push(result);
-		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
-	} else if (textArr.length == 3){
-		let textLength = text.length - textArr.length;
-		textLength = Math.round(textLength /= 2) + 4;
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 00 00 01 00 00 00";
-		result += changeEndianness(char);
-		result += "00 00 0F 25 00 00";
-		result += textLength.toString(16).padStart(2, '0').toUpperCase();
-		result += "00 0E 20 01 00";
-		if (bustup) {
-			result += "00";
-		} else {
-			result += "01";
-		}
-		result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-		result += posCalculator(textArr[0]);
-		result += "88 00 0F 28 1F 00";
-		result += changeEndianness(lineNum);
-		result += "0E 4E 01 00 01 00 40 00 00 00";
-		result += stringEncoder(textArr[0]);
-		result += "0A 00 04 20";
-		result += posCalculator(textArr[1]);
-		result += "B0 00";
-		result += stringEncoder(textArr[1]);
-		result += "0A 00 04 20";
-		result += posCalculator(textArr[2]);
-		result += "D8 00";
-		result += stringEncoder(textArr[2]);
-		result += "0F 20 78 00 03 00 00 00";
-		result = result.replace(/\s/g,''); 
-		lineArr.push(result);
-		document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
-	} else {
-		return alert("Too many line breaks, three max per line.");
-	}
+function lineBuild() {
+    let text = document.getElementById('text').value;
+    if (text.length < 3) {
+        alert("Text must be at least 3 characters long.")
+        return;
+    }
+    let bustup = document.getElementById("bustup").checked
+    let char = document.getElementById('char').value;
+    char = parseInt(char, 16);
+    char = char.toString(16).padStart(4, '0').toUpperCase();
+    let lineOpt = document.getElementById('lineOpt').value;
+    let lineNum;
+    if (lineOpt == 1) {
+        lineNum = ++currentVoice;
+        lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+    } else {
+        lineNum = document.getElementById('lineNum').value;
+        lineNum = parseInt(lineNum);
+        lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+    }
+
+    result = "";
+    let textArr = text.split(/\n/);
+    for (let i = 0; i < textArr.length; i++) {
+        for (let x = 0; x < textArr[i].length; x++) {
+            if (!(textArr[i].charAt(x) in charEncoding)) {
+                return alert(textArr[i].charAt(x) + " is an invalid character!")
+            }
+        }
+        if (!(posCalculator(textArr[i]))) {
+            return;
+        }
+    }
+    if (textArr.length == 1) {
+        let textLength = text.length;
+        textLength = Math.round(textLength /= 2) + 4;
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 00 00 01 00 00 00";
+        result += changeEndianness(char);
+        result += "00 00 0F 25 00 00";
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 0E 20 01 00";
+        if (bustup) {
+            result += "00";
+        } else {
+            result += "01";
+        }
+        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+        result += posCalculator(textArr[0]);
+        result += "BE 00 0F 28 1F 00";
+        result += changeEndianness(lineNum);
+        result += "0E 4E 01 00 01 00 76 00 00 00";
+        result += stringEncoder(textArr[0]);
+        result += "0F 20 78 00 03 00 00 00";
+        result = result.replace(/\s/g, '');
+        lineArr.push(result);
+        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
+    } else if (textArr.length == 2) {
+        let textLength = text.length - textArr.length;
+        textLength = Math.round(textLength /= 2) + 4;
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 00 00 01 00 00 00";
+        result += changeEndianness(char);
+        result += "00 00 0F 25 00 00";
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 0E 20 01 00";
+        if (bustup) {
+            result += "00";
+        } else {
+            result += "01";
+        }
+        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+        result += posCalculator(textArr[0]);
+        result += "A8 00 0F 28 1F 00";
+        result += changeEndianness(lineNum);
+        result += "0E 4E 01 00 01 00 60 00 00 00";
+        result += stringEncoder(textArr[0]);
+        result += "0A 00 04 20";
+        result += posCalculator(textArr[1]);
+        result += "D0 00";
+        result += stringEncoder(textArr[1]);
+        result += "0F 20 78 00 03 00 00 00";
+        result = result.replace(/\s/g, '');
+        lineArr.push(result);
+        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
+    } else if (textArr.length == 3) {
+        let textLength = text.length - textArr.length;
+        textLength = Math.round(textLength /= 2) + 4;
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 00 00 01 00 00 00";
+        result += changeEndianness(char);
+        result += "00 00 0F 25 00 00";
+        result += textLength.toString(16).padStart(2, '0').toUpperCase();
+        result += "00 0E 20 01 00";
+        if (bustup) {
+            result += "00";
+        } else {
+            result += "01";
+        }
+        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+        result += posCalculator(textArr[0]);
+        result += "88 00 0F 28 1F 00";
+        result += changeEndianness(lineNum);
+        result += "0E 4E 01 00 01 00 40 00 00 00";
+        result += stringEncoder(textArr[0]);
+        result += "0A 00 04 20";
+        result += posCalculator(textArr[1]);
+        result += "B0 00";
+        result += stringEncoder(textArr[1]);
+        result += "0A 00 04 20";
+        result += posCalculator(textArr[2]);
+        result += "D8 00";
+        result += stringEncoder(textArr[2]);
+        result += "0F 20 78 00 03 00 00 00";
+        result = result.replace(/\s/g, '');
+        lineArr.push(result);
+        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
+    } else {
+        return alert("Too many line breaks, three max per line.");
+    }
 }
 
-function download2(){
-	if (lineArr.length == 0){
-		alert("Nothing added.");
-		return;
-	}
-	if (document.getElementById("null").checked){
-		lineArr.unshift("0000000001000000010000000F25000000000E200100010002206A695F800221000000000320330B661605010710000304200000BE000E4E01000100760000000E24010002010000");
-	}
-	let totalSize = 0;
-	let currentLength = 0;
-	let baseLength = 48;
-	baseLength += 8*lineArr.length;
-	for (let i = 0; i < lineArr.length; i++){
-		lineArr[i] = lineArr[i].replace(/\s/g,'');
-		if(i == 0){
-			while(((lineArr[i].length / 2) % 4) != 0){
-				lineArr[i] += "00";
-			}
-			currentLength = baseLength/2;
-			totalSize += currentLength + (lineArr[0].length / 2);
-			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
-			temp = changeEndianness(temp);
-			pointerArr.push(temp);
-		} else {
-			while(((lineArr[i].length / 2) % 4) != 0){
-				lineArr[i] += "00";
-			}
-			currentLength += (lineArr[i-1].length / 2);
-			totalSize += lineArr[i].length / 2;
-			let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
-			temp = changeEndianness(temp);
-			pointerArr.push(temp);
-		}
-	}
-	totalSize = totalSize.toString(16).padStart(8, '0').toUpperCase();
-	totalSize = changeEndianness(totalSize);
-	let lineCount = lineArr.length;
-	lineCount = lineCount.toString(16).padStart(8, '0').toUpperCase();
-	lineCount = changeEndianness(lineCount);
-	let output = "52 4D 46 31 CE 00 00 00 00 00 00 00";
-	output += totalSize;
-	output += lineCount;
-	output += totalSize;
-	for (let i = 0; i < pointerArr.length; i++){
-		output += pointerArr[i];
-	}
-	for (let i = 0; i < lineArr.length; i++){
-		output += lineArr[i];
-	}
-	output = output.replace(/\s/g,'');
-	navigator.clipboard.writeText(output)
-  .then(() => {
-  	if (document.getElementById("null").checked){
-  		lineArr.shift();
-  	}
-  	pointerArr = [];
-    alert("Data copied to clipboard.");
-  })
-  .catch(err => {
-  	if (document.getElementById("null").checked){
-  		lineArr.shift();
-  	}
-  	pointerArr = [];
-    console.log('Error: ', err);
-  });
-	//document.getElementById("results").innerHTML = output;
+function download2() {
+    if (lineArr.length == 0) {
+        alert("Nothing added.");
+        return;
+    }
+    if (document.getElementById("null").checked) {
+        lineArr.unshift("0000000001000000010000000F25000000000E200100010002206A695F800221000000000320330B661605010710000304200000BE000E4E01000100760000000E24010002010000");
+    }
+    let totalSize = 0;
+    let currentLength = 0;
+    let baseLength = 48;
+    baseLength += 8 * lineArr.length;
+    for (let i = 0; i < lineArr.length; i++) {
+        lineArr[i] = lineArr[i].replace(/\s/g, '');
+        if (i == 0) {
+            while (((lineArr[i].length / 2) % 4) != 0) {
+                lineArr[i] += "00";
+            }
+            currentLength = baseLength / 2;
+            totalSize += currentLength + (lineArr[0].length / 2);
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        } else {
+            while (((lineArr[i].length / 2) % 4) != 0) {
+                lineArr[i] += "00";
+            }
+            currentLength += (lineArr[i - 1].length / 2);
+            totalSize += lineArr[i].length / 2;
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        }
+    }
+    totalSize = totalSize.toString(16).padStart(8, '0').toUpperCase();
+    totalSize = changeEndianness(totalSize);
+    let lineCount = lineArr.length;
+    lineCount = lineCount.toString(16).padStart(8, '0').toUpperCase();
+    lineCount = changeEndianness(lineCount);
+    let output = "52 4D 46 31 CE 00 00 00 00 00 00 00";
+    output += totalSize;
+    output += lineCount;
+    output += totalSize;
+    for (let i = 0; i < pointerArr.length; i++) {
+        output += pointerArr[i];
+    }
+    for (let i = 0; i < lineArr.length; i++) {
+        output += lineArr[i];
+    }
+    output = output.replace(/\s/g, '');
+    navigator.clipboard.writeText(output)
+        .then(() => {
+            if (document.getElementById("null").checked) {
+                lineArr.shift();
+            }
+            pointerArr = [];
+            alert("Data copied to clipboard.");
+        })
+        .catch(err => {
+            if (document.getElementById("null").checked) {
+                lineArr.shift();
+            }
+            pointerArr = [];
+            console.log('Error: ', err);
+        });
+    //document.getElementById("results").innerHTML = output;
 }
 
-function hexTrim(text){
-	result = "";
-	rmf = false;
-	text = text.replace(/\s/g,''); 
-	while (text.length > 0) {
-		if (!rmf) {
-			id = text.substring(0, 8);
-			if (id == "524D4631") {
-				rmf = true;
-				result += text.substring(0,2);
-			}
-			text = text.substring(2);
-		} else if (rmf) {
-			id = text.substring(0,8);
-			if (id == "4B6F6473"){
-				rmf = false;
-			} else {
-				result += text.substring(0,2);
-			}
-			text = text.substring(2);
-		}
-	}
-	return result;
+function hexTrim(text) {
+    result = "";
+    rmf = false;
+    text = text.replace(/\s/g, '');
+    while (text.length > 0) {
+        if (!rmf) {
+            id = text.substring(0, 8);
+            if (id == "524D4631") {
+                rmf = true;
+                result += text.substring(0, 2);
+            }
+            text = text.substring(2);
+        } else if (rmf) {
+            id = text.substring(0, 8);
+            if (id == "4B6F6473") {
+                rmf = false;
+            } else {
+                result += text.substring(0, 2);
+            }
+            text = text.substring(2);
+        }
+    }
+    return result;
 }
 
 function stringDecoder(text) {
-	result = "";
-	text = text.replace(/\s/g,''); 
-	while (text.length > 0){
-		temp = text.substring(0, 4);
-		text = text.substring(4);
+    result = "";
+    text = text.replace(/\s/g, '');
+    while (text.length > 0) {
+        temp = text.substring(0, 4);
+        text = text.substring(4);
+        if (document.getElementById("ptbr").checked) {
+            if (temp != "") {
+                if (temp == "0F20") {
+                    result += "\n\n";
+                } else {
+                    temp = parseInt(changeEndianness2(temp), 16);
+                    if (document.getElementById("enbjp").checked) {
+                        if (temp > 0 && temp < 457 && temp in charDecoding2) {
+                            result += charDecoding2[temp];
+                        }
+                    } else {
+                        if (temp > 0 && temp < 177 && temp in charDecoding3) {
+                            result += charDecoding3[temp];
+                        }
+                    }
 
-		if (temp != ""){
-			switch(temp){
-				case "0100":
-					result += " ";
-					break;
-				case "6300":
-					result += "A";
-					break;
-				case "6400":
-					result += "B";
-					break;
-				case "6500":
-					result += "C";
-					break;
-				case "6600":
-					result += "D";
-					break;
-				case "6700":
-					result += "E";
-					break;
-				case "6800":
-					result += "F";
-					break;
-				case "6900":
-					result += "G";
-					break;
-				case "6A00":
-					result += "H";
-					break;
-				case "6B00":
-					result += "I";
-					break;
-				case "6C00":
-					result += "J";
-					break;
-				case "6D00":
-					result += "K";
-					break;
-				case "6E00":
-					result += "L";
-					break;
-				case "6F00":
-					result += "M";
-					break;
-				case "7000":
-					result += "N";
-					break;
-				case "7100":
-					result += "O";
-					break;
-				case "7200":
-					result += "P";
-					break;
-				case "7300":
-					result += "Q";
-					break;
-				case "7400":
-					result += "R";
-					break;
-				case "7500":
-					result += "S";
-					break;
-				case "7600":
-					result += "T";
-					break;
-				case "7700":
-					result += "U";
-					break;
-				case "7800":
-					result += "V";
-					break;
-				case "7900":
-					result += "W";
-					break;
-				case "7A00":
-					result += "X";
-					break;
-				case "7B00":
-					result += "Y";
-					break;
-				case "7C00":
-					result += "Z";
-					break;
-				case "7D00":
-					result += "a";
-					break;
-				case "7E00":
-					result += "b";
-					break;
-				case "7F00":
-					result += "c";
-					break;
-				case "8000":
-					result += "d";
-					break;
-				case "8100":
-					result += "e";
-					break;
-				case "8200":
-					result += "f";
-					break;
-				case "8300":
-					result += "g";
-					break;
-				case "8400":
-					result += "h";
-					break;
-				case "8500":
-					result += "i";
-					break;
-				case "8600":
-					result += "j";
-					break;
-				case "8700":
-					result += "k";
-					break;
-				case "8800":
-					result += "l";
-					break;
-				case "8900":
-					result += "m";
-					break;
-				case "8A00":
-					result += "n";
-					break;
-				case "8B00":
-					result += "o";
-					break;
-				case "8C00":
-					result += "p";
-					break;
-				case "8D00":
-					result += "q";
-					break;
-				case "8E00":
-					result += "r";
-					break;
-				case "8F00":
-					result += "s";
-					break;
-				case "9000":
-					result += "t";
-					break;
-				case "9100":
-					result += "u";
-					break;
-				case "9200":
-					result += "v";
-					break;
-				case "9300":
-					result += "w";
-					break;
-				case "9400":
-					result += "x";
-					break;
-				case "9500":
-					result += "y";
-					break;
-				case "9600":
-					result += "z";
-					break;
-				case "6200":
-					result += "9";
-					break;
-				case "6100":
-					result += "8";
-					break;
-				case "6000":
-					result += "7";
-					break;
-				case "5F00":
-					result += "6";
-					break;
-				case "5E00":
-					result += "5";
-					break;
-				case "5D00":
-					result += "4";
-					break;
-				case "5C00":
-					result += "3";
-					break;
-				case "5B00":
-					result += "2";
-					break;
-				case "5A00":
-					result += "1";
-					break;
-				case "5900":
-					result += "0";
-					break;
-				/*case "1C00":
-					result += "/";
-					break;
-				case "1A00":
-					result += "々";
-					break;*/
-				case "1B00":
-					result += "ー";
-					break;
-				case "1D00":
-					result += "\\";
-					break;
-				case "1F00":
-					result += "...";
-					break;
-				case "1800":
-					result += "!";
-					break;
-				case "1700":
-					result += "?";
-					break;
-				/*case "1900":
-					result += "_";
-					break;*/
-				case "1300":
-					result += ".";
-					break;
-				case "1200":
-					result += ",";
-					break;
-				/*case "1000":
-					result += "、";
-					break;
-				case "1100":
-					result += "。";
-					break;*/
-				/*case "1400":
-					result += "・";
-					break;*/
-				case "1500":
-					result += ":";
-					break;
-				/*case "1600":
-					result += ";";
-					break;*/
-				/*case "1E00":
-					result += "~";
-					break;*/
-				case "2000":
-					result += "‘";
-					break;
-				case "2100":
-					result += "’";
-					break;
-				case "2200":
-					result += "“";
-					break;
-				case "2300":
-					result += "”";
-					break;
-				case "2400":
-					result += "(";
-					break;
-				case "2500":
-					result += ")";
-					break;
-				/*case "2800":
-					result += "[";
-					break;
-				case "2900":
-					result += "]";
-					break;
-				case "3000":
-					result += "「";
-					break;
-				case "3100":
-					result += "」";
-					break;
-				case "3200":
-					result += "『";
-					break;
-				case "3300":
-					result += "』";
-					break;
-				case "3400":
-					result += "【";
-					break;
-				case "3500":
-					result += "】";
-					break;
-				case "3600":
-					result += "+";
-					break;
-				case "3700":
-					result += "-";
-					break;
-				case "3800":
-					result += "±";
-					break;
-				case "3900":
-					result += "×";
-					break;
-				case "3A00":
-					result += "÷";
-					break;
-				case "3B00":
-					result += "=";
-					break;
-				case "3C00":
-					result += "≠";
-					break;
-				case "3D00":
-					result += "<";
-					break;
-				case "3E00":
-					result += ">";
-					break;
-				case "3F00":
-					result += "≤";
-					break;
-				case "4000":
-					result += "≥";
-					break;
-				case "4100":
-					result += "￥";
-					break;
-				case "4200":
-					result += "$";
-					break;
-				case "4300":
-					result += "%";
-					break;
-				case "4400":
-					result += "#";
-					break;
-				case "4500":
-					result += "&";
-					break;
-				case "4600":
-					result += "*";
-					break;
-				case "4700":
-					result += "@";
-					break;
-				case "4800":
-					result += "☆";
-					break;
-				case "4900":
-					result += "★";
-					break;
-				case "4A00":
-					result += "○";
-					break;
-				case "4B00":
-					result += "●";
-					break;
-				case "4C00":
-					result += "◎";
-					break;
-				case "4D00":
-					result += "◇";
-					break;
-				case "4E00":
-					result += "◆";
-					break;
-				case "4F00":
-					result += "□";
-					break;
-				case "5000":
-					result += "⬛";
-					break;
-				case "5100":
-					result += "△";
-					break;
-				case "5200":
-					result += "▲";
-					break;
-				case "5300":
-					result += "▽";
-					break;
-				case "5400":
-					result += "▼";
-					break;
-				case "5500":
-					result += "→";
-					break;
-				case "5600":
-					result += "←";
-					break;
-				case "5700":
-					result += "↑";
-					break;
-				case "5800":
-					result += "↓";
-					break;*/
-				case "0F20":
-					result += "\n\n";
-					break;
-				case "0A00":
-					result += "\n";
-					break;
-				default:
-					//result += "�";
-			}
-		} else {
-			break;
-		}
-	}
-	return result;
+                }
+
+
+            }
+        } else if (temp != "") {
+            switch (temp) {
+                case "0100":
+                    result += " ";
+                    break;
+                case "6300":
+                    result += "A";
+                    break;
+                case "6400":
+                    result += "B";
+                    break;
+                case "6500":
+                    result += "C";
+                    break;
+                case "6600":
+                    result += "D";
+                    break;
+                case "6700":
+                    result += "E";
+                    break;
+                case "6800":
+                    result += "F";
+                    break;
+                case "6900":
+                    result += "G";
+                    break;
+                case "6A00":
+                    result += "H";
+                    break;
+                case "6B00":
+                    result += "I";
+                    break;
+                case "6C00":
+                    result += "J";
+                    break;
+                case "6D00":
+                    result += "K";
+                    break;
+                case "6E00":
+                    result += "L";
+                    break;
+                case "6F00":
+                    result += "M";
+                    break;
+                case "7000":
+                    result += "N";
+                    break;
+                case "7100":
+                    result += "O";
+                    break;
+                case "7200":
+                    result += "P";
+                    break;
+                case "7300":
+                    result += "Q";
+                    break;
+                case "7400":
+                    result += "R";
+                    break;
+                case "7500":
+                    result += "S";
+                    break;
+                case "7600":
+                    result += "T";
+                    break;
+                case "7700":
+                    result += "U";
+                    break;
+                case "7800":
+                    result += "V";
+                    break;
+                case "7900":
+                    result += "W";
+                    break;
+                case "7A00":
+                    result += "X";
+                    break;
+                case "7B00":
+                    result += "Y";
+                    break;
+                case "7C00":
+                    result += "Z";
+                    break;
+                case "7D00":
+                    result += "a";
+                    break;
+                case "7E00":
+                    result += "b";
+                    break;
+                case "7F00":
+                    result += "c";
+                    break;
+                case "8000":
+                    result += "d";
+                    break;
+                case "8100":
+                    result += "e";
+                    break;
+                case "8200":
+                    result += "f";
+                    break;
+                case "8300":
+                    result += "g";
+                    break;
+                case "8400":
+                    result += "h";
+                    break;
+                case "8500":
+                    result += "i";
+                    break;
+                case "8600":
+                    result += "j";
+                    break;
+                case "8700":
+                    result += "k";
+                    break;
+                case "8800":
+                    result += "l";
+                    break;
+                case "8900":
+                    result += "m";
+                    break;
+                case "8A00":
+                    result += "n";
+                    break;
+                case "8B00":
+                    result += "o";
+                    break;
+                case "8C00":
+                    result += "p";
+                    break;
+                case "8D00":
+                    result += "q";
+                    break;
+                case "8E00":
+                    result += "r";
+                    break;
+                case "8F00":
+                    result += "s";
+                    break;
+                case "9000":
+                    result += "t";
+                    break;
+                case "9100":
+                    result += "u";
+                    break;
+                case "9200":
+                    result += "v";
+                    break;
+                case "9300":
+                    result += "w";
+                    break;
+                case "9400":
+                    result += "x";
+                    break;
+                case "9500":
+                    result += "y";
+                    break;
+                case "9600":
+                    result += "z";
+                    break;
+                case "6200":
+                    result += "9";
+                    break;
+                case "6100":
+                    result += "8";
+                    break;
+                case "6000":
+                    result += "7";
+                    break;
+                case "5F00":
+                    result += "6";
+                    break;
+                case "5E00":
+                    result += "5";
+                    break;
+                case "5D00":
+                    result += "4";
+                    break;
+                case "5C00":
+                    result += "3";
+                    break;
+                case "5B00":
+                    result += "2";
+                    break;
+                case "5A00":
+                    result += "1";
+                    break;
+                case "5900":
+                    result += "0";
+                    break;
+                    /*case "1C00":
+                    	result += "/";
+                    	break;
+                    case "1A00":
+                    	result += "々";
+                    	break;*/
+                case "1B00":
+                    result += "ー";
+                    break;
+                case "1D00":
+                    result += "\\";
+                    break;
+                case "1F00":
+                    result += "...";
+                    break;
+                case "1800":
+                    result += "!";
+                    break;
+                case "1700":
+                    result += "?";
+                    break;
+                    /*case "1900":
+                    	result += "_";
+                    	break;*/
+                case "1300":
+                    result += ".";
+                    break;
+                case "1200":
+                    result += ",";
+                    break;
+                    /*case "1000":
+                    	result += "、";
+                    	break;
+                    case "1100":
+                    	result += "。";
+                    	break;*/
+                    /*case "1400":
+                    	result += "・";
+                    	break;*/
+                case "1500":
+                    result += ":";
+                    break;
+                    /*case "1600":
+                    	result += ";";
+                    	break;*/
+                    /*case "1E00":
+                    	result += "~";
+                    	break;*/
+                case "2000":
+                    result += "‘";
+                    break;
+                case "2100":
+                    result += "’";
+                    break;
+                case "2200":
+                    result += "“";
+                    break;
+                case "2300":
+                    result += "”";
+                    break;
+                case "2400":
+                    result += "(";
+                    break;
+                case "2500":
+                    result += ")";
+                    break;
+                case "2800":
+                    result += "[";
+                    break;
+                case "2900":
+                    result += "]";
+                    break;
+                case "3000":
+                    result += "「";
+                    break;
+                case "3100":
+                    result += "」";
+                    break;
+                case "3200":
+                    result += "『";
+                    break;
+                case "3300":
+                    result += "』";
+                    break;
+                case "3400":
+                    result += "【";
+                    break;
+                case "3500":
+                    result += "】";
+                    break;
+                case "3600":
+                    result += "+";
+                    break;
+                case "3700":
+                    result += "-";
+                    break;
+                case "3800":
+                    result += "±";
+                    break;
+                case "3900":
+                    result += "×";
+                    break;
+                case "3A00":
+                    result += "÷";
+                    break;
+                case "3B00":
+                    result += "=";
+                    break;
+                case "3C00":
+                    result += "≠";
+                    break;
+                case "3D00":
+                    result += "<";
+                    break;
+                case "3E00":
+                    result += ">";
+                    break;
+                case "3F00":
+                    result += "≤";
+                    break;
+                case "4000":
+                    result += "≥";
+                    break;
+                case "4100":
+                    result += "￥";
+                    break;
+                case "4200":
+                    result += "$";
+                    break;
+                case "4300":
+                    result += "%";
+                    break;
+                case "4400":
+                    result += "#";
+                    break;
+                case "4500":
+                    result += "&";
+                    break;
+                case "4600":
+                    result += "*";
+                    break;
+                case "4700":
+                    result += "@";
+                    break;
+                case "4800":
+                    result += "☆";
+                    break;
+                case "4900":
+                    result += "★";
+                    break;
+                case "4A00":
+                    result += "○";
+                    break;
+                case "4B00":
+                    result += "●";
+                    break;
+                case "4C00":
+                    result += "◎";
+                    break;
+                case "4D00":
+                    result += "◇";
+                    break;
+                case "4E00":
+                    result += "◆";
+                    break;
+                case "4F00":
+                    result += "□";
+                    break;
+                case "5000":
+                    result += "⬛";
+                    break;
+                case "5100":
+                    result += "△";
+                    break;
+                case "5200":
+                    result += "▲";
+                    break;
+                case "5300":
+                    result += "▽";
+                    break;
+                case "5400":
+                    result += "▼";
+                    break;
+                case "5500":
+                    result += "→";
+                    break;
+                case "5600":
+                    result += "←";
+                    break;
+                case "5700":
+                    result += "↑";
+                    break;
+                case "5800":
+                    result += "↓";
+                    break;
+                case "0F20":
+                    result += "\n\n";
+                    break;
+                case "0A00":
+                    result += "\n";
+                    break;
+                default:
+                    //result += "�";
+            }
+        } else {
+            break;
+        }
+    }
+    return result;
 }
 
-function copyClip(text){
-	navigator.clipboard.writeText(text)
-  .then(() => {
-    alert("Data copied to clipboard.");
-  })
-  .catch(err => {
-    console.log('Error: ', err);
-  });
+function copyClip(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            alert("Data copied to clipboard.");
+        })
+        .catch(err => {
+            console.log('Error: ', err);
+        });
 }
 
-function initialiseCharacter(){
-	let char1 = document.getElementById('char1').value;
-	char1 = parseInt(char1, 16);
-  char1 = char1.toString(16).padStart(8, '0').toUpperCase();
-  char1 = changeEndianness2(char1);
-  let char3 = document.getElementById('char3').value;
-  char3 = parseInt(char3, 16);
-  char3 = char3.toString(16).padStart(2, '0').toUpperCase();
+function initialiseCharacter() {
+    let char1 = document.getElementById('char1').value;
+    char1 = parseInt(char1, 16);
+    char1 = char1.toString(16).padStart(8, '0').toUpperCase();
+    char1 = changeEndianness2(char1);
+    let char3 = document.getElementById('char3').value;
+    char3 = parseInt(char3, 16);
+    char3 = char3.toString(16).padStart(2, '0').toUpperCase();
 
-  let string = '';
-  string += '39 02 22 00 01 00 00 00';
-  string += char1;
-  string += 'C0 02 01 80';
-  string += char1;
-  string += '00 00 05 00 27 01 01 80';
-  string += char1;
-  string += '20 03 01 80';
-  string += char1;
-  string += '01 00 00 00';
-  string += char3;
-  string += '01 01 00';
+    let string = '';
+    string += '39 02 22 00 01 00 00 00';
+    string += char1;
+    string += 'C0 02 01 80';
+    string += char1;
+    string += '00 00 05 00 27 01 01 80';
+    string += char1;
+    string += '20 03 01 80';
+    string += char1;
+    string += '01 00 00 00';
+    string += char3;
+    string += '01 01 00';
 
-  copyClip(string);
+    copyClip(string);
 }
 
 let charSpacing = {
@@ -1565,436 +1584,491 @@ let charSpacing = {
     "獣": "30",
     "神": "30",
     "殿": "30",
-    "死": "30"
+    "死": "30",
+    "Ã": "1A",
+    "Á": "1A",
+    "À": "1A",
+    "Â": "1A",
+    "É": "17",
+    "Ê": "17",
+    "Í": "0A",
+    "Õ": "1B",
+    "Ó": "1B",
+    "Ò": "1B",
+    "Ô": "1B",
+    "Ú": "18",
+    "Ç": "17",
+    "ã": "16",
+    "á": "16",
+    "à": "16",
+    "â": "16",
+    "é": "14",
+    "ê": "14",
+    "í": "0B",
+    "õ": "16",
+    "ó": "16",
+    "ò": "16",
+    "ô": "16",
+    "ú": "14",
+    "ç": "13"
 }
 
+
+
 let charEncoding = {
-  " ": 1,
-  "\n": 10,
-  "0": 89,
-  "1": 90,
-  "2": 91,
-  "3": 92,
-  "4": 93,
-  "5": 94,
-  "6": 95,
-  "7": 96,
-  "8": 97,
-  "9": 98,
-  "､": 16,
-  "｡": 17,
-  ",": 18,
-  ".": 19,
-  "･": 20,
-  ":": 21,
-  ";": 22,
-  "?": 23,
-  "!": 24,
-  "_": 25,
-  "々": 26,
-  "ｰ": 27,
-  "ー": 27,
-  "/": 28,
-  "＼": 29,
-  "~": 30,
-  "…": 31,
-  "‘": 32,
-  "'": 33,
-  "“": 34,
-  "\"": 35,
-  "(": 36,
-  ")": 37,
-  "〔": 38,
-  "〕": 39,
-  "[": 40,
-  "]": 41,
-  "{": 42,
-  "}": 43,
-  "〈": 44,
-  "〉": 45,
-  "《": 46,
-  "》": 47,
-  "｢": 48,
-  "｣": 49,
-  "『": 50,
-  "』": 51,
-  "【": 52,
-  "】": 53,
-  "+": 54,
-  "-": 55,
-  "±": 56,
-  "×": 57,
-  "÷": 58,
-  "≠": 60,
-  "<": 61,
-  ">": 62,
-  "≦": 63,
-  "≧": 64,
-  "\\": 65,
-  "$": 66,
-  "%": 67,
-  "&": 69,
-  "*": 70,
-  "@": 71,
-  "☆": 414,
-  "★": 73,
-  "○": 74,
-  "●": 75,
-  "◎": 76,
-  "◇": 77,
-  "◆": 78,
-  "□": 79,
-  "■": 80,
-  "△": 81,
-  "▲": 82,
-  "▽": 83,
-  "▼": 84,
-  "→": 85,
-  "←": 86,
-  "↑": 87,
-  "↓": 88,
-  "A": 99,
-  "B": 100,
-  "C": 101,
-  "D": 102,
-  "E": 103,
-  "F": 104,
-  "G": 105,
-  "H": 106,
-  "I": 107,
-  "J": 108,
-  "K": 109,
-  "L": 110,
-  "M": 111,
-  "N": 112,
-  "O": 113,
-  "P": 114,
-  "Q": 115,
-  "R": 116,
-  "S": 117,
-  "T": 118,
-  "U": 119,
-  "V": 120,
-  "W": 121,
-  "X": 122,
-  "Y": 123,
-  "Z": 124,
-  "a": 125,
-  "b": 126,
-  "c": 127,
-  "d": 128,
-  "e": 129,
-  "f": 130,
-  "g": 131,
-  "h": 132,
-  "i": 133,
-  "j": 134,
-  "k": 135,
-  "l": 136,
-  "m": 137,
-  "n": 138,
-  "o": 139,
-  "p": 140,
-  "q": 141,
-  "r": 142,
-  "s": 143,
-  "t": 144,
-  "u": 145,
-  "v": 146,
-  "w": 147,
-  "x": 148,
-  "y": 149,
-  "z": 150,
-  "ぁ": 151,
-  "あ": 152,
-  "ぃ": 153,
-  "い": 154,
-  "ぅ": 155,
-  "う": 156,
-  "ぇ": 157,
-  "え": 158,
-  "ぉ": 159,
-  "お": 160,
-  "か": 161,
-  "が": 162,
-  "き": 163,
-  "ぎ": 164,
-  "く": 165,
-  "ぐ": 166,
-  "け": 167,
-  "げ": 168,
-  "こ": 169,
-  "ご": 170,
-  "さ": 171,
-  "ざ": 172,
-  "し": 173,
-  "じ": 174,
-  "す": 175,
-  "ず": 176,
-  "せ": 177,
-  "ぜ": 178,
-  "そ": 179,
-  "ぞ": 180,
-  "た": 181,
-  "だ": 182,
-  "ち": 183,
-  "ぢ": 184,
-  "っ": 185,
-  "つ": 186,
-  "づ": 187,
-  "て": 188,
-  "で": 189,
-  "と": 190,
-  "ど": 191,
-  "な": 192,
-  "に": 193,
-  "ぬ": 194,
-  "ね": 195,
-  "の": 196,
-  "は": 197,
-  "ば": 198,
-  "ぱ": 199,
-  "ひ": 200,
-  "び": 201,
-  "ぴ": 202,
-  "ふ": 203,
-  "ぶ": 204,
-  "ぷ": 205,
-  "へ": 206,
-  "べ": 207,
-  "ぺ": 208,
-  "ほ": 209,
-  "ぼ": 210,
-  "ぽ": 211,
-  "ま": 212,
-  "み": 213,
-  "む": 214,
-  "め": 215,
-  "も": 216,
-  "ゃ": 217,
-  "や": 218,
-  "ゅ": 219,
-  "ゆ": 220,
-  "ょ": 221,
-  "よ": 222,
-  "ら": 223,
-  "り": 224,
-  "る": 225,
-  "れ": 226,
-  "ろ": 227,
-  "ゎ": 228,
-  "わ": 229,
-  "ゐ": 230,
-  "ゑ": 231,
-  "を": 232,
-  "ん": 233,
-  "ァ": 234,
-  "ア": 235,
-  "ィ": 236,
-  "イ": 237,
-  "ゥ": 238,
-  "ウ": 239,
-  "ェ": 240,
-  "エ": 241,
-  "ォ": 242,
-  "オ": 243,
-  "カ": 244,
-  "ガ": 245,
-  "キ": 246,
-  "ギ": 247,
-  "ク": 248,
-  "グ": 249,
-  "ケ": 250,
-  "ゲ": 251,
-  "コ": 252,
-  "ゴ": 253,
-  "サ": 254,
-  "ザ": 255,
-  "シ": 272,
-  "ジ": 273,
-  "ス": 274,
-  "ズ": 275,
-  "セ": 276,
-  "ゼ": 277,
-  "ソ": 278,
-  "ゾ": 279,
-  "タ": 280,
-  "ダ": 281,
-  "チ": 282,
-  "ヂ": 283,
-  "ッ": 284,
-  "ツ": 285,
-  "ヅ": 286,
-  "テ": 287,
-  "デ": 288,
-  "ト": 289,
-  "ド": 290,
-  "ナ": 291,
-  "ニ": 292,
-  "ヌ": 293,
-  "ネ": 294,
-  "ノ": 295,
-  "ハ": 296,
-  "バ": 297,
-  "パ": 298,
-  "ヒ": 299,
-  "ビ": 300,
-  "ピ": 301,
-  "フ": 302,
-  "ブ": 303,
-  "プ": 304,
-  "ヘ": 305,
-  "ベ": 306,
-  "ペ": 307,
-  "ホ": 308,
-  "ボ": 309,
-  "ポ": 310,
-  "マ": 311,
-  "ミ": 312,
-  "ム": 313,
-  "メ": 314,
-  "モ": 315,
-  "ャ": 316,
-  "ヤ": 317,
-  "ュ": 318,
-  "ユ": 319,
-  "ョ": 320,
-  "ヨ": 321,
-  "ラ": 322,
-  "リ": 323,
-  "ル": 324,
-  "レ": 325,
-  "ロ": 326,
-  "ヮ": 327,
-  "ワ": 328,
-  "ヰ": 329,
-  "ヱ": 330,
-  "ヲ": 331,
-  "ン": 332,
-  "ヴ": 333,
-  "ヵ": 334,
-  "ヶ": 335,
-  "緑": 336,
-  "依": 337,
-  "頼": 338,
-  "書": 339,
-  "村": 340,
-  "雨": 341,
-  "折": 342,
-  "剣": 343,
-  "鉄": 344,
-  "槌": 345,
-  "隠": 346,
-  "者": 347,
-  "像": 348,
-  "用": 349,
-  "状": 350,
-  "態": 351,
-  "耐": 352,
-  "性": 353,
-  "戦": 354,
-  "闘": 355,
-  "心": 356,
-  "得": 357,
-  "人": 358,
-  "好": 359,
-  "武": 360,
-  "器": 361,
-  "工": 362,
-  "房": 363,
-  "士": 364,
-  "魔": 365,
-  "術": 366,
-  "師": 367,
-  "僧": 368,
-  "侶": 369,
-  "盗": 370,
-  "賊": 371,
-  "生": 372,
-  "物": 373,
-  "図": 374,
-  "鑑": 375,
-  "伝": 376,
-  "本": 377,
-  "歴": 378,
-  "史": 379,
-  "上": 380,
-  "下": 381,
-  "激": 382,
-  "大": 383,
-  "蛇": 384,
-  "壁": 385,
-  "開": 386,
-  "放": 387,
-  "奮": 388,
-  "起": 389,
-  "燃": 390,
-  "焼": 391,
-  "読": 392,
-  "込": 393,
-  "保": 394,
-  "存": 395,
-  "差": 396,
-  "空": 397,
-  "他": 398,
-  "容": 399,
-  "量": 400,
-  "出": 401,
-  "入": 402,
-  "番": 403,
-  "円": 404,
-  "軽": 405,
-  "重": 406,
-  "装": 407,
-  "衛": 408,
-  "兵": 409,
-  "世": 410,
-  "Ⅰ": 411,
-  "Ⅱ": 412,
-  "号": 413,
-  "女": 415,
-  "男": 416,
-  "騎": 417,
-  "見": 418,
-  "習": 419,
-  "黒": 420,
-  "部": 421,
-  "木": 422,
-  "野": 423,
-  "火": 424,
-  "事": 425,
-  "水": 426,
-  "地": 427,
-  "風": 428,
-  "無": 429,
-  "毒": 430,
-  "凍": 431,
-  "結": 432,
-  "金": 433,
-  "縛": 434,
-  "呪": 435,
-  "混": 436,
-  "乱": 437,
-  "近": 438,
-  "眼": 439,
-  "回": 440,
-  "復": 441,
-  "吸": 442,
-  "収": 443,
-  "炎": 444,
-  "石": 445,
-  "化": 446,
-  "♂": 447,
-  "♀": 448,
-  "食": 449,
-  "型": 450,
-  "球": 451,
-  "雷": 452,
-  "獣": 453,
-  "神": 454,
-  "殿": 455,
-  "死": 456
+    " ": 1,
+    "\n": 10,
+    "0": 89,
+    "1": 90,
+    "2": 91,
+    "3": 92,
+    "4": 93,
+    "5": 94,
+    "6": 95,
+    "7": 96,
+    "8": 97,
+    "9": 98,
+    "､": 16,
+    "｡": 17,
+    ",": 18,
+    ".": 19,
+    "･": 20,
+    ":": 21,
+    ";": 22,
+    "?": 23,
+    "!": 24,
+    "_": 25,
+    "々": 26,
+    "ｰ": 27,
+    "ー": 27,
+    "/": 28,
+    "＼": 29,
+    "~": 30,
+    "…": 31,
+    "‘": 32,
+    "'": 33,
+    "“": 34,
+    "\"": 35,
+    "(": 36,
+    ")": 37,
+    "〔": 38,
+    "〕": 39,
+    "[": 40,
+    "]": 41,
+    "{": 42,
+    "}": 43,
+    "〈": 44,
+    "〉": 45,
+    "《": 46,
+    "》": 47,
+    "｢": 48,
+    "｣": 49,
+    "『": 50,
+    "』": 51,
+    "【": 52,
+    "】": 53,
+    "+": 54,
+    "-": 55,
+    "±": 56,
+    "×": 57,
+    "÷": 58,
+    "≠": 60,
+    "<": 61,
+    ">": 62,
+    "≦": 63,
+    "≧": 64,
+    "\\": 65,
+    "$": 66,
+    "%": 67,
+    "&": 69,
+    "*": 70,
+    "@": 71,
+    "☆": 414,
+    "★": 73,
+    "○": 74,
+    "●": 75,
+    "◎": 76,
+    "◇": 77,
+    "◆": 78,
+    "□": 79,
+    "■": 80,
+    "△": 81,
+    "▲": 82,
+    "▽": 83,
+    "▼": 84,
+    "→": 85,
+    "←": 86,
+    "↑": 87,
+    "↓": 88,
+    "A": 99,
+    "B": 100,
+    "C": 101,
+    "D": 102,
+    "E": 103,
+    "F": 104,
+    "G": 105,
+    "H": 106,
+    "I": 107,
+    "J": 108,
+    "K": 109,
+    "L": 110,
+    "M": 111,
+    "N": 112,
+    "O": 113,
+    "P": 114,
+    "Q": 115,
+    "R": 116,
+    "S": 117,
+    "T": 118,
+    "U": 119,
+    "V": 120,
+    "W": 121,
+    "X": 122,
+    "Y": 123,
+    "Z": 124,
+    "a": 125,
+    "b": 126,
+    "c": 127,
+    "d": 128,
+    "e": 129,
+    "f": 130,
+    "g": 131,
+    "h": 132,
+    "i": 133,
+    "j": 134,
+    "k": 135,
+    "l": 136,
+    "m": 137,
+    "n": 138,
+    "o": 139,
+    "p": 140,
+    "q": 141,
+    "r": 142,
+    "s": 143,
+    "t": 144,
+    "u": 145,
+    "v": 146,
+    "w": 147,
+    "x": 148,
+    "y": 149,
+    "z": 150,
+    "ぁ": 151,
+    "あ": 152,
+    "ぃ": 153,
+    "い": 154,
+    "ぅ": 155,
+    "う": 156,
+    "ぇ": 157,
+    "え": 158,
+    "ぉ": 159,
+    "お": 160,
+    "か": 161,
+    "が": 162,
+    "き": 163,
+    "ぎ": 164,
+    "く": 165,
+    "ぐ": 166,
+    "け": 167,
+    "げ": 168,
+    "こ": 169,
+    "ご": 170,
+    "さ": 171,
+    "ざ": 172,
+    "し": 173,
+    "じ": 174,
+    "す": 175,
+    "ず": 176,
+    "せ": 177,
+    "ぜ": 178,
+    "そ": 179,
+    "ぞ": 180,
+    "た": 181,
+    "だ": 182,
+    "ち": 183,
+    "ぢ": 184,
+    "っ": 185,
+    "つ": 186,
+    "づ": 187,
+    "て": 188,
+    "で": 189,
+    "と": 190,
+    "ど": 191,
+    "な": 192,
+    "に": 193,
+    "ぬ": 194,
+    "ね": 195,
+    "の": 196,
+    "は": 197,
+    "ば": 198,
+    "ぱ": 199,
+    "ひ": 200,
+    "び": 201,
+    "ぴ": 202,
+    "ふ": 203,
+    "ぶ": 204,
+    "ぷ": 205,
+    "へ": 206,
+    "べ": 207,
+    "ぺ": 208,
+    "ほ": 209,
+    "ぼ": 210,
+    "ぽ": 211,
+    "ま": 212,
+    "み": 213,
+    "む": 214,
+    "め": 215,
+    "も": 216,
+    "ゃ": 217,
+    "や": 218,
+    "ゅ": 219,
+    "ゆ": 220,
+    "ょ": 221,
+    "よ": 222,
+    "ら": 223,
+    "り": 224,
+    "る": 225,
+    "れ": 226,
+    "ろ": 227,
+    "ゎ": 228,
+    "わ": 229,
+    "ゐ": 230,
+    "ゑ": 231,
+    "を": 232,
+    "ん": 233,
+    "ァ": 234,
+    "ア": 235,
+    "ィ": 236,
+    "イ": 237,
+    "ゥ": 238,
+    "ウ": 239,
+    "ェ": 240,
+    "エ": 241,
+    "ォ": 242,
+    "オ": 243,
+    "カ": 244,
+    "ガ": 245,
+    "キ": 246,
+    "ギ": 247,
+    "ク": 248,
+    "グ": 249,
+    "ケ": 250,
+    "ゲ": 251,
+    "コ": 252,
+    "ゴ": 253,
+    "サ": 254,
+    "ザ": 255,
+    "シ": 272,
+    "ジ": 273,
+    "ス": 274,
+    "ズ": 275,
+    "セ": 276,
+    "ゼ": 277,
+    "ソ": 278,
+    "ゾ": 279,
+    "タ": 280,
+    "ダ": 281,
+    "チ": 282,
+    "ヂ": 283,
+    "ッ": 284,
+    "ツ": 285,
+    "ヅ": 286,
+    "テ": 287,
+    "デ": 288,
+    "ト": 289,
+    "ド": 290,
+    "ナ": 291,
+    "ニ": 292,
+    "ヌ": 293,
+    "ネ": 294,
+    "ノ": 295,
+    "ハ": 296,
+    "バ": 297,
+    "パ": 298,
+    "ヒ": 299,
+    "ビ": 300,
+    "ピ": 301,
+    "フ": 302,
+    "ブ": 303,
+    "プ": 304,
+    "ヘ": 305,
+    "ベ": 306,
+    "ペ": 307,
+    "ホ": 308,
+    "ボ": 309,
+    "ポ": 310,
+    "マ": 311,
+    "ミ": 312,
+    "ム": 313,
+    "メ": 314,
+    "モ": 315,
+    "ャ": 316,
+    "ヤ": 317,
+    "ュ": 318,
+    "ユ": 319,
+    "ョ": 320,
+    "ヨ": 321,
+    "ラ": 322,
+    "リ": 323,
+    "ル": 324,
+    "レ": 325,
+    "ロ": 326,
+    "ヮ": 327,
+    "ワ": 328,
+    "ヰ": 329,
+    "ヱ": 330,
+    "ヲ": 331,
+    "ン": 332,
+    "ヴ": 333,
+    "ヵ": 334,
+    "ヶ": 335,
+    "緑": 336,
+    "依": 337,
+    "頼": 338,
+    "書": 339,
+    "村": 340,
+    "雨": 341,
+    "折": 342,
+    "剣": 343,
+    "鉄": 344,
+    "槌": 345,
+    "隠": 346,
+    "者": 347,
+    "像": 348,
+    "用": 349,
+    "状": 350,
+    "態": 351,
+    "耐": 352,
+    "性": 353,
+    "戦": 354,
+    "闘": 355,
+    "心": 356,
+    "得": 357,
+    "人": 358,
+    "好": 359,
+    "武": 360,
+    "器": 361,
+    "工": 362,
+    "房": 363,
+    "士": 364,
+    "魔": 365,
+    "術": 366,
+    "師": 367,
+    "僧": 368,
+    "侶": 369,
+    "盗": 370,
+    "賊": 371,
+    "生": 372,
+    "物": 373,
+    "図": 374,
+    "鑑": 375,
+    "伝": 376,
+    "本": 377,
+    "歴": 378,
+    "史": 379,
+    "上": 380,
+    "下": 381,
+    "激": 382,
+    "大": 383,
+    "蛇": 384,
+    "壁": 385,
+    "開": 386,
+    "放": 387,
+    "奮": 388,
+    "起": 389,
+    "燃": 390,
+    "焼": 391,
+    "読": 392,
+    "込": 393,
+    "保": 394,
+    "存": 395,
+    "差": 396,
+    "空": 397,
+    "他": 398,
+    "容": 399,
+    "量": 400,
+    "出": 401,
+    "入": 402,
+    "番": 403,
+    "円": 404,
+    "軽": 405,
+    "重": 406,
+    "装": 407,
+    "衛": 408,
+    "兵": 409,
+    "世": 410,
+    "Ⅰ": 411,
+    "Ⅱ": 412,
+    "号": 413,
+    "女": 415,
+    "男": 416,
+    "騎": 417,
+    "見": 418,
+    "習": 419,
+    "黒": 420,
+    "部": 421,
+    "木": 422,
+    "野": 423,
+    "火": 424,
+    "事": 425,
+    "水": 426,
+    "地": 427,
+    "風": 428,
+    "無": 429,
+    "毒": 430,
+    "凍": 431,
+    "結": 432,
+    "金": 433,
+    "縛": 434,
+    "呪": 435,
+    "混": 436,
+    "乱": 437,
+    "近": 438,
+    "眼": 439,
+    "回": 440,
+    "復": 441,
+    "吸": 442,
+    "収": 443,
+    "炎": 444,
+    "石": 445,
+    "化": 446,
+    "♂": 447,
+    "♀": 448,
+    "食": 449,
+    "型": 450,
+    "球": 451,
+    "雷": 452,
+    "獣": 453,
+    "神": 454,
+    "殿": 455,
+    "死": 456,
+    "Ã": 151,
+    "Á": 152,
+    "À": 153,
+    "Â": 154,
+    "É": 155,
+    "Ê": 156,
+    "Í": 157,
+    "Õ": 158,
+    "Ó": 159,
+    "Ò": 160,
+    "Ô": 161,
+    "Ú": 162,
+    "Ç": 163,
+    "ã": 164,
+    "á": 165,
+    "à": 166,
+    "â": 167,
+    "é": 168,
+    "ê": 169,
+    "í": 170,
+    "õ": 171,
+    "ó": 172,
+    "ò": 173,
+    "ô": 174,
+    "ú": 175,
+    "ç": 176
 }
+
 
 let charDecoding = {
     "1": " ",
@@ -2421,4 +2495,583 @@ let charDecoding = {
     "454": "神",
     "455": "殿",
     "456": "死"
+}
+
+let charDecoding2 = {
+    "1": " ",
+    "10": "\n",
+    "3872": "\n\n",
+    "16": "､",
+    "17": "｡",
+    "18": ",",
+    "19": ".",
+    "20": "･",
+    "21": ":",
+    "22": ";",
+    "23": "?",
+    "24": "!",
+    "25": "_",
+    "26": "々",
+    "27": "ー",
+    "28": "/",
+    "29": "＼",
+    "30": "~",
+    "31": "…",
+    "32": "‘",
+    "33": "'",
+    "34": "“",
+    "35": "\"",
+    "36": "(",
+    "37": ")",
+    "38": "〔",
+    "39": "〕",
+    "40": "[",
+    "41": "]",
+    "42": "{",
+    "43": "}",
+    "44": "〈",
+    "45": "〉",
+    "46": "《",
+    "47": "》",
+    "48": "｢",
+    "49": "｣",
+    "50": "『",
+    "51": "』",
+    "52": "【",
+    "53": "】",
+    "54": "+",
+    "55": "-",
+    "56": "±",
+    "57": "×",
+    "58": "÷",
+    "60": "≠",
+    "61": "<",
+    "62": ">",
+    "63": "≦",
+    "64": "≧",
+    "65": "\\",
+    "66": "$",
+    "67": "%",
+    "69": "&",
+    "70": "*",
+    "71": "@",
+    "73": "★",
+    "74": "○",
+    "75": "●",
+    "76": "◎",
+    "77": "◇",
+    "78": "◆",
+    "79": "□",
+    "80": "■",
+    "81": "△",
+    "82": "▲",
+    "83": "▽",
+    "84": "▼",
+    "85": "→",
+    "86": "←",
+    "87": "↑",
+    "88": "↓",
+    "89": "0",
+    "90": "1",
+    "91": "2",
+    "92": "3",
+    "93": "4",
+    "94": "5",
+    "95": "6",
+    "96": "7",
+    "97": "8",
+    "98": "9",
+    "99": "A",
+    "100": "B",
+    "101": "C",
+    "102": "D",
+    "103": "E",
+    "104": "F",
+    "105": "G",
+    "106": "H",
+    "107": "I",
+    "108": "J",
+    "109": "K",
+    "110": "L",
+    "111": "M",
+    "112": "N",
+    "113": "O",
+    "114": "P",
+    "115": "Q",
+    "116": "R",
+    "117": "S",
+    "118": "T",
+    "119": "U",
+    "120": "V",
+    "121": "W",
+    "122": "X",
+    "123": "Y",
+    "124": "Z",
+    "125": "a",
+    "126": "b",
+    "127": "c",
+    "128": "d",
+    "129": "e",
+    "130": "f",
+    "131": "g",
+    "132": "h",
+    "133": "i",
+    "134": "j",
+    "135": "k",
+    "136": "l",
+    "137": "m",
+    "138": "n",
+    "139": "o",
+    "140": "p",
+    "141": "q",
+    "142": "r",
+    "143": "s",
+    "144": "t",
+    "145": "u",
+    "146": "v",
+    "147": "w",
+    "148": "x",
+    "149": "y",
+    "150": "z",
+    "151": "Ã",
+    "152": "Á",
+    "153": "À",
+    "154": "Â",
+    "155": "É",
+    "156": "Ê",
+    "157": "Í",
+    "158": "Õ",
+    "159": "Ó",
+    "160": "Ò",
+    "161": "Ô",
+    "162": "Ú",
+    "163": "Ç",
+    "164": "ã",
+    "165": "á",
+    "166": "à",
+    "167": "â",
+    "168": "é",
+    "169": "ê",
+    "170": "í",
+    "171": "õ",
+    "172": "ó",
+    "173": "ò",
+    "174": "ô",
+    "175": "ú",
+    "176": "ç",
+    "177": "せ",
+    "178": "ぜ",
+    "179": "そ",
+    "180": "ぞ",
+    "181": "た",
+    "182": "だ",
+    "183": "ち",
+    "184": "ぢ",
+    "185": "っ",
+    "186": "つ",
+    "187": "づ",
+    "188": "て",
+    "189": "で",
+    "190": "と",
+    "191": "ど",
+    "192": "な",
+    "193": "に",
+    "194": "ぬ",
+    "195": "ね",
+    "196": "の",
+    "197": "は",
+    "198": "ば",
+    "199": "ぱ",
+    "200": "ひ",
+    "201": "び",
+    "202": "ぴ",
+    "203": "ふ",
+    "204": "ぶ",
+    "205": "ぷ",
+    "206": "へ",
+    "207": "べ",
+    "208": "ぺ",
+    "209": "ほ",
+    "210": "ぼ",
+    "211": "ぽ",
+    "212": "ま",
+    "213": "み",
+    "214": "む",
+    "215": "め",
+    "216": "も",
+    "217": "ゃ",
+    "218": "や",
+    "219": "ゅ",
+    "220": "ゆ",
+    "221": "ょ",
+    "222": "よ",
+    "223": "ら",
+    "224": "り",
+    "225": "る",
+    "226": "れ",
+    "227": "ろ",
+    "228": "ゎ",
+    "229": "わ",
+    "230": "ゐ",
+    "231": "ゑ",
+    "232": "を",
+    "233": "ん",
+    "234": "ァ",
+    "235": "ア",
+    "236": "ィ",
+    "237": "イ",
+    "238": "ゥ",
+    "239": "ウ",
+    "240": "ェ",
+    "241": "エ",
+    "242": "ォ",
+    "243": "オ",
+    "244": "カ",
+    "245": "ガ",
+    "246": "キ",
+    "247": "ギ",
+    "248": "ク",
+    "249": "グ",
+    "250": "ケ",
+    "251": "ゲ",
+    "252": "コ",
+    "253": "ゴ",
+    "254": "サ",
+    "255": "ザ",
+    "272": "シ",
+    "273": "ジ",
+    "274": "ス",
+    "275": "ズ",
+    "276": "セ",
+    "277": "ゼ",
+    "278": "ソ",
+    "279": "ゾ",
+    "280": "タ",
+    "281": "ダ",
+    "282": "チ",
+    "283": "ヂ",
+    "284": "ッ",
+    "285": "ツ",
+    "286": "ヅ",
+    "287": "テ",
+    "288": "デ",
+    "289": "ト",
+    "290": "ド",
+    "291": "ナ",
+    "292": "ニ",
+    "293": "ヌ",
+    "294": "ネ",
+    "295": "ノ",
+    "296": "ハ",
+    "297": "バ",
+    "298": "パ",
+    "299": "ヒ",
+    "300": "ビ",
+    "301": "ピ",
+    "302": "フ",
+    "303": "ブ",
+    "304": "プ",
+    "305": "ヘ",
+    "306": "ベ",
+    "307": "ペ",
+    "308": "ホ",
+    "309": "ボ",
+    "310": "ポ",
+    "311": "マ",
+    "312": "ミ",
+    "313": "ム",
+    "314": "メ",
+    "315": "モ",
+    "316": "ャ",
+    "317": "ヤ",
+    "318": "ュ",
+    "319": "ユ",
+    "320": "ョ",
+    "321": "ヨ",
+    "322": "ラ",
+    "323": "リ",
+    "324": "ル",
+    "325": "レ",
+    "326": "ロ",
+    "327": "ヮ",
+    "328": "ワ",
+    "329": "ヰ",
+    "330": "ヱ",
+    "331": "ヲ",
+    "332": "ン",
+    "333": "ヴ",
+    "334": "ヵ",
+    "335": "ヶ",
+    "336": "緑",
+    "337": "依",
+    "338": "頼",
+    "339": "書",
+    "340": "村",
+    "341": "雨",
+    "342": "折",
+    "343": "剣",
+    "344": "鉄",
+    "345": "槌",
+    "346": "隠",
+    "347": "者",
+    "348": "像",
+    "349": "用",
+    "350": "状",
+    "351": "態",
+    "352": "耐",
+    "353": "性",
+    "354": "戦",
+    "355": "闘",
+    "356": "心",
+    "357": "得",
+    "358": "人",
+    "359": "好",
+    "360": "武",
+    "361": "器",
+    "362": "工",
+    "363": "房",
+    "364": "士",
+    "365": "魔",
+    "366": "術",
+    "367": "師",
+    "368": "僧",
+    "369": "侶",
+    "370": "盗",
+    "371": "賊",
+    "372": "生",
+    "373": "物",
+    "374": "図",
+    "375": "鑑",
+    "376": "伝",
+    "377": "本",
+    "378": "歴",
+    "379": "史",
+    "380": "上",
+    "381": "下",
+    "382": "激",
+    "383": "大",
+    "384": "蛇",
+    "385": "壁",
+    "386": "開",
+    "387": "放",
+    "388": "奮",
+    "389": "起",
+    "390": "燃",
+    "391": "焼",
+    "392": "読",
+    "393": "込",
+    "394": "保",
+    "395": "存",
+    "396": "差",
+    "397": "空",
+    "398": "他",
+    "399": "容",
+    "400": "量",
+    "401": "出",
+    "402": "入",
+    "403": "番",
+    "404": "円",
+    "405": "軽",
+    "406": "重",
+    "407": "装",
+    "408": "衛",
+    "409": "兵",
+    "410": "世",
+    "411": "Ⅰ",
+    "412": "Ⅱ",
+    "413": "号",
+    "414": "☆",
+    "415": "女",
+    "416": "男",
+    "417": "騎",
+    "418": "見",
+    "419": "習",
+    "420": "黒",
+    "421": "部",
+    "422": "木",
+    "423": "野",
+    "424": "火",
+    "425": "事",
+    "426": "水",
+    "427": "地",
+    "428": "風",
+    "429": "無",
+    "430": "毒",
+    "431": "凍",
+    "432": "結",
+    "433": "金",
+    "434": "縛",
+    "435": "呪",
+    "436": "混",
+    "437": "乱",
+    "438": "近",
+    "439": "眼",
+    "440": "回",
+    "441": "復",
+    "442": "吸",
+    "443": "収",
+    "444": "炎",
+    "445": "石",
+    "446": "化",
+    "447": "♂",
+    "448": "♀",
+    "449": "食",
+    "450": "型",
+    "451": "球",
+    "452": "雷",
+    "453": "獣",
+    "454": "神",
+    "455": "殿",
+    "456": "死"
+}
+
+let charDecoding3 = {
+    "1": " ",
+    "10": "\n",
+    "3872": "\n\n",
+    "18": ",",
+    "19": ".",
+    "20": "･",
+    "21": ":",
+    "22": ";",
+    "23": "?",
+    "24": "!",
+    "25": "_",
+    "27": "ー",
+    "28": "/",
+    "29": "＼",
+    "30": "~",
+    "31": "…",
+    "32": "‘",
+    "33": "'",
+    "34": "“",
+    "35": "\"",
+    "36": "(",
+    "37": ")",
+    "38": "〔",
+    "39": "〕",
+    "40": "[",
+    "41": "]",
+    "42": "{",
+    "43": "}",
+    "54": "+",
+    "55": "-",
+    "56": "±",
+    "57": "×",
+    "58": "÷",
+    "60": "≠",
+    "61": "<",
+    "62": ">",
+    "63": "≦",
+    "64": "≧",
+    "65": "\\",
+    "66": "$",
+    "67": "%",
+    "69": "&",
+    "70": "*",
+    "71": "@",
+    "73": "★",
+    "74": "○",
+    "75": "●",
+    "76": "◎",
+    "77": "◇",
+    "78": "◆",
+    "79": "□",
+    "80": "■",
+    "81": "△",
+    "82": "▲",
+    "83": "▽",
+    "84": "▼",
+    "85": "→",
+    "86": "←",
+    "87": "↑",
+    "88": "↓",
+    "89": "0",
+    "90": "1",
+    "91": "2",
+    "92": "3",
+    "93": "4",
+    "94": "5",
+    "95": "6",
+    "96": "7",
+    "97": "8",
+    "98": "9",
+    "99": "A",
+    "100": "B",
+    "101": "C",
+    "102": "D",
+    "103": "E",
+    "104": "F",
+    "105": "G",
+    "106": "H",
+    "107": "I",
+    "108": "J",
+    "109": "K",
+    "110": "L",
+    "111": "M",
+    "112": "N",
+    "113": "O",
+    "114": "P",
+    "115": "Q",
+    "116": "R",
+    "117": "S",
+    "118": "T",
+    "119": "U",
+    "120": "V",
+    "121": "W",
+    "122": "X",
+    "123": "Y",
+    "124": "Z",
+    "125": "a",
+    "126": "b",
+    "127": "c",
+    "128": "d",
+    "129": "e",
+    "130": "f",
+    "131": "g",
+    "132": "h",
+    "133": "i",
+    "134": "j",
+    "135": "k",
+    "136": "l",
+    "137": "m",
+    "138": "n",
+    "139": "o",
+    "140": "p",
+    "141": "q",
+    "142": "r",
+    "143": "s",
+    "144": "t",
+    "145": "u",
+    "146": "v",
+    "147": "w",
+    "148": "x",
+    "149": "y",
+    "150": "z",
+    "151": "Ã",
+    "152": "Á",
+    "153": "À",
+    "154": "Â",
+    "155": "É",
+    "156": "Ê",
+    "157": "Í",
+    "158": "Õ",
+    "159": "Ó",
+    "160": "Ò",
+    "161": "Ô",
+    "162": "Ú",
+    "163": "Ç",
+    "164": "ã",
+    "165": "á",
+    "166": "à",
+    "167": "â",
+    "168": "é",
+    "169": "ê",
+    "170": "í",
+    "171": "õ",
+    "172": "ó",
+    "173": "ò",
+    "174": "ô",
+    "175": "ú",
+    "176": "ç"
 }
