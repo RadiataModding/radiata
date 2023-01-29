@@ -523,7 +523,12 @@ function lineBuild() {
     let lineOpt = document.getElementById('lineOpt').value;
     let lineNum;
     if (lineOpt == 1) {
-        lineNum = ++currentVoice;
+        //lineNum = ++currentVoice;
+        if (document.getElementById("lineReplace").value == 2){
+            lineNum = document.getElementById("lineToReplace").value;
+        } else {
+            lineNum = lineArr.length + 1;
+        }
         lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
     } else {
         lineNum = document.getElementById('lineNum').value;
