@@ -14,9 +14,6 @@ function changeEndianness(string) {
 }
 
 function charAdd(){
-   if (battles.length >= 10) {
-      return alert("Too many characters in battle already.");
-   }
    
    if (document.getElementById('char1').value == ''){
       return alert("Character ID is blank.");
@@ -89,7 +86,7 @@ function charAdd(){
    code = code.replace(/\s/g, '');
    battles.push(code);
    
-   document.getElementById("results").innerHTML = "Added. Currently at " + battles.length + "/10 characters."
+   document.getElementById("results").innerHTML = "Added. Currently at " + battles.length + " characters."
 
 }
 
@@ -108,7 +105,7 @@ function addDefault(){
    battles.push(code4);
    allyPos = 0x9A;
 
-   document.getElementById("results").innerHTML = "Defaults added. Currently at " + battles.length + "/10 characters."
+   document.getElementById("results").innerHTML = "Defaults added. Currently at " + battles.length + " characters."
 }
 
 function download(){

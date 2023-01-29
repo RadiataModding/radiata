@@ -4,17 +4,18 @@ let navBar;
 
 const navStart = "<a class=\"navbar-brand\" href=\"\/\">Radiata<\/a> <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavAltMarkup\" aria-controls=\"navbarNavAltMarkup\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"> <span class=\"navbar-toggler-icon\"><\/span> <\/button> <div class=\"collapse navbar-collapse\" id=\"navbarNavAltMarkup\">\r\n <div class=\"navbar-nav\">";
 
-let navGen = "<a class=\"nav-item nav-link\" href=\"..\/decoder\">Text Decoder\/Generator<\/a> ";
+//let navGen = "<a class=\"nav-item nav-link\" href=\"..\/decoder\">Text Decoder\/Generator<\/a> ";
 
-let navId = "<a class=\"nav-item nav-link\" href=\"http:\/\/id.radiata.moe\/\">IDs/Values<\/a> ";
+let navTools = "<li class=\"nav-item dropdown\">\r\n        <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n          Tools\r\n        <\/a>\r\n        <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\r\n    <a class=\"dropdown-item\" href=\"http:\/\/id.radiata.moe\/\">IDs/Values<\/a>       <a class=\"dropdown-item\" href=\"..\/decoder\">Text Decoder\/Generator<\/a>\r\n          <a class=\"dropdown-item\" href=\"..\/textbuilder\">Text Builder<\/a>\r\n          <a class=\"dropdown-item\" href=\"..\/battle\">Battle (PNACH)<\/a>\r\n          <a class=\"dropdown-item\" href=\"..\/eventbattle\">Battle (Event)<\/a>\r\n        <\/div>\r\n      <\/li>"
 
-let navText = "<a class=\"nav-item nav-link\" href=\"..\/textbuilder\">Text Builder<\/a> ";
 
-let navName = "<a class=\"nav-item nav-link\" href=\"..\/name\">Name<\/a> ";
+//let navText = "<a class=\"nav-item nav-link\" href=\"..\/textbuilder\">Text Builder<\/a> ";
 
-let navYouTube = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.youtube.com\/c\/Radiata\">YouTube<\/a> ";
+//let navName = "<a class=\"nav-item nav-link\" href=\"..\/name\">Name<\/a> ";
 
-let navReddit = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.reddit.com\/r\/RadiataStories\/\">Subreddit<\/a> ";
+let navYouTube = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.youtube.com\/@Radiata\">YouTube<\/a> ";
+
+let navReddit = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.reddit.com\/r\/RadiataStories\/\">Reddit<\/a> ";
 
 let navRevive = "<a class=\"nav-item nav-link\" href=\"https:\/\/www.change.org\/ReviveRadiata\/\">#ReviveRadiata<\/a>"
 
@@ -27,43 +28,17 @@ function createNav(){
             break;  
     }*/
 
-    navBar = navStart + navGen + navId + navText + navName + navYouTube + navReddit + navRevive + navEnd;
+    navBar = navStart + navTools + navYouTube + navReddit + navRevive + navEnd;
     
     document.getElementById("navbar").innerHTML = navBar;
     
-    
+
 }
+
+
+
+
 
 $(function() {
     createNav();
 });
-
-
-/*
-<a class="navbar-brand" href="#">2KRN</a>
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-         </button>
-         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-               <a class="nav-item nav-link" href="../search">Search</a>
-               <a class="nav-item nav-link" href="../wholesome">Wholesome Animu </a>
-               <a class="nav-item nav-link" href="../read">Read </a>
-               <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          OP/ED
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="../mikakunin">Engaged to the Unidentified</a>
-          <a class="dropdown-item" href="../dropkick">Gabriel Dropout</a>
-          <a class="dropdown-item" href="../chuchuyeah">Miss Kobayashi's Dragon Maid</a>
-          <a class="dropdown-item" href="../kyutie">Ms. vampire who lives in my neighborhood.</a>
-        </div>
-      </li>
-            </div>
-         </div>
-*/
-
-/*
-<a class=\"navbar-brand\" href=\"#\">2KRN</a> <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavAltMarkup\" aria-controls=\"navbarNavAltMarkup\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"> <span class=\"navbar-toggler-icon\"></span> </button> <div class=\"collapse navbar-collapse\" id=\"navbarNavAltMarkup\"> <div class=\"navbar-nav\"> <a class=\"nav-item nav-link\" href=\"../search\">Search</a> <a class=\"nav-item nav-link\" href=\"../wholesome\">Wholesome Animu </a> <a class=\"nav-item nav-link\" href=\"../read\">Read </a> <li class=\"nav-item dropdown\"> <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"> OP/ED </a> <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\"> <a class=\"dropdown-item\" href=\"../mikakunin\">Engaged to the Unidentified</a> <a class=\"dropdown-item\" href=\"../dropkick\">Gabriel Dropout</a> <a class=\"dropdown-item\" href=\"../chuchuyeah\">Miss Kobayashi\'s Dragon Maid</a> <a class=\"dropdown-item\" href=\"../kyutie\">Ms. vampire who lives in my neighborhood.</a> </div> </li> </div> </div>
-*/

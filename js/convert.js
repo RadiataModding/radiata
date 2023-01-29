@@ -79,7 +79,12 @@ function startConvert() {
         if (document.getElementById("clipboard").checked) {
             navigator.clipboard.readText()
                 .then(text => {
-                    stringDecoder(text);
+                    if (document.getElementById("experimental").checked){
+                        result = linesProcess(text);
+                    } else {
+                        stringDecoder(text);
+                    }
+                    
                     if (document.getElementById("download").checked) {
                         let a = document.createElement('a');
                         a.href = "data:application/octet-stream," + encodeURIComponent(result);
@@ -95,7 +100,11 @@ function startConvert() {
                 });
 
         } else {
-            stringDecoder(document.getElementById('text').value);
+            if (document.getElementById("experimental").checked){
+                result = linesProcess(document.getElementById('text').value);
+            } else {
+                stringDecoder(document.getElementById('text').value);
+            }
             if (document.getElementById("download").checked) {
                 let a = document.createElement('a');
                 a.href = "data:application/octet-stream," + encodeURIComponent(result);
@@ -699,6 +708,75 @@ function hexTrim(text) {
     return result;
 }
 
+function rmf1splitter(text){
+    rmf1Array = [];
+    rmf1Pointers = [];
+    rmf = hexTrim(text);
+    if (rmf.length == 0){
+        return alert("RMF not found!");
+    }
+
+    rmfSize = parseInt(changeEndianness2(rmf.substring(24,32)), 16);
+    lines = parseInt(changeEndianness2(rmf.substring(32,40)), 16);
+
+    if (lines <= 0) {
+        return alert("RMF is empty!");
+    }
+
+    for (let i = 0; i < lines; i++){
+        rmf1Pointers.push(parseInt(changeEndianness2(rmf.substring(0x30+(i*8),0x38+(i*8))), 16));
+    }
+
+    for (let i = 0; i < lines; i++){
+        if (i == lines - 1){
+            rmf1Array.push(rmf.substring(rmf1Pointers[i]*2,rmfSize*2));
+        } else {
+            rmf1Array.push(rmf.substring(rmf1Pointers[i]*2,(rmf1Pointers[i+1]*2 - 2)));
+        }
+    }
+    return rmf1Array;
+}
+
+function linesProcess(text){
+    rmfArray = rmf1splitter(text);
+
+    result = ""
+
+    for (let i = 0; i < rmfArray.length; i++){
+        textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0,8)),16);
+        charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8,16)),16);
+        rmfArray[i] = rmfArray[i].substring(16);
+        character = [0]
+        for (let j = 0; j < charAmt; j++){
+            character.push(parseInt(changeEndianness2(rmfArray[i].substring(0,8)),16));
+            rmfArray[i] = rmfArray[i].substring(8);
+        }
+
+        rmfArray[i] = rmfArray[i].substring(0x54);
+
+        if (rmfArray[i].substring(0,4) != '0E4E'){
+            rmfArray[i] = rmfArray[i].substring(0x10);
+        }
+
+        charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+
+        rmfArray[i] = rmfArray[i].substring(0x8);
+
+        lineAmt = rmfArray[i].substring(0,2);
+        rmfArray[i] = rmfArray[i].substring(0x8);
+
+        rmfArray[i] = rmfArray[i].substring(0,rmfArray[i].length-10)
+
+        result += charSpeak + ": ";
+
+        result += stringDecoder(rmfArray[i]);
+
+        result += "\n";
+
+    }
+    return result;
+}
+
 function stringDecoder(text) {
     result = "";
     text = text.replace(/\s/g, '');
@@ -725,404 +803,425 @@ function stringDecoder(text) {
 
 
             }
-        } else if (temp != "") {
-            switch (temp) {
-                case "0100":
-                    result += " ";
-                    break;
-                case "6300":
-                    result += "A";
-                    break;
-                case "6400":
-                    result += "B";
-                    break;
-                case "6500":
-                    result += "C";
-                    break;
-                case "6600":
-                    result += "D";
-                    break;
-                case "6700":
-                    result += "E";
-                    break;
-                case "6800":
-                    result += "F";
-                    break;
-                case "6900":
-                    result += "G";
-                    break;
-                case "6A00":
-                    result += "H";
-                    break;
-                case "6B00":
-                    result += "I";
-                    break;
-                case "6C00":
-                    result += "J";
-                    break;
-                case "6D00":
-                    result += "K";
-                    break;
-                case "6E00":
-                    result += "L";
-                    break;
-                case "6F00":
-                    result += "M";
-                    break;
-                case "7000":
-                    result += "N";
-                    break;
-                case "7100":
-                    result += "O";
-                    break;
-                case "7200":
-                    result += "P";
-                    break;
-                case "7300":
-                    result += "Q";
-                    break;
-                case "7400":
-                    result += "R";
-                    break;
-                case "7500":
-                    result += "S";
-                    break;
-                case "7600":
-                    result += "T";
-                    break;
-                case "7700":
-                    result += "U";
-                    break;
-                case "7800":
-                    result += "V";
-                    break;
-                case "7900":
-                    result += "W";
-                    break;
-                case "7A00":
-                    result += "X";
-                    break;
-                case "7B00":
-                    result += "Y";
-                    break;
-                case "7C00":
-                    result += "Z";
-                    break;
-                case "7D00":
-                    result += "a";
-                    break;
-                case "7E00":
-                    result += "b";
-                    break;
-                case "7F00":
-                    result += "c";
-                    break;
-                case "8000":
-                    result += "d";
-                    break;
-                case "8100":
-                    result += "e";
-                    break;
-                case "8200":
-                    result += "f";
-                    break;
-                case "8300":
-                    result += "g";
-                    break;
-                case "8400":
-                    result += "h";
-                    break;
-                case "8500":
-                    result += "i";
-                    break;
-                case "8600":
-                    result += "j";
-                    break;
-                case "8700":
-                    result += "k";
-                    break;
-                case "8800":
-                    result += "l";
-                    break;
-                case "8900":
-                    result += "m";
-                    break;
-                case "8A00":
-                    result += "n";
-                    break;
-                case "8B00":
-                    result += "o";
-                    break;
-                case "8C00":
-                    result += "p";
-                    break;
-                case "8D00":
-                    result += "q";
-                    break;
-                case "8E00":
-                    result += "r";
-                    break;
-                case "8F00":
-                    result += "s";
-                    break;
-                case "9000":
-                    result += "t";
-                    break;
-                case "9100":
-                    result += "u";
-                    break;
-                case "9200":
-                    result += "v";
-                    break;
-                case "9300":
-                    result += "w";
-                    break;
-                case "9400":
-                    result += "x";
-                    break;
-                case "9500":
-                    result += "y";
-                    break;
-                case "9600":
-                    result += "z";
-                    break;
-                case "6200":
-                    result += "9";
-                    break;
-                case "6100":
-                    result += "8";
-                    break;
-                case "6000":
-                    result += "7";
-                    break;
-                case "5F00":
-                    result += "6";
-                    break;
-                case "5E00":
-                    result += "5";
-                    break;
-                case "5D00":
-                    result += "4";
-                    break;
-                case "5C00":
-                    result += "3";
-                    break;
-                case "5B00":
-                    result += "2";
-                    break;
-                case "5A00":
-                    result += "1";
-                    break;
-                case "5900":
-                    result += "0";
-                    break;
-                    /*case "1C00":
-                    	result += "/";
-                    	break;
-                    case "1A00":
-                    	result += "々";
-                    	break;*/
-                case "1B00":
-                    result += "ー";
-                    break;
-                case "1D00":
-                    result += "\\";
-                    break;
-                case "1F00":
-                    result += "...";
-                    break;
-                case "1800":
-                    result += "!";
-                    break;
-                case "1700":
-                    result += "?";
-                    break;
-                    /*case "1900":
-                    	result += "_";
-                    	break;*/
-                case "1300":
-                    result += ".";
-                    break;
-                case "1200":
-                    result += ",";
-                    break;
-                    /*case "1000":
-                    	result += "、";
-                    	break;
-                    case "1100":
-                    	result += "。";
-                    	break;*/
-                    /*case "1400":
-                    	result += "・";
-                    	break;*/
-                case "1500":
-                    result += ":";
-                    break;
-                    /*case "1600":
-                    	result += ";";
-                    	break;*/
-                    /*case "1E00":
-                    	result += "~";
-                    	break;*/
-                case "2000":
-                    result += "‘";
-                    break;
-                case "2100":
-                    result += "’";
-                    break;
-                case "2200":
-                    result += "“";
-                    break;
-                case "2300":
-                    result += "”";
-                    break;
-                case "2400":
-                    result += "(";
-                    break;
-                case "2500":
-                    result += ")";
-                    break;
-                case "2800":
-                    result += "[";
-                    break;
-                case "2900":
-                    result += "]";
-                    break;
-                case "3000":
-                    result += "「";
-                    break;
-                case "3100":
-                    result += "」";
-                    break;
-                case "3200":
-                    result += "『";
-                    break;
-                case "3300":
-                    result += "』";
-                    break;
-                case "3400":
-                    result += "【";
-                    break;
-                case "3500":
-                    result += "】";
-                    break;
-                case "3600":
-                    result += "+";
-                    break;
-                case "3700":
-                    result += "-";
-                    break;
-                case "3800":
-                    result += "±";
-                    break;
-                case "3900":
-                    result += "×";
-                    break;
-                case "3A00":
-                    result += "÷";
-                    break;
-                case "3B00":
-                    result += "=";
-                    break;
-                case "3C00":
-                    result += "≠";
-                    break;
-                case "3D00":
-                    result += "<";
-                    break;
-                case "3E00":
-                    result += ">";
-                    break;
-                case "3F00":
-                    result += "≤";
-                    break;
-                case "4000":
-                    result += "≥";
-                    break;
-                case "4100":
-                    result += "￥";
-                    break;
-                case "4200":
-                    result += "$";
-                    break;
-                case "4300":
-                    result += "%";
-                    break;
-                case "4400":
-                    result += "#";
-                    break;
-                case "4500":
-                    result += "&";
-                    break;
-                case "4600":
-                    result += "*";
-                    break;
-                case "4700":
-                    result += "@";
-                    break;
-                case "4800":
-                    result += "☆";
-                    break;
-                case "4900":
-                    result += "★";
-                    break;
-                case "4A00":
-                    result += "○";
-                    break;
-                case "4B00":
-                    result += "●";
-                    break;
-                case "4C00":
-                    result += "◎";
-                    break;
-                case "4D00":
-                    result += "◇";
-                    break;
-                case "4E00":
-                    result += "◆";
-                    break;
-                case "4F00":
-                    result += "□";
-                    break;
-                case "5000":
-                    result += "⬛";
-                    break;
-                case "5100":
-                    result += "△";
-                    break;
-                case "5200":
-                    result += "▲";
-                    break;
-                case "5300":
-                    result += "▽";
-                    break;
-                case "5400":
-                    result += "▼";
-                    break;
-                case "5500":
-                    result += "→";
-                    break;
-                case "5600":
-                    result += "←";
-                    break;
-                case "5700":
-                    result += "↑";
-                    break;
-                case "5800":
-                    result += "↓";
-                    break;
-                case "0F20":
+        } else if (temp != ""){
+            if (temp == "0F20") {
                     result += "\n\n";
-                    break;
-                case "0A00":
-                    result += "\n";
-                    break;
-                default:
-                    //result += "�";
-            }
-        } else {
-            break;
+                } else {
+                    temp = parseInt(changeEndianness2(temp), 16);
+                    if (document.getElementById("enbjp").checked) {
+                        if (temp > 0 && temp < 457 && temp in charDecoding2) {
+                            result += charDecoding2[temp];
+                        }
+                    } else {
+                        if (temp > 0 && temp < 177 && temp in charDecoding) {
+                            curchar = charDecoding[temp];
+                            if (curchar != null){
+                                result += curchar;
+                            }
+                            //result += charDecoding[temp];
+                        }
+                    }
+
+                }
         }
+            //  else if (temp != "") {
+            //     switch (temp) {
+            //         case "0100":
+            //             result += " ";
+            //             break;
+            //         case "6300":
+            //             result += "A";
+            //             break;
+            //         case "6400":
+            //             result += "B";
+            //             break;
+            //         case "6500":
+            //             result += "C";
+            //             break;
+            //         case "6600":
+            //             result += "D";
+            //             break;
+            //         case "6700":
+            //             result += "E";
+            //             break;
+            //         case "6800":
+            //             result += "F";
+            //             break;
+            //         case "6900":
+            //             result += "G";
+            //             break;
+            //         case "6A00":
+            //             result += "H";
+            //             break;
+            //         case "6B00":
+            //             result += "I";
+            //             break;
+            //         case "6C00":
+            //             result += "J";
+            //             break;
+            //         case "6D00":
+            //             result += "K";
+            //             break;
+            //         case "6E00":
+            //             result += "L";
+            //             break;
+            //         case "6F00":
+            //             result += "M";
+            //             break;
+            //         case "7000":
+            //             result += "N";
+            //             break;
+            //         case "7100":
+            //             result += "O";
+            //             break;
+            //         case "7200":
+            //             result += "P";
+            //             break;
+            //         case "7300":
+            //             result += "Q";
+            //             break;
+            //         case "7400":
+            //             result += "R";
+            //             break;
+            //         case "7500":
+            //             result += "S";
+            //             break;
+            //         case "7600":
+            //             result += "T";
+            //             break;
+            //         case "7700":
+            //             result += "U";
+            //             break;
+            //         case "7800":
+            //             result += "V";
+            //             break;
+            //         case "7900":
+            //             result += "W";
+            //             break;
+            //         case "7A00":
+            //             result += "X";
+            //             break;
+            //         case "7B00":
+            //             result += "Y";
+            //             break;
+            //         case "7C00":
+            //             result += "Z";
+            //             break;
+            //         case "7D00":
+            //             result += "a";
+            //             break;
+            //         case "7E00":
+            //             result += "b";
+            //             break;
+            //         case "7F00":
+            //             result += "c";
+            //             break;
+            //         case "8000":
+            //             result += "d";
+            //             break;
+            //         case "8100":
+            //             result += "e";
+            //             break;
+            //         case "8200":
+            //             result += "f";
+            //             break;
+            //         case "8300":
+            //             result += "g";
+            //             break;
+            //         case "8400":
+            //             result += "h";
+            //             break;
+            //         case "8500":
+            //             result += "i";
+            //             break;
+            //         case "8600":
+            //             result += "j";
+            //             break;
+            //         case "8700":
+            //             result += "k";
+            //             break;
+            //         case "8800":
+            //             result += "l";
+            //             break;
+            //         case "8900":
+            //             result += "m";
+            //             break;
+            //         case "8A00":
+            //             result += "n";
+            //             break;
+            //         case "8B00":
+            //             result += "o";
+            //             break;
+            //         case "8C00":
+            //             result += "p";
+            //             break;
+            //         case "8D00":
+            //             result += "q";
+            //             break;
+            //         case "8E00":
+            //             result += "r";
+            //             break;
+            //         case "8F00":
+            //             result += "s";
+            //             break;
+            //         case "9000":
+            //             result += "t";
+            //             break;
+            //         case "9100":
+            //             result += "u";
+            //             break;
+            //         case "9200":
+            //             result += "v";
+            //             break;
+            //         case "9300":
+            //             result += "w";
+            //             break;
+            //         case "9400":
+            //             result += "x";
+            //             break;
+            //         case "9500":
+            //             result += "y";
+            //             break;
+            //         case "9600":
+            //             result += "z";
+            //             break;
+            //         case "6200":
+            //             result += "9";
+            //             break;
+            //         case "6100":
+            //             result += "8";
+            //             break;
+            //         case "6000":
+            //             result += "7";
+            //             break;
+            //         case "5F00":
+            //             result += "6";
+            //             break;
+            //         case "5E00":
+            //             result += "5";
+            //             break;
+            //         case "5D00":
+            //             result += "4";
+            //             break;
+            //         case "5C00":
+            //             result += "3";
+            //             break;
+            //         case "5B00":
+            //             result += "2";
+            //             break;
+            //         case "5A00":
+            //             result += "1";
+            //             break;
+            //         case "5900":
+            //             result += "0";
+            //             break;
+            //             /*case "1C00":
+            //             	result += "/";
+            //             	break;
+            //             case "1A00":
+            //             	result += "々";
+            //             	break;*/
+            //         case "1B00":
+            //             result += "ー";
+            //             break;
+            //         case "1D00":
+            //             result += "\\";
+            //             break;
+            //         case "1F00":
+            //             result += "...";
+            //             break;
+            //         case "1800":
+            //             result += "!";
+            //             break;
+            //         case "1700":
+            //             result += "?";
+            //             break;
+            //             /*case "1900":
+            //             	result += "_";
+            //             	break;*/
+            //         case "1300":
+            //             result += ".";
+            //             break;
+            //         case "1200":
+            //             result += ",";
+            //             break;
+            //             /*case "1000":
+            //             	result += "、";
+            //             	break;
+            //             case "1100":
+            //             	result += "。";
+            //             	break;*/
+            //             /*case "1400":
+            //             	result += "・";
+            //             	break;*/
+            //         case "1500":
+            //             result += ":";
+            //             break;
+            //             /*case "1600":
+            //             	result += ";";
+            //             	break;*/
+            //             /*case "1E00":
+            //             	result += "~";
+            //             	break;*/
+            //         case "2000":
+            //             result += "‘";
+            //             break;
+            //         case "2100":
+            //             result += "’";
+            //             break;
+            //         case "2200":
+            //             result += "“";
+            //             break;
+            //         case "2300":
+            //             result += "”";
+            //             break;
+            //         case "2400":
+            //             result += "(";
+            //             break;
+            //         case "2500":
+            //             result += ")";
+            //             break;
+            //         case "2800":
+            //             result += "[";
+            //             break;
+            //         case "2900":
+            //             result += "]";
+            //             break;
+            //         case "3000":
+            //             result += "「";
+            //             break;
+            //         case "3100":
+            //             result += "」";
+            //             break;
+            //         case "3200":
+            //             result += "『";
+            //             break;
+            //         case "3300":
+            //             result += "』";
+            //             break;
+            //         case "3400":
+            //             result += "【";
+            //             break;
+            //         case "3500":
+            //             result += "】";
+            //             break;
+            //         case "3600":
+            //             result += "+";
+            //             break;
+            //         case "3700":
+            //             result += "-";
+            //             break;
+            //         case "3800":
+            //             result += "±";
+            //             break;
+            //         case "3900":
+            //             result += "×";
+            //             break;
+            //         case "3A00":
+            //             result += "÷";
+            //             break;
+            //         case "3B00":
+            //             result += "=";
+            //             break;
+            //         case "3C00":
+            //             result += "≠";
+            //             break;
+            //         case "3D00":
+            //             result += "<";
+            //             break;
+            //         case "3E00":
+            //             result += ">";
+            //             break;
+            //         case "3F00":
+            //             result += "≤";
+            //             break;
+            //         case "4000":
+            //             result += "≥";
+            //             break;
+            //         case "4100":
+            //             result += "￥";
+            //             break;
+            //         case "4200":
+            //             result += "$";
+            //             break;
+            //         case "4300":
+            //             result += "%";
+            //             break;
+            //         case "4400":
+            //             result += "#";
+            //             break;
+            //         case "4500":
+            //             result += "&";
+            //             break;
+            //         case "4600":
+            //             result += "*";
+            //             break;
+            //         case "4700":
+            //             result += "@";
+            //             break;
+            //         case "4800":
+            //             result += "☆";
+            //             break;
+            //         case "4900":
+            //             result += "★";
+            //             break;
+            //         case "4A00":
+            //             result += "○";
+            //             break;
+            //         case "4B00":
+            //             result += "●";
+            //             break;
+            //         case "4C00":
+            //             result += "◎";
+            //             break;
+            //         case "4D00":
+            //             result += "◇";
+            //             break;
+            //         case "4E00":
+            //             result += "◆";
+            //             break;
+            //         case "4F00":
+            //             result += "□";
+            //             break;
+            //         case "5000":
+            //             result += "⬛";
+            //             break;
+            //         case "5100":
+            //             result += "△";
+            //             break;
+            //         case "5200":
+            //             result += "▲";
+            //             break;
+            //         case "5300":
+            //             result += "▽";
+            //             break;
+            //         case "5400":
+            //             result += "▼";
+            //             break;
+            //         case "5500":
+            //             result += "→";
+            //             break;
+            //         case "5600":
+            //             result += "←";
+            //             break;
+            //         case "5700":
+            //             result += "↑";
+            //             break;
+            //         case "5800":
+            //             result += "↓";
+            //             break;
+            //         case "0F20":
+            //             result += "\n\n";
+            //             break;
+            //         case "0A00":
+            //             result += "\n";
+            //             break;
+            //         default:
+            //             //result += "�";
+            //     }
+            // } else {
+            //     break;
+            // }
     }
     return result;
 }
@@ -2073,72 +2172,72 @@ let charEncoding = {
 let charDecoding = {
     "1": " ",
     "10": "\n",
-    "16": "､",
-    "17": "｡",
+    //"16": "､",
+    //"17": "｡",
     "18": ",",
     "19": ".",
-    "20": "･",
+    //"20": "･",
     "21": ":",
     "22": ";",
     "23": "?",
     "24": "!",
-    "25": "_",
-    "26": "々",
+    //"25": "_",
+    //"26": "々",
     "27": "ー",
     "28": "/",
-    "29": "＼",
+    //"29": "＼",
     "30": "~",
-    "31": "…",
+    //"31": "…",
     "32": "‘",
     "33": "'",
     "34": "“",
     "35": "\"",
-    "36": "(",
-    "37": ")",
-    "38": "〔",
-    "39": "〕",
-    "40": "[",
-    "41": "]",
-    "42": "{",
-    "43": "}",
-    "44": "〈",
-    "45": "〉",
-    "46": "《",
-    "47": "》",
-    "48": "｢",
-    "49": "｣",
-    "50": "『",
-    "51": "』",
-    "52": "【",
-    "53": "】",
+    //"36": "(",
+    //"37": ")",
+    //"38": "〔",
+    //"39": "〕",
+    //"40": "[",
+    //"41": "]",
+    //"42": "{",
+    //"43": "}",
+    //"44": "〈",
+    //"45": "〉",
+    // "46": "《",
+    // "47": "》",
+    // "48": "｢",
+    // "49": "｣",
+    // "50": "『",
+    // "51": "』",
+    // "52": "【",
+    // "53": "】",
     "54": "+",
     "55": "-",
-    "56": "±",
-    "57": "×",
-    "58": "÷",
-    "60": "≠",
-    "61": "<",
-    "62": ">",
-    "63": "≦",
-    "64": "≧",
+    //"56": "±",
+    //"57": "×",
+    //"58": "÷",
+    //"60": "≠",
+    // "61": "<",
+    // "62": ">",
+    // "63": "≦",
+    // "64": "≧",
     "65": "\\",
     "66": "$",
     "67": "%",
     "69": "&",
     "70": "*",
     "71": "@",
-    "73": "★",
-    "74": "○",
-    "75": "●",
-    "76": "◎",
-    "77": "◇",
-    "78": "◆",
-    "79": "□",
-    "80": "■",
-    "81": "△",
-    "82": "▲",
-    "83": "▽",
-    "84": "▼",
+    // "73": "★",
+    // "74": "○",
+    // "75": "●",
+    // "76": "◎",
+    // "77": "◇",
+    // "78": "◆",
+    // "79": "□",
+    // "80": "■",
+    // "81": "△",
+    // "82": "▲",
+    // "83": "▽",
+    // "84": "▼",
     "85": "→",
     "86": "←",
     "87": "↑",
@@ -2204,297 +2303,297 @@ let charDecoding = {
     "147": "w",
     "148": "x",
     "149": "y",
-    "150": "z",
-    "151": "ぁ",
-    "152": "あ",
-    "153": "ぃ",
-    "154": "い",
-    "155": "ぅ",
-    "156": "う",
-    "157": "ぇ",
-    "158": "え",
-    "159": "ぉ",
-    "160": "お",
-    "161": "か",
-    "162": "が",
-    "163": "き",
-    "164": "ぎ",
-    "165": "く",
-    "166": "ぐ",
-    "167": "け",
-    "168": "げ",
-    "169": "こ",
-    "170": "ご",
-    "171": "さ",
-    "172": "ざ",
-    "173": "し",
-    "174": "じ",
-    "175": "す",
-    "176": "ず",
-    "177": "せ",
-    "178": "ぜ",
-    "179": "そ",
-    "180": "ぞ",
-    "181": "た",
-    "182": "だ",
-    "183": "ち",
-    "184": "ぢ",
-    "185": "っ",
-    "186": "つ",
-    "187": "づ",
-    "188": "て",
-    "189": "で",
-    "190": "と",
-    "191": "ど",
-    "192": "な",
-    "193": "に",
-    "194": "ぬ",
-    "195": "ね",
-    "196": "の",
-    "197": "は",
-    "198": "ば",
-    "199": "ぱ",
-    "200": "ひ",
-    "201": "び",
-    "202": "ぴ",
-    "203": "ふ",
-    "204": "ぶ",
-    "205": "ぷ",
-    "206": "へ",
-    "207": "べ",
-    "208": "ぺ",
-    "209": "ほ",
-    "210": "ぼ",
-    "211": "ぽ",
-    "212": "ま",
-    "213": "み",
-    "214": "む",
-    "215": "め",
-    "216": "も",
-    "217": "ゃ",
-    "218": "や",
-    "219": "ゅ",
-    "220": "ゆ",
-    "221": "ょ",
-    "222": "よ",
-    "223": "ら",
-    "224": "り",
-    "225": "る",
-    "226": "れ",
-    "227": "ろ",
-    "228": "ゎ",
-    "229": "わ",
-    "230": "ゐ",
-    "231": "ゑ",
-    "232": "を",
-    "233": "ん",
-    "234": "ァ",
-    "235": "ア",
-    "236": "ィ",
-    "237": "イ",
-    "238": "ゥ",
-    "239": "ウ",
-    "240": "ェ",
-    "241": "エ",
-    "242": "ォ",
-    "243": "オ",
-    "244": "カ",
-    "245": "ガ",
-    "246": "キ",
-    "247": "ギ",
-    "248": "ク",
-    "249": "グ",
-    "250": "ケ",
-    "251": "ゲ",
-    "252": "コ",
-    "253": "ゴ",
-    "254": "サ",
-    "255": "ザ",
-    "272": "シ",
-    "273": "ジ",
-    "274": "ス",
-    "275": "ズ",
-    "276": "セ",
-    "277": "ゼ",
-    "278": "ソ",
-    "279": "ゾ",
-    "280": "タ",
-    "281": "ダ",
-    "282": "チ",
-    "283": "ヂ",
-    "284": "ッ",
-    "285": "ツ",
-    "286": "ヅ",
-    "287": "テ",
-    "288": "デ",
-    "289": "ト",
-    "290": "ド",
-    "291": "ナ",
-    "292": "ニ",
-    "293": "ヌ",
-    "294": "ネ",
-    "295": "ノ",
-    "296": "ハ",
-    "297": "バ",
-    "298": "パ",
-    "299": "ヒ",
-    "300": "ビ",
-    "301": "ピ",
-    "302": "フ",
-    "303": "ブ",
-    "304": "プ",
-    "305": "ヘ",
-    "306": "ベ",
-    "307": "ペ",
-    "308": "ホ",
-    "309": "ボ",
-    "310": "ポ",
-    "311": "マ",
-    "312": "ミ",
-    "313": "ム",
-    "314": "メ",
-    "315": "モ",
-    "316": "ャ",
-    "317": "ヤ",
-    "318": "ュ",
-    "319": "ユ",
-    "320": "ョ",
-    "321": "ヨ",
-    "322": "ラ",
-    "323": "リ",
-    "324": "ル",
-    "325": "レ",
-    "326": "ロ",
-    "327": "ヮ",
-    "328": "ワ",
-    "329": "ヰ",
-    "330": "ヱ",
-    "331": "ヲ",
-    "332": "ン",
-    "333": "ヴ",
-    "334": "ヵ",
-    "335": "ヶ",
-    "336": "緑",
-    "337": "依",
-    "338": "頼",
-    "339": "書",
-    "340": "村",
-    "341": "雨",
-    "342": "折",
-    "343": "剣",
-    "344": "鉄",
-    "345": "槌",
-    "346": "隠",
-    "347": "者",
-    "348": "像",
-    "349": "用",
-    "350": "状",
-    "351": "態",
-    "352": "耐",
-    "353": "性",
-    "354": "戦",
-    "355": "闘",
-    "356": "心",
-    "357": "得",
-    "358": "人",
-    "359": "好",
-    "360": "武",
-    "361": "器",
-    "362": "工",
-    "363": "房",
-    "364": "士",
-    "365": "魔",
-    "366": "術",
-    "367": "師",
-    "368": "僧",
-    "369": "侶",
-    "370": "盗",
-    "371": "賊",
-    "372": "生",
-    "373": "物",
-    "374": "図",
-    "375": "鑑",
-    "376": "伝",
-    "377": "本",
-    "378": "歴",
-    "379": "史",
-    "380": "上",
-    "381": "下",
-    "382": "激",
-    "383": "大",
-    "384": "蛇",
-    "385": "壁",
-    "386": "開",
-    "387": "放",
-    "388": "奮",
-    "389": "起",
-    "390": "燃",
-    "391": "焼",
-    "392": "読",
-    "393": "込",
-    "394": "保",
-    "395": "存",
-    "396": "差",
-    "397": "空",
-    "398": "他",
-    "399": "容",
-    "400": "量",
-    "401": "出",
-    "402": "入",
-    "403": "番",
-    "404": "円",
-    "405": "軽",
-    "406": "重",
-    "407": "装",
-    "408": "衛",
-    "409": "兵",
-    "410": "世",
-    "411": "Ⅰ",
-    "412": "Ⅱ",
-    "413": "号",
-    "414": "☆",
-    "415": "女",
-    "416": "男",
-    "417": "騎",
-    "418": "見",
-    "419": "習",
-    "420": "黒",
-    "421": "部",
-    "422": "木",
-    "423": "野",
-    "424": "火",
-    "425": "事",
-    "426": "水",
-    "427": "地",
-    "428": "風",
-    "429": "無",
-    "430": "毒",
-    "431": "凍",
-    "432": "結",
-    "433": "金",
-    "434": "縛",
-    "435": "呪",
-    "436": "混",
-    "437": "乱",
-    "438": "近",
-    "439": "眼",
-    "440": "回",
-    "441": "復",
-    "442": "吸",
-    "443": "収",
-    "444": "炎",
-    "445": "石",
-    "446": "化",
-    "447": "♂",
-    "448": "♀",
-    "449": "食",
-    "450": "型",
-    "451": "球",
-    "452": "雷",
-    "453": "獣",
-    "454": "神",
-    "455": "殿",
-    "456": "死"
+    "150": "z"
+    // "151": "ぁ",
+    // "152": "あ",
+    // "153": "ぃ",
+    // "154": "い",
+    // "155": "ぅ",
+    // "156": "う",
+    // "157": "ぇ",
+    // "158": "え",
+    // "159": "ぉ",
+    // "160": "お",
+    // "161": "か",
+    // "162": "が",
+    // "163": "き",
+    // "164": "ぎ",
+    // "165": "く",
+    // "166": "ぐ",
+    // "167": "け",
+    // "168": "げ",
+    // "169": "こ",
+    // "170": "ご",
+    // "171": "さ",
+    // "172": "ざ",
+    // "173": "し",
+    // "174": "じ",
+    // "175": "す",
+    // "176": "ず",
+    // "177": "せ",
+    // "178": "ぜ",
+    // "179": "そ",
+    // "180": "ぞ",
+    // "181": "た",
+    // "182": "だ",
+    // "183": "ち",
+    // "184": "ぢ",
+    // "185": "っ",
+    // "186": "つ",
+    // "187": "づ",
+    // "188": "て",
+    // "189": "で",
+    // "190": "と",
+    // "191": "ど",
+    // "192": "な",
+    // "193": "に",
+    // "194": "ぬ",
+    // "195": "ね",
+    // "196": "の",
+    // "197": "は",
+    // "198": "ば",
+    // "199": "ぱ",
+    // "200": "ひ",
+    // "201": "び",
+    // "202": "ぴ",
+    // "203": "ふ",
+    // "204": "ぶ",
+    // "205": "ぷ",
+    // "206": "へ",
+    // "207": "べ",
+    // "208": "ぺ",
+    // "209": "ほ",
+    // "210": "ぼ",
+    // "211": "ぽ",
+    // "212": "ま",
+    // "213": "み",
+    // "214": "む",
+    // "215": "め",
+    // "216": "も",
+    // "217": "ゃ",
+    // "218": "や",
+    // "219": "ゅ",
+    // "220": "ゆ",
+    // "221": "ょ",
+    // "222": "よ",
+    // "223": "ら",
+    // "224": "り",
+    // "225": "る",
+    // "226": "れ",
+    // "227": "ろ",
+    // "228": "ゎ",
+    // "229": "わ",
+    // "230": "ゐ",
+    // "231": "ゑ",
+    // "232": "を",
+    // "233": "ん",
+    // "234": "ァ",
+    // "235": "ア",
+    // "236": "ィ",
+    // "237": "イ",
+    // "238": "ゥ",
+    // "239": "ウ",
+    // "240": "ェ",
+    // "241": "エ",
+    // "242": "ォ",
+    // "243": "オ",
+    // "244": "カ",
+    // "245": "ガ",
+    // "246": "キ",
+    // "247": "ギ",
+    // "248": "ク",
+    // "249": "グ",
+    // "250": "ケ",
+    // "251": "ゲ",
+    // "252": "コ",
+    // "253": "ゴ",
+    // "254": "サ",
+    // "255": "ザ",
+    // "272": "シ",
+    // "273": "ジ",
+    // "274": "ス",
+    // "275": "ズ",
+    // "276": "セ",
+    // "277": "ゼ",
+    // "278": "ソ",
+    // "279": "ゾ",
+    // "280": "タ",
+    // "281": "ダ",
+    // "282": "チ",
+    // "283": "ヂ",
+    // "284": "ッ",
+    // "285": "ツ",
+    // "286": "ヅ",
+    // "287": "テ",
+    // "288": "デ",
+    // "289": "ト",
+    // "290": "ド",
+    // "291": "ナ",
+    // "292": "ニ",
+    // "293": "ヌ",
+    // "294": "ネ",
+    // "295": "ノ",
+    // "296": "ハ",
+    // "297": "バ",
+    // "298": "パ",
+    // "299": "ヒ",
+    // "300": "ビ",
+    // "301": "ピ",
+    // "302": "フ",
+    // "303": "ブ",
+    // "304": "プ",
+    // "305": "ヘ",
+    // "306": "ベ",
+    // "307": "ペ",
+    // "308": "ホ",
+    // "309": "ボ",
+    // "310": "ポ",
+    // "311": "マ",
+    // "312": "ミ",
+    // "313": "ム",
+    // "314": "メ",
+    // "315": "モ",
+    // "316": "ャ",
+    // "317": "ヤ",
+    // "318": "ュ",
+    // "319": "ユ",
+    // "320": "ョ",
+    // "321": "ヨ",
+    // "322": "ラ",
+    // "323": "リ",
+    // "324": "ル",
+    // "325": "レ",
+    // "326": "ロ",
+    // "327": "ヮ",
+    // "328": "ワ",
+    // "329": "ヰ",
+    // "330": "ヱ",
+    // "331": "ヲ",
+    // "332": "ン",
+    // "333": "ヴ",
+    // "334": "ヵ",
+    // "335": "ヶ",
+    // "336": "緑",
+    // "337": "依",
+    // "338": "頼",
+    // "339": "書",
+    // "340": "村",
+    // "341": "雨",
+    // "342": "折",
+    // "343": "剣",
+    // "344": "鉄",
+    // "345": "槌",
+    // "346": "隠",
+    // "347": "者",
+    // "348": "像",
+    // "349": "用",
+    // "350": "状",
+    // "351": "態",
+    // "352": "耐",
+    // "353": "性",
+    // "354": "戦",
+    // "355": "闘",
+    // "356": "心",
+    // "357": "得",
+    // "358": "人",
+    // "359": "好",
+    // "360": "武",
+    // "361": "器",
+    // "362": "工",
+    // "363": "房",
+    // "364": "士",
+    // "365": "魔",
+    // "366": "術",
+    // "367": "師",
+    // "368": "僧",
+    // "369": "侶",
+    // "370": "盗",
+    // "371": "賊",
+    // "372": "生",
+    // "373": "物",
+    // "374": "図",
+    // "375": "鑑",
+    // "376": "伝",
+    // "377": "本",
+    // "378": "歴",
+    // "379": "史",
+    // "380": "上",
+    // "381": "下",
+    // "382": "激",
+    // "383": "大",
+    // "384": "蛇",
+    // "385": "壁",
+    // "386": "開",
+    // "387": "放",
+    // "388": "奮",
+    // "389": "起",
+    // "390": "燃",
+    // "391": "焼",
+    // "392": "読",
+    // "393": "込",
+    // "394": "保",
+    // "395": "存",
+    // "396": "差",
+    // "397": "空",
+    // "398": "他",
+    // "399": "容",
+    // "400": "量",
+    // "401": "出",
+    // "402": "入",
+    // "403": "番",
+    // "404": "円",
+    // "405": "軽",
+    // "406": "重",
+    // "407": "装",
+    // "408": "衛",
+    // "409": "兵",
+    // "410": "世",
+    // "411": "Ⅰ",
+    // "412": "Ⅱ",
+    // "413": "号",
+    // "414": "☆",
+    // "415": "女",
+    // "416": "男",
+    // "417": "騎",
+    // "418": "見",
+    // "419": "習",
+    // "420": "黒",
+    // "421": "部",
+    // "422": "木",
+    // "423": "野",
+    // "424": "火",
+    // "425": "事",
+    // "426": "水",
+    // "427": "地",
+    // "428": "風",
+    // "429": "無",
+    // "430": "毒",
+    // "431": "凍",
+    // "432": "結",
+    // "433": "金",
+    // "434": "縛",
+    // "435": "呪",
+    // "436": "混",
+    // "437": "乱",
+    // "438": "近",
+    // "439": "眼",
+    // "440": "回",
+    // "441": "復",
+    // "442": "吸",
+    // "443": "収",
+    // "444": "炎",
+    // "445": "石",
+    // "446": "化",
+    // "447": "♂",
+    // "448": "♀",
+    // "449": "食",
+    // "450": "型",
+    // "451": "球",
+    // "452": "雷",
+    // "453": "獣",
+    // "454": "神",
+    // "455": "殿",
+    // "456": "死"
 }
 
 let charDecoding2 = {
@@ -2544,7 +2643,7 @@ let charDecoding2 = {
     "56": "±",
     "57": "×",
     "58": "÷",
-    "60": "≠",
+    //"60": "≠",
     "61": "<",
     "62": ">",
     "63": "≦",
@@ -2959,7 +3058,7 @@ let charDecoding3 = {
     "56": "±",
     "57": "×",
     "58": "÷",
-    "60": "≠",
+    //"60": "≠",
     "61": "<",
     "62": ">",
     "63": "≦",
@@ -3075,3 +3174,592 @@ let charDecoding3 = {
     "175": "ú",
     "176": "ç"
 }
+
+let characters = {
+  "Empty": 0,
+  "Jack": 1,
+  "Ganz": 2,
+  "Ridley": 3,
+  "Rynka": 4,
+  "Flau": 5,
+  "Star": 6,
+  "Sebastian": 7,
+  "Genius": 8,
+  "Rocky": 9,
+  "Gawain": 10,
+  "Light Guardsman": 269,
+  "Elwen": 12,
+  "Gerald": 13,
+  "Caesar": 14,
+  "Alicia": 15,
+  "Dennis": 16,
+  "Gareth": 17,
+  "Gregory": 18,
+  "Walter": 19,
+  "Jarvis": 20,
+  "Aldo": 22,
+  "Gordon": 23,
+  "Bruce": 24,
+  "David": 25,
+  "Conrad": 26,
+  "Rolec": 27,
+  "Daniel": 28,
+  "Carlos": 29,
+  "Gene": 30,
+  "Thanos": 32,
+  "Curtis": 33,
+  "Cecil": 34,
+  "Morgan": 35,
+  "Felix": 36,
+  "Jill": 37,
+  "Ursula": 38,
+  "Derek": 39,
+  "Christoph": 40,
+  "Claudia": 41,
+  "Ardoph": 42,
+  "Dimitri": 43,
+  "Aidan": 44,
+  "Cornelia": 45,
+  "Faraus": 46,
+  "Marietta": 47,
+  "Ernest": 48,
+  "Franklin": 49,
+  "Johan": 50,
+  "Roche": 51,
+  "Kain": 53,
+  "Fernando": 54,
+  "Anastasia": 55,
+  "Dwight": 56,
+  "Godwin": 57,
+  "Achilles": 58,
+  "Flora": 59,
+  "Elena": 60,
+  "Alvin": 61,
+  "Vitas": 62,
+  "Cosmo": 63,
+  "Grant": 64,
+  "Adina": 65,
+  "Miranda": 66,
+  "Edgar": 67,
+  "Clive": 68,
+  "Lulu": 69,
+  "Eugene": 70,
+  "Nyx": 71,
+  "Ortoroz": 72,
+  "Sonata": 73,
+  "Iris": 74,
+  "Nocturne": 75,
+  "Herz": 76,
+  "Alba": 77,
+  "Lily": 78,
+  "Jared": 79,
+  "Pinky": 80,
+  "Interlude": 81,
+  "Solo": 82,
+  "Joaquel": 83,
+  "Eon": 84,
+  "Elmo": 85,
+  "Jiorus": 86,
+  "Sarasenia": 87,
+  "Belflower": 88,
+  "Jasne": 89,
+  "Larks": 90,
+  "Sakurazaki": 91,
+  "Junzaburo": 92,
+  "Natalie": 93,
+  "Nina": 94,
+  "Charlie": 95,
+  "Leonard": 96,
+  "Heavy Guardsman": 278,
+  "Raymond": 99,
+  "Al": 100,
+  "Margaret": 101,
+  "Zion": 102,
+  "Paul": 103,
+  "Toma": 104,
+  "Torenia": 105,
+  "Testa": 106,
+  "Nuse": 107,
+  "Jorn": 108,
+  "Barbena": 109,
+  "Giske": 110,
+  "Yuri": 111,
+  "Warc": 112,
+  "Robin": 113,
+  "Sheila": 114,
+  "Jasmine": 115,
+  "Camuse": 116,
+  "Lantana": 117,
+  "Lyle": 118,
+  "Rose": 119,
+  "Josef": 120,
+  "Virginia": 121,
+  "Morfinn": 122,
+  "Bligh": 123,
+  "Freija": 124,
+  "Nask": 125,
+  "Cherie": 126,
+  "Zeke": 127,
+  "Dan": 128,
+  "Servia": 129,
+  "Lunbar": 130,
+  "Sonia": 131,
+  "Startis": 132,
+  "Brood": 133,
+  "Garbella": 134,
+  "Silvia": 135,
+  "Thyme": 136,
+  "Elef": 137,
+  "Ryan": 138,
+  "Hip": 139,
+  "Nick": 140,
+  "Kira": 141,
+  "Rabi": 142,
+  "Golye": 143,
+  "Butch": 144,
+  "Sarval": 145,
+  "Sunset": 146,
+  "Sora": 147,
+  "Keaton": 148,
+  "Tarkin": 149,
+  "Gonber": 150,
+  "Leban": 151,
+  "Mook": 152,
+  "Wal": 153,
+  "Wyze": 154,
+  "Zeranium": 155,
+  "Glitch": 255,
+  "Pomemelie": 157,
+  "Saron": 158,
+  "Cepheid": 159,
+  "Baade": 160,
+  "Quasar": 161,
+  "Aphelion": 162,
+  "Gonovitch": 163,
+  "Albert": 164,
+  "Vladimir": 165,
+  "Yevgeni": 166,
+  "Oleg": 167,
+  "Grigory": 168,
+  "Brockle": 169,
+  "Dyvad": 170,
+  "Gehrman": 171,
+  "Sergei": 172,
+  "Naom": 173,
+  "Aegenhart": 174,
+  "Marke": 175,
+  "Donovitch": 176,
+  "Zane": 177,
+  "Hap": 178,
+  "Gil": 179,
+  "Shin": 180,
+  "Fan": 181,
+  "Row": 182,
+  "Pitt": 183,
+  "Few": 184,
+  "Alan": 185,
+  "Keane": 186,
+  "Nogueira": 187,
+  "Clarence": 188,
+  "Serva": 189,
+  "Hyann": 190,
+  "Chatt": 191,
+  "Zida": 192,
+  "Franz": 193,
+  "Romaria": 194,
+  "Marsha": 195,
+  "Lufa": 196,
+  "Coco": 197,
+  "Martinez": 198,
+  "Santos": 199,
+  "Rika": 200,
+  "Mikey": 201,
+  "Gob": 202,
+  "Lin": 203,
+  "Brie": 204,
+  "Gonn": 205,
+  "Golly": 206,
+  "Gobrey": 207,
+  "Den": 208,
+  "Ben": 209,
+  "Aesop": 210,
+  "Monki": 211,
+  "Gabe": 212,
+  "Mason": 213,
+  "Goo": 214,
+  "Donkey": 215,
+  "Ricky": 216,
+  "Drew": 217,
+  "Gruel": 218,
+  "Doppio": 219,
+  "Pietro": 220,
+  "Jan": 221,
+  "Marco": 222,
+  "Niko": 223,
+  "Danny": 224,
+  "Dominic": 225,
+  "Bosso": 226,
+  "Georgio": 227,
+  "Luka": 228,
+  "Sonny": 229,
+  "Giovanni": 230,
+  "Polpo": 231,
+  "J.J.": 232,
+  "Leona": 233,
+  "Leann": 234,
+  "Ray C Ross": 235,
+  "Pinta": 236,
+  "Buta": 237,
+  "Valkyrie": 238,
+  "Lezard": 239,
+  "Radian": 240,
+  "Ethereal Queen": 241,
+  "Cairn": 242,
+  "Kelvin": 243,
+  "Gabriel Celesta": 244,
+  "Galvados": 247,
+  "FC Glitch": 248,
+  "Drago": 253,
+  "Bull": 254,
+  "Null": 258,
+  "Library": 259,
+  "Phonograph": 260,
+  "Jack Bookshelf": 261,
+  "Cross": 262,
+  "Stein": 263,
+  "Blackjack": 264,
+  "Event Watcher": 265,
+  "Parsec": 266,
+  "Cody": 279,
+  "Adele": 280,
+  "Howard": 281,
+  "Ravil": 282,
+  "Astor": 283,
+  "Maddock": 284,
+  "Synelia": 285,
+  "Tony": 286,
+  "Patrick": 287,
+  "Putt": 288,
+  "Reynos": 289,
+  "Gobblehope IX": 290,
+  "Nalshay": 291,
+  "Sayna": 292,
+  "Bran": 293,
+  "Stefan": 294,
+  "Mint": 295,
+  "Daria": 296,
+  "Yack": 297,
+  "Lauren": 298,
+  "Theresa": 299,
+  "Garcia": 300,
+  "Dynas": 301,
+  "Epoch": 302,
+  "Roy": 303,
+  "Louis": 304
+};
+
+let characterIds = {
+    "0": "Unknown/???",
+    "1": "Jack",
+    "2": "Ganz",
+    "3": "Ridley",
+    "4": "Rynka",
+    "5": "Flau",
+    "6": "Star",
+    "7": "Sebastian",
+    "8": "Genius",
+    "9": "Rocky",
+    "10": "Gawain",
+    "11": "Light Guardsman",
+    "12": "Elwen",
+    "13": "Gerald",
+    "14": "Caesar",
+    "15": "Alicia",
+    "16": "Dennis",
+    "17": "Gareth",
+    "18": "Gregory",
+    "19": "Walter",
+    "20": "Jarvis",
+    "21": "Light Guardsman",
+    "22": "Aldo",
+    "23": "Gordon",
+    "24": "Bruce",
+    "25": "David",
+    "26": "Conrad",
+    "27": "Rolec",
+    "28": "Daniel",
+    "29": "Carlos",
+    "30": "Gene",
+    "31": "Light Guardsman",
+    "32": "Thanos",
+    "33": "Curtis",
+    "34": "Cecil",
+    "35": "Morgan",
+    "36": "Felix",
+    "37": "Jill",
+    "38": "Ursula",
+    "39": "Derek",
+    "40": "Christoph",
+    "41": "Claudia",
+    "42": "Ardoph",
+    "43": "Dimitri",
+    "44": "Aidan",
+    "45": "Cornelia",
+    "46": "Faraus",
+    "47": "Marietta",
+    "48": "Ernest",
+    "49": "Franklin",
+    "50": "Johan",
+    "51": "Roche",
+    "52": "Light Guardsman",
+    "53": "Kain",
+    "54": "Fernando",
+    "55": "Anastasia",
+    "56": "Dwight",
+    "57": "Godwin",
+    "58": "Achilles",
+    "59": "Flora",
+    "60": "Elena",
+    "61": "Alvin",
+    "62": "Vitas",
+    "63": "Cosmo",
+    "64": "Grant",
+    "65": "Adina",
+    "66": "Miranda",
+    "67": "Edgar",
+    "68": "Clive",
+    "69": "Lulu",
+    "70": "Eugene",
+    "71": "Nyx",
+    "72": "Ortoroz",
+    "73": "Sonata",
+    "74": "Iris",
+    "75": "Nocturne",
+    "76": "Herz",
+    "77": "Alba",
+    "78": "Lily",
+    "79": "Jared",
+    "80": "Pinky",
+    "81": "Interlude",
+    "82": "Solo",
+    "83": "Joaquel",
+    "84": "Eon",
+    "85": "Elmo",
+    "86": "Jiorus",
+    "87": "Sarasenia",
+    "88": "Belflower",
+    "89": "Jasne",
+    "90": "Larks",
+    "91": "Sakurazaki",
+    "92": "Junzaburo",
+    "93": "Natalie",
+    "94": "Nina",
+    "95": "Charlie",
+    "96": "Leonard",
+    "97": "Light Guardsman",
+    "98": "Heavy Guardsman",
+    "99": "Raymond",
+    "100": "Al",
+    "101": "Margaret",
+    "102": "Zion",
+    "103": "Paul",
+    "104": "Toma",
+    "105": "Torenia",
+    "106": "Testa",
+    "107": "Nuse",
+    "108": "Jorn",
+    "109": "Barbena",
+    "110": "Giske",
+    "111": "Yuri",
+    "112": "Warc",
+    "113": "Robin",
+    "114": "Sheila",
+    "115": "Jasmine",
+    "116": "Camuse",
+    "117": "Lantana",
+    "118": "Lyle",
+    "119": "Rose",
+    "120": "Josef",
+    "121": "Virginia",
+    "122": "Morfinn",
+    "123": "Bligh",
+    "124": "Freija",
+    "125": "Nask",
+    "126": "Cherie",
+    "127": "Zeke",
+    "128": "Dan",
+    "129": "Servia",
+    "130": "Lunbar",
+    "131": "Sonia",
+    "132": "Startis",
+    "133": "Brood",
+    "134": "Garbella",
+    "135": "Silvia",
+    "136": "Thyme",
+    "137": "Elef",
+    "138": "Ryan",
+    "139": "Hip",
+    "140": "Nick",
+    "141": "Kira",
+    "142": "Rabi",
+    "143": "Golye",
+    "144": "Butch",
+    "145": "Sarval",
+    "146": "Sunset",
+    "147": "Sora",
+    "148": "Keaton",
+    "149": "Tarkin",
+    "150": "Gonber",
+    "151": "Leban",
+    "152": "Mook",
+    "153": "Wal",
+    "154": "Wyze",
+    "155": "Zeranium",
+    "156": "Glitch",
+    "157": "Pomemelie",
+    "158": "Saron",
+    "159": "Cepheid",
+    "160": "Baade",
+    "161": "Quasar",
+    "162": "Aphelion",
+    "163": "Gonovitch",
+    "164": "Albert",
+    "165": "Vladimir",
+    "166": "Yevgeni",
+    "167": "Oleg",
+    "168": "Grigory",
+    "169": "Brockle",
+    "170": "Dyvad",
+    "171": "Gehrman",
+    "172": "Sergei",
+    "173": "Naom",
+    "174": "Aegenhart",
+    "175": "Marke",
+    "176": "Donovitch",
+    "177": "Zane",
+    "178": "Hap",
+    "179": "Gil",
+    "180": "Shin",
+    "181": "Fan",
+    "182": "Row",
+    "183": "Pitt",
+    "184": "Few",
+    "185": "Alan",
+    "186": "Keane",
+    "187": "Nogueira",
+    "188": "Clarence",
+    "189": "Serva",
+    "190": "Hyann",
+    "191": "Chatt",
+    "192": "Zida",
+    "193": "Franz",
+    "194": "Romaria",
+    "195": "Marsha",
+    "196": "Lufa",
+    "197": "Coco",
+    "198": "Martinez",
+    "199": "Santos",
+    "200": "Rika",
+    "201": "Mikey",
+    "202": "Gob",
+    "203": "Lin",
+    "204": "Brie",
+    "205": "Gonn",
+    "206": "Golly",
+    "207": "Gobrey",
+    "208": "Den",
+    "209": "Ben",
+    "210": "Aesop",
+    "211": "Monki",
+    "212": "Gabe",
+    "213": "Mason",
+    "214": "Goo",
+    "215": "Donkey",
+    "216": "Ricky",
+    "217": "Drew",
+    "218": "Gruel",
+    "219": "Doppio",
+    "220": "Pietro",
+    "221": "Jan",
+    "222": "Marco",
+    "223": "Niko",
+    "224": "Danny",
+    "225": "Dominic",
+    "226": "Bosso",
+    "227": "Georgio",
+    "228": "Luka",
+    "229": "Sonny",
+    "230": "Giovanni",
+    "231": "Polpo",
+    "232": "J.J.",
+    "233": "Leona",
+    "234": "Leann",
+    "235": "Ray C Ross",
+    "236": "Pinta",
+    "237": "Buta",
+    "238": "Valkyrie",
+    "239": "Lezard",
+    "240": "Radian",
+    "241": "Ethereal Queen",
+    "242": "Cairn",
+    "243": "Kelvin",
+    "244": "Gabriel Celesta",
+    "245": "Glitch",
+    "246": "Glitch",
+    "247": "Galvados",
+    "248": "FC Glitch",
+    "253": "Drago",
+    "254": "Bull",
+    "255": "Glitch",
+    "256": "Null",
+    "257": "Null",
+    "258": "Null",
+    "259": "Library",
+    "260": "Phonograph",
+    "261": "Jack Bookshelf",
+    "262": "Cross",
+    "263": "Stein",
+    "264": "Blackjack",
+    "265": "Event Watcher",
+    "266": "Parsec",
+    "267": "Light Guardsman",
+    "268": "Light Guardsman",
+    "269": "Light Guardsman",
+    "270": "Heavy Guardsman",
+    "271": "Heavy Guardsman",
+    "272": "Heavy Guardsman",
+    "273": "Heavy Guardsman",
+    "274": "Heavy Guardsman",
+    "275": "Heavy Guardsman",
+    "276": "Heavy Guardsman",
+    "277": "Heavy Guardsman",
+    "278": "Heavy Guardsman",
+    "279": "Cody",
+    "280": "Adele",
+    "281": "Howard",
+    "282": "Ravil",
+    "283": "Astor",
+    "284": "Maddock",
+    "285": "Synelia",
+    "286": "Tony",
+    "287": "Patrick",
+    "288": "Putt",
+    "289": "Reynos",
+    "290": "Gobblehope IX",
+    "291": "Nalshay",
+    "292": "Sayna",
+    "293": "Bran",
+    "294": "Stefan",
+    "295": "Mint",
+    "296": "Daria",
+    "297": "Yack",
+    "298": "Lauren",
+    "299": "Theresa",
+    "300": "Garcia",
+    "301": "Dynas",
+    "302": "Epoch",
+    "303": "Roy",
+    "304": "Louis",
+    "9900": "Jack",
+    "9901": "Jack"
+};

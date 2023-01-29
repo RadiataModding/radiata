@@ -4,15 +4,21 @@
       <meta charset="utf-8">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="../js/convert.js"></script>
+      <script src ="../js/nav.js"></script>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <title>Text Creator | Radiata</title>
    </head>
    <body>
-      <a href="/">Home</a>
-      <a href="../decoder">Hex Converter</a>
-      <a href="../name">Name Generator</a>
+      <nav class="navbar fixed-middle navbar-expand-lg navbar-light bg-transparent" id="navbar">
+      </nav>
       <br>
-      <label>Text</label>
-      <textarea id = "text"></textarea><label>Character</label>
+      <div class="container">
+      <textarea id = "text" style="width: 600px; height: 200px;" placeholder="Enter text here, up to three line breaks."></textarea>
+      <br>
+      <label>Character</label>
       <select id="char">
           <option value="03A">Achilles</option>
           <option value="118">Adele</option>
@@ -485,17 +491,30 @@
           <option value="432">Zerotone</option>
           <option value="0C0">Zida</option>
           <option value="066">Zion</option>
-        </select><label>Line Voice</label>
+        </select>
+        <br>
+        <label>Line Voice</label>
         <select id = "lineOpt">
            <option value=1>Automatically select voice number (starting from 1)</option>
            <option value=2>Manually add voice number</option>
         </select>
-      <label>Line Voice Number (Manual, Decimal)</label><input id = "lineNum">
+      <div id="linevoice">
+   </div>
       <input type = "checkbox" id = "bustup"><label for = "bustup">Display Bustup</label>
       <input type = "checkbox" id = "null"><label for = "null">Insert Null Line at beginning (use if first line skips.)</label>
+      <br>
       <input type = "button" onClick = "lineBuild()" value = "Add">
       <input type = "button" onClick = "download2()" value = "Generate">
       <pre id = "results"></pre>
-
+   </div>
    </body>
+   <script>
+      $("#lineOpt").change(function () {
+  if ($(this).val() == 2) {
+    document.getElementById('linevoice').innerHTML = "<label>Line Voice Number (Manual, Decimal)<\/label><input id = \"lineNum\">";
+  } else {
+   document.getElementById('linevoice').innerHTML = "";
+  }
+});
+   </script>
 </html>
