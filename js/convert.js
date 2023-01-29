@@ -754,11 +754,34 @@ function linesProcess(text){
 
         rmfArray[i] = rmfArray[i].substring(0x54);
 
+        speak = false;
+
+        //console.log(rmfArray[i].substring(0,4));
+
         if (rmfArray[i].substring(0,4) != '0E4E'){
-            rmfArray[i] = rmfArray[i].substring(0x10);
+            rmfArray[i] = rmfArray[i].substring(0xC);
         }
 
-        charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+        if (rmfArray[i].substring(0,4) != '0E4E'){
+            rmfArray[i] = rmfArray[i].substring(0x4);
+        }
+        //console.log(rmfArray[i].substring(0,4));
+        if (rmfArray[i].substring(0,4) == '0E4E'){
+            speak = true;
+        }
+        rmfArray[i] = rmfArray[i].substring(0x4);
+
+        charSpeakId = character[parseInt(rmfArray[i].substring(0,2))];
+
+        charCheck = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+
+        if (charCheck != null){
+            charSpeak = charCheck;
+        } else {
+            charSpeak = "";
+        }
+
+        //charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
 
         rmfArray[i] = rmfArray[i].substring(0x8);
 
@@ -767,8 +790,10 @@ function linesProcess(text){
 
         rmfArray[i] = rmfArray[i].substring(0,rmfArray[i].length-10)
 
-        result += charSpeak + ": ";
-
+        if (speak && charSpeakId != 0){
+            result += charSpeak + ": ";
+        }
+        
         result += stringDecoder(rmfArray[i]);
 
         result += "\n";
@@ -3459,7 +3484,7 @@ let characters = {
 };
 
 let characterIds = {
-    "0": "Unknown/???",
+    "0": "Unknown/Blank",
     "1": "Jack",
     "2": "Ganz",
     "3": "Ridley",
