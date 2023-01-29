@@ -44,6 +44,18 @@ function startConvert() {
         } else {
             document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
         }
+
+        if(document.getElementById("calcu").checked){
+            curtext = document.getElementById('text').value;
+            let textArr = curtext.split(/\n/);
+            for(let i = 0; i < textArr.length; i++){
+                document.getElementById("results").innerHTML += "\n";
+                document.getElementById("results").innerHTML += "Line " + (i + 1) + ":";
+                document.getElementById("results").innerHTML += "\n";
+                document.getElementById("results").innerHTML += posCalculator(textArr[i]);
+                document.getElementById("results").innerHTML += "\n";
+            }
+        }
     } else if (document.getElementById('stringSelect').value == "Trim") {
         if (document.getElementById("clipboard").checked) {
             navigator.clipboard.readText()
