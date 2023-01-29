@@ -503,6 +503,13 @@
       <input type = "checkbox" id = "bustup"><label for = "bustup">Display Bustup</label>
       <input type = "checkbox" id = "null"><label for = "null">Insert Null Line at beginning (use if first line skips.)</label>
       <br>
+      <select id = "lineReplace">
+           <option value=1 id = "newLine">Add new line</option>
+           <option value=2 id = "replaceLine">Replace line</option>
+        </select>
+        <div id="linerep">
+   </div>
+        <br>
       <input type = "button" onClick = "lineBuild()" value = "Add">
       <input type = "button" onClick = "download2()" value = "Generate">
       <pre id = "results"></pre>
@@ -514,6 +521,13 @@
     document.getElementById('linevoice').innerHTML = "<label>Line Voice Number (Manual, Decimal)<\/label><input id = \"lineNum\">";
   } else {
    document.getElementById('linevoice').innerHTML = "";
+  }
+});
+      $("#lineReplace").change(function () {
+  if ($(this).val() == 2) {
+    document.getElementById('linerep').innerHTML = "<label>Line to replace:<\/label><input id = \"lineToReplace\">";
+  } else {
+   document.getElementById('linerep').innerHTML = "";
   }
 });
    </script>

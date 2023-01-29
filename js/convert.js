@@ -9,6 +9,8 @@ let charArr = [];
 
 let lineArr = [];
 
+let textLineArr = []
+
 let pointerArr = [];
 
 let currentVoice = 0;
@@ -495,6 +497,21 @@ function posCalculator(text) {
 
 function lineBuild() {
     let text = document.getElementById('text').value;
+    if (document.getElementById("lineReplace").value == 2){
+        linereplace = document.getElementById("lineToReplace").value - 1
+        if(linereplace == null){
+            return alert("Invalid line to replace");
+        }
+
+        if(isNaN(linereplace)){
+           return alert("Invalid line to replace"); 
+        }
+
+        if(linereplace > lineArr.length){
+            return alert("Invalid line to replace");
+        }
+
+    }
     if (text.length < 3) {
         alert("Text must be at least 3 characters long.")
         return;
@@ -516,16 +533,26 @@ function lineBuild() {
 
     result = "";
     let textArr = text.split(/\n/);
+    if (textArr.length > 3){
+        return alert("Too many line breaks!");
+    }
     for (let i = 0; i < textArr.length; i++) {
         for (let x = 0; x < textArr[i].length; x++) {
             if (!(textArr[i].charAt(x) in charEncoding)) {
-                return alert(textArr[i].charAt(x) + " is an invalid character!")
+                return alert(textArr[i].charAt(x) + " is an invalid character!");
             }
         }
         if (!(posCalculator(textArr[i]))) {
             return;
         }
     }
+    if (document.getElementById("lineReplace").value == 2){
+        linetoreplace = document.getElementById("lineToReplace").value - 1;
+        textLineArr[linetoreplace] = text;
+    } else {
+        textLineArr.push(text);
+    }
+    
     if (textArr.length == 1) {
         let textLength = text.length;
         textLength = Math.round(textLength /= 2) + 4;
@@ -548,8 +575,14 @@ function lineBuild() {
         result += stringEncoder(textArr[0]);
         result += "0F 20 78 00 03 00 00 00";
         result = result.replace(/\s/g, '');
-        lineArr.push(result);
-        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
+        if (document.getElementById("lineReplace").value == 2){
+            linetoreplace = document.getElementById("lineToReplace").value - 1;
+            lineArr[linetoreplace] = result;
+        } else {
+            lineArr.push(result);
+        }
+        
+        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
     } else if (textArr.length == 2) {
         let textLength = text.length - textArr.length;
         textLength = Math.round(textLength /= 2) + 4;
@@ -576,8 +609,13 @@ function lineBuild() {
         result += stringEncoder(textArr[1]);
         result += "0F 20 78 00 03 00 00 00";
         result = result.replace(/\s/g, '');
-        lineArr.push(result);
-        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
+        if (document.getElementById("lineReplace").value == 2){
+            linetoreplace = document.getElementById("lineToReplace").value - 1;
+            lineArr[linetoreplace] = result;
+        } else {
+            lineArr.push(result);
+        }
+        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
     } else if (textArr.length == 3) {
         let textLength = text.length - textArr.length;
         textLength = Math.round(textLength /= 2) + 4;
@@ -608,10 +646,21 @@ function lineBuild() {
         result += stringEncoder(textArr[2]);
         result += "0F 20 78 00 03 00 00 00";
         result = result.replace(/\s/g, '');
-        lineArr.push(result);
-        document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
+        if (document.getElementById("lineReplace").value == 2){
+            linetoreplace = document.getElementById("lineToReplace").value - 1;
+            lineArr[linetoreplace] = result;
+        } else {
+            lineArr.push(result);
+        }
+        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
     } else {
         return alert("Too many line breaks, three max per line.");
+    }
+    document.getElementById("results").innerHTML = ""
+    for(let i = 0; i < textLineArr.length; i++){
+        document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
+        document.getElementById("results").innerHTML += textLineArr[i];
+        document.getElementById("results").innerHTML += "\n\n"
     }
 }
 
