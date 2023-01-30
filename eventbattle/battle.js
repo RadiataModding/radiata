@@ -108,10 +108,24 @@ function addDefault(){
    document.getElementById("results").innerHTML = "Defaults added. Currently at " + battles.length + " characters."
 }
 
+function isNumeric(str) {
+  if (typeof str != "string") return false // we only process strings!  
+  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
 function download(){
    if (battles.length == 0){
       alert("Nothing added.");
       return;
+   }
+
+   if (!isNumeric(document.getElementById('event1').value)){
+      return alert("Event Number Empty/Invalid")
+   }
+
+   if (!isNumeric(document.getElementById('event2').value)){
+      return alert("Sub-event Number Empty/Invalid")
    }
 
    event1 = parseInt(document.getElementById('event1').value);
