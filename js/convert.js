@@ -803,6 +803,31 @@ function rmf1splitter(text){
     return rmf1Array;
 }
 
+function loadRMF(){
+    //load = confirm("This will override any lines made. Continue?");
+    if (document.getElementById("loadRMF").checked){
+        navigator.clipboard.readText()
+                .then(text => {
+                    lineArr = rmf1splitter(text);
+                    textLineArr = [];
+                    for(let i = 0; i < lineArr.length; i++){
+                        textLineArr.push(stringDecoder2(lineArr[i]));
+                    }
+                    document.getElementById("results").innerHTML = ""
+                    for(let i = 0; i < textLineArr.length; i++){
+                        document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
+                        document.getElementById("results").innerHTML += textLineArr[i];
+                        document.getElementById("results").innerHTML += "\n\n"
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to read clipboard contents: ', err);
+                });
+    } else {
+        return alert("Confirm loading by ticking the checkbox beside the button. Loading RMF will override any lines you have already made.")
+    }
+}
+
 function linesProcess(text){
     rmfArray = rmf1splitter(text);
 
@@ -864,6 +889,32 @@ function linesProcess(text){
 
         result += "\n";
 
+    }
+    return result;
+}
+
+function stringDecoder2(text) {
+    result = "";
+    text = text.replace(/\s/g, '');
+    while (text.length > 0) {
+        temp = text.substring(0, 4);
+        text = text.substring(4);
+        if (temp != ""){
+            if (temp == "0F20") {
+                    result += "\n\n";
+                } else {
+                    temp = parseInt(changeEndianness2(temp), 16);
+                    
+                        if (temp > 0 && temp < 177 && temp in charDecoding) {
+                            curchar = charDecoding[temp];
+                            if (curchar != null){
+                                result += curchar;
+                            //result += charDecoding[temp];
+                        }
+                    }
+
+                }
+        }
     }
     return result;
 }
