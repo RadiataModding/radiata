@@ -45,10 +45,10 @@ function startConvert() {
             document.getElementById("results").innerHTML = stringEncoder(document.getElementById('text').value);
         }
 
-        if(document.getElementById("calcu").checked){
+        if (document.getElementById("calcu").checked) {
             curtext = document.getElementById('text').value;
             let textArr = curtext.split(/\n/);
-            for(let i = 0; i < textArr.length; i++){
+            for (let i = 0; i < textArr.length; i++) {
                 document.getElementById("results").innerHTML += "\n";
                 document.getElementById("results").innerHTML += "Line " + (i + 1) + ":";
                 document.getElementById("results").innerHTML += "\n";
@@ -93,12 +93,12 @@ function startConvert() {
         if (document.getElementById("clipboard").checked) {
             navigator.clipboard.readText()
                 .then(text => {
-                    if (document.getElementById("experimental").checked){
+                    if (document.getElementById("experimental").checked) {
                         result = linesProcess(text);
                     } else {
                         stringDecoder(text);
                     }
-                    
+
                     if (document.getElementById("download").checked) {
                         let a = document.createElement('a');
                         a.href = "data:application/octet-stream," + encodeURIComponent(result);
@@ -114,7 +114,7 @@ function startConvert() {
                 });
 
         } else {
-            if (document.getElementById("experimental").checked){
+            if (document.getElementById("experimental").checked) {
                 result = linesProcess(document.getElementById('text').value);
             } else {
                 stringDecoder(document.getElementById('text').value);
@@ -352,71 +352,71 @@ function stringEncoder(text) {
     }
     return result;
     /*case "è":
-    	result += "510101000100";
-    	break;
+        result += "510101000100";
+        break;
     case "é":
-    	result += "520101000100";
-    	break;
+        result += "520101000100";
+        break;
     case "ê":
-    	result += "530101000100";
-    	break;
+        result += "530101000100";
+        break;
     case "ë":
-    	result += "540101000100";
-    	break;
+        result += "540101000100";
+        break;
     case "ã":
-    	result += "550101000100";
-    	break;
+        result += "550101000100";
+        break;
     case "á":
-    	result += "5B0101000100";
-    	break;
+        result += "5B0101000100";
+        break;
     case "ç":
-    	result += "5F0101000100";
-    	break;
+        result += "5F0101000100";
+        break;
     case "…":
-    	result += "130013001300";
-    	break;
+        result += "130013001300";
+        break;
     case "µ":
-    	result += "1CC0";
-    	break;
+        result += "1CC0";
+        break;
     case "\n":
-    	result += "0A00";
-    	break;*/
+        result += "0A00";
+        break;*/
     /*case "4D00":
-    	result += "◇";
-    	break;
+        result += "◇";
+        break;
     case "4E00":
-    	result += "◆";
-    	break;
+        result += "◆";
+        break;
     case "4F00":
-    	result += "□";
-    	break;
+        result += "□";
+        break;
     case "5000":
-    	result += "⬛";
-    	break;
+        result += "⬛";
+        break;
     case "5100":
-    	result += "△";
-    	break;
+        result += "△";
+        break;
     case "5200":
-    	result += "▲";
-    	break;
+        result += "▲";
+        break;
     case "5300":
-    	result += "▽";
-    	break;
+        result += "▽";
+        break;
     case "5400":
-    	result += "▼";
-    	break;
+        result += "▼";
+        break;
     case "5500":
-    	result += "→";
-    	break;
+        result += "→";
+        break;
     case "5600":
-    	result += "←";
-    	break;
+        result += "←";
+        break;
     case "5700":
-    	result += "↑";
-    	break;
+        result += "↑";
+        break;
     case "5800":
-    	result += "↓";
-    	break;*/
+        result += "↓";
+        break;*/
 }
 
 const changeEndianness = (string) => {
@@ -509,176 +509,246 @@ function posCalculator(text) {
 
 function lineBuild() {
     let text = document.getElementById('text').value;
-    if (document.getElementById("lineReplace").value == 2){
-        linereplace = document.getElementById("lineToReplace").value - 1
-        if(linereplace == null){
-            return alert("Invalid line to replace");
-        }
 
-        if(isNaN(linereplace)){
-           return alert("Invalid line to replace"); 
-        }
-
-        if(linereplace > lineArr.length){
-            return alert("Invalid line to replace");
-        }
-
-    }
-    if (text.length < 3) {
-        alert("Text must be at least 3 characters long.")
-        return;
-    }
-    let bustup = document.getElementById("bustup").checked
-    let char = document.getElementById('char').value;
-    char = parseInt(char, 16);
-    char = char.toString(16).padStart(4, '0').toUpperCase();
-    let lineOpt = document.getElementById('lineOpt').value;
-    let lineNum;
-    if (lineOpt == 1) {
-        //lineNum = ++currentVoice;
-        if (document.getElementById("lineReplace").value == 2){
-            lineNum = document.getElementById("lineToReplace").value;
-        } else {
-            lineNum = lineArr.length + 1;
-        }
-        lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
-    } else {
-        lineNum = document.getElementById('lineNum').value;
-        lineNum = parseInt(lineNum);
-        lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
-    }
-
-    result = "";
-    let textArr = text.split(/\n/);
-    if (textArr.length > 3){
-        return alert("Too many line breaks!");
-    }
-    for (let i = 0; i < textArr.length; i++) {
-        for (let x = 0; x < textArr[i].length; x++) {
-            if (!(textArr[i].charAt(x) in charEncoding)) {
-                return alert(textArr[i].charAt(x) + " is an invalid character!");
+    if (document.getElementById("currentMode").value == 2) {
+        if (document.getElementById("lineReplace").value == 2) {
+            linereplace = document.getElementById("lineToReplace").value - 1
+            if (linereplace > lineArr.length) {
+                return alert("Invalid line to replace");
             }
+            textLineArr[linereplace] = text;
+            count = document.getElementById('text').value.length;
+            res = changeEndianness2(count.toString(16).padStart(4, '0')) + "000000000000";
+            res += stringEncoder(document.getElementById('text').value);
+            res += "00"
+            lineArr[linereplace] = res;
+
         }
-        if (!(posCalculator(textArr[i]))) {
+
+
+
+
+    } else {
+
+        if (document.getElementById("lineReplace").value == 2) {
+            linereplace = document.getElementById("lineToReplace").value - 1
+            if (linereplace == null) {
+                return alert("Invalid line to replace");
+            }
+
+            if (isNaN(linereplace)) {
+                return alert("Invalid line to replace");
+            }
+
+            if (linereplace > lineArr.length) {
+                return alert("Invalid line to replace");
+            }
+
+        }
+        if (text.length < 3) {
+            alert("Text must be at least 3 characters long.")
             return;
         }
-    }
-    if (document.getElementById("lineReplace").value == 2){
-        linetoreplace = document.getElementById("lineToReplace").value - 1;
-        textLineArr[linetoreplace] = text;
-    } else {
-        textLineArr.push(text);
-    }
-    
-    if (textArr.length == 1) {
-        let textLength = text.length;
-        textLength = Math.round(textLength /= 2) + 4;
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 00 00 01 00 00 00";
-        result += changeEndianness(char);
-        result += "00 00 0F 25 00 00";
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 0E 20 01 00";
-        if (bustup) {
-            result += "00";
-        } else {
-            result += "01";
+        let custom = document.getElementById("customName").value;
+        if (custom == 2){
+            custom = true;
+        } else{
+            custom = false;
         }
-        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-        result += posCalculator(textArr[0]);
-        result += "BE 00 0F 28 1F 00";
-        result += changeEndianness(lineNum);
-        result += "0E 4E 01 00 01 00 76 00 00 00";
-        result += stringEncoder(textArr[0]);
-        result += "0F 20 78 00 03 00 00 00";
-        result = result.replace(/\s/g, '');
-        if (document.getElementById("lineReplace").value == 2){
+        let bustup = document.getElementById("bustup").checked
+        let char = document.getElementById('char').value;
+        char = parseInt(char, 16);
+        char = char.toString(16).padStart(4, '0').toUpperCase();
+        let lineOpt = document.getElementById('lineOpt').value;
+        let lineNum;
+        if (lineOpt == 1) {
+            //lineNum = ++currentVoice;
+            autoOff = parseInt(document.getElementById("autoOffset").value);
+            if (document.getElementById("lineReplace").value == 2) {
+                lineNum = parseInt(document.getElementById("lineToReplace").value) + autoOff;
+            } else {
+                lineNum = lineArr.length + 1 + autoOff;
+            }
+            lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+        } else {
+            lineNum = document.getElementById('lineNum').value;
+            lineNum = parseInt(lineNum);
+            lineNum = lineNum.toString(16).padStart(4, '0').toUpperCase();
+        }
+
+        result = "";
+        let textArr = text.split(/\n/);
+        if (textArr.length > 3) {
+            return alert("Too many line breaks!");
+        }
+        for (let i = 0; i < textArr.length; i++) {
+            for (let x = 0; x < textArr[i].length; x++) {
+                if (!(textArr[i].charAt(x) in charEncoding)) {
+                    return alert(textArr[i].charAt(x) + " is an invalid character!");
+                }
+            }
+            if (!(posCalculator(textArr[i]))) {
+                return;
+            }
+        }
+        if (document.getElementById("lineReplace").value == 2) {
             linetoreplace = document.getElementById("lineToReplace").value - 1;
-            lineArr[linetoreplace] = result;
+            textLineArr[linetoreplace] = text;
         } else {
-            lineArr.push(result);
+            textLineArr.push(text);
         }
-        
-        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
-    } else if (textArr.length == 2) {
-        let textLength = text.length - textArr.length;
-        textLength = Math.round(textLength /= 2) + 4;
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 00 00 01 00 00 00";
-        result += changeEndianness(char);
-        result += "00 00 0F 25 00 00";
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 0E 20 01 00";
-        if (bustup) {
-            result += "00";
+
+        if (textArr.length == 1) {
+            let textLength = text.length;
+            textLength = Math.round(textLength /= 2) + 4;
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 00 00 01 00 00 00";
+            result += changeEndianness(char);
+            result += "00 00 0F 25 00 00";
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 0E 20 01 00";
+            if (bustup) {
+                result += "00";
+            } else {
+                result += "01";
+            }
+            result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+            result += posCalculator(textArr[0]);
+            result += "BE 00 0F 28 1F 00";
+            result += changeEndianness(lineNum);
+            result += "0E 4E 01 00 ";
+            if (custom){
+                result += "0200";
+            } else {
+                result += "0100";
+            }
+            result += "76 00";
+            if (custom){
+                cusLine = parseInt(document.getElementById("customNamelineNum").value) - 1;
+                cusLine = changeEndianness2(cusLine.toString(16).padStart(4, '0').toUpperCase());
+                result += cusLine;
+            } else {
+                result += " 00 00"
+            }
+            result += stringEncoder(textArr[0]);
+            result += "0F 20 78 00 03 00 00 00";
+            result = result.replace(/\s/g, '');
+            if (document.getElementById("lineReplace").value == 2) {
+                linetoreplace = document.getElementById("lineToReplace").value - 1;
+                lineArr[linetoreplace] = result;
+            } else {
+                lineArr.push(result);
+            }
+
+            //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\"\n\nhas been added.";
+        } else if (textArr.length == 2) {
+            let textLength = text.length - textArr.length;
+            textLength = Math.round(textLength /= 2) + 4;
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 00 00 01 00 00 00";
+            result += changeEndianness(char);
+            result += "00 00 0F 25 00 00";
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 0E 20 01 00";
+            if (bustup) {
+                result += "00";
+            } else {
+                result += "01";
+            }
+            result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+            result += posCalculator(textArr[0]);
+            result += "A8 00 0F 28 1F 00";
+            result += changeEndianness(lineNum);
+            result += "0E 4E 01 00 ";
+            if (custom){
+                result += "0200";
+            } else {
+                result += "0100";
+            }
+            result += "60 00";
+            if (custom){
+                cusLine = parseInt(document.getElementById("customNamelineNum").value) - 1;
+                cusLine = changeEndianness2(cusLine.toString(16).padStart(4, '0').toUpperCase());
+                result += cusLine;
+            } else {
+                result += " 00 00"
+            }
+            result += stringEncoder(textArr[0]);
+            result += "0A 00 04 20";
+            result += posCalculator(textArr[1]);
+            result += "D0 00";
+            result += stringEncoder(textArr[1]);
+            result += "0F 20 78 00 03 00 00 00";
+            result = result.replace(/\s/g, '');
+            if (document.getElementById("lineReplace").value == 2) {
+                linetoreplace = document.getElementById("lineToReplace").value - 1;
+                lineArr[linetoreplace] = result;
+            } else {
+                lineArr.push(result);
+            }
+            //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
+        } else if (textArr.length == 3) {
+            let textLength = text.length - textArr.length;
+            textLength = Math.round(textLength /= 2) + 4;
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 00 00 01 00 00 00";
+            result += changeEndianness(char);
+            result += "00 00 0F 25 00 00";
+            result += textLength.toString(16).padStart(2, '0').toUpperCase();
+            result += "00 0E 20 01 00";
+            if (bustup) {
+                result += "00";
+            } else {
+                result += "01";
+            }
+            result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
+            result += posCalculator(textArr[0]);
+            result += "88 00 0F 28 1F 00";
+            result += changeEndianness(lineNum);
+            result += "0E 4E 01 00 ";
+            if (custom){
+                result += "0200";
+            } else {
+                result += "0100";
+            }
+            result += "40 00";
+            if (custom){
+                cusLine = parseInt(document.getElementById("customNamelineNum").value) - 1;
+                cusLine = changeEndianness2(cusLine.toString(16).padStart(4, '0').toUpperCase());
+                result += cusLine;
+            } else {
+                result += " 00 00"
+            }
+            result += stringEncoder(textArr[0]);
+            result += "0A 00 04 20";
+            result += posCalculator(textArr[1]);
+            result += "B0 00";
+            result += stringEncoder(textArr[1]);
+            result += "0A 00 04 20";
+            result += posCalculator(textArr[2]);
+            result += "D8 00";
+            result += stringEncoder(textArr[2]);
+            result += "0F 20 78 00 03 00 00 00";
+            result = result.replace(/\s/g, '');
+            if (document.getElementById("lineReplace").value == 2) {
+                linetoreplace = document.getElementById("lineToReplace").value - 1;
+                lineArr[linetoreplace] = result;
+            } else {
+                lineArr.push(result);
+            }
+            //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
         } else {
-            result += "01";
+            return alert("Too many line breaks, three max per line.");
         }
-        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-        result += posCalculator(textArr[0]);
-        result += "A8 00 0F 28 1F 00";
-        result += changeEndianness(lineNum);
-        result += "0E 4E 01 00 01 00 60 00 00 00";
-        result += stringEncoder(textArr[0]);
-        result += "0A 00 04 20";
-        result += posCalculator(textArr[1]);
-        result += "D0 00";
-        result += stringEncoder(textArr[1]);
-        result += "0F 20 78 00 03 00 00 00";
-        result = result.replace(/\s/g, '');
-        if (document.getElementById("lineReplace").value == 2){
-            linetoreplace = document.getElementById("lineToReplace").value - 1;
-            lineArr[linetoreplace] = result;
-        } else {
-            lineArr.push(result);
-        }
-        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\"\n\nhas been added.";
-    } else if (textArr.length == 3) {
-        let textLength = text.length - textArr.length;
-        textLength = Math.round(textLength /= 2) + 4;
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 00 00 01 00 00 00";
-        result += changeEndianness(char);
-        result += "00 00 0F 25 00 00";
-        result += textLength.toString(16).padStart(2, '0').toUpperCase();
-        result += "00 0E 20 01 00";
-        if (bustup) {
-            result += "00";
-        } else {
-            result += "01";
-        }
-        result += "00 02 20 6A 69 5F 80 02 21 00 00 00 00 03 20 33 0B 66 16 05 01 07 10 00 03 04 20";
-        result += posCalculator(textArr[0]);
-        result += "88 00 0F 28 1F 00";
-        result += changeEndianness(lineNum);
-        result += "0E 4E 01 00 01 00 40 00 00 00";
-        result += stringEncoder(textArr[0]);
-        result += "0A 00 04 20";
-        result += posCalculator(textArr[1]);
-        result += "B0 00";
-        result += stringEncoder(textArr[1]);
-        result += "0A 00 04 20";
-        result += posCalculator(textArr[2]);
-        result += "D8 00";
-        result += stringEncoder(textArr[2]);
-        result += "0F 20 78 00 03 00 00 00";
-        result = result.replace(/\s/g, '');
-        if (document.getElementById("lineReplace").value == 2){
-            linetoreplace = document.getElementById("lineToReplace").value - 1;
-            lineArr[linetoreplace] = result;
-        } else {
-            lineArr.push(result);
-        }
-        //document.getElementById("results").innerHTML += "\n\n\"" + textArr[0] + "\n" + textArr[1] + "\n" + textArr[2] + "\"\n\nhas been added.";
-    } else {
-        return alert("Too many line breaks, three max per line.");
+
     }
     document.getElementById("results").innerHTML = ""
-    for(let i = 0; i < textLineArr.length; i++){
+    for (let i = 0; i < textLineArr.length; i++) {
         document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
         document.getElementById("results").innerHTML += textLineArr[i];
         document.getElementById("results").innerHTML += "\n\n"
     }
+
 }
 
 function download2() {
@@ -774,72 +844,72 @@ function hexTrim(text) {
     return result;
 }
 
-function rmf1splitter(text){
+function rmf1splitter(text) {
     rmf1Array = [];
     rmf1Pointers = [];
     rmf = hexTrim(text);
-    if (rmf.length == 0){
+    if (rmf.length == 0) {
         return alert("RMF not found!");
     }
 
-    rmfSize = parseInt(changeEndianness2(rmf.substring(24,32)), 16);
-    lines = parseInt(changeEndianness2(rmf.substring(32,40)), 16);
+    rmfSize = parseInt(changeEndianness2(rmf.substring(24, 32)), 16);
+    lines = parseInt(changeEndianness2(rmf.substring(32, 40)), 16);
 
     if (lines <= 0) {
         return alert("RMF is empty!");
     }
 
-    for (let i = 0; i < lines; i++){
-        rmf1Pointers.push(parseInt(changeEndianness2(rmf.substring(0x30+(i*8),0x38+(i*8))), 16));
+    for (let i = 0; i < lines; i++) {
+        rmf1Pointers.push(parseInt(changeEndianness2(rmf.substring(0x30 + (i * 8), 0x38 + (i * 8))), 16));
     }
 
-    for (let i = 0; i < lines; i++){
-        if (i == lines - 1){
-            rmf1Array.push(rmf.substring(rmf1Pointers[i]*2,rmfSize*2));
+    for (let i = 0; i < lines; i++) {
+        if (i == lines - 1) {
+            rmf1Array.push(rmf.substring(rmf1Pointers[i] * 2, rmfSize * 2));
         } else {
-            rmf1Array.push(rmf.substring(rmf1Pointers[i]*2,(rmf1Pointers[i+1]*2 - 2)));
+            rmf1Array.push(rmf.substring(rmf1Pointers[i] * 2, (rmf1Pointers[i + 1] * 2 - 2)));
         }
     }
     return rmf1Array;
 }
 
-function loadRMF(){
+function loadRMF() {
     //load = confirm("This will override any lines made. Continue?");
-    if (document.getElementById("loadRMF").checked){
+    if (document.getElementById("loadRMF").checked) {
         navigator.clipboard.readText()
-                .then(text => {
-                    lineArr = rmf1splitter(text);
-                    textLineArr = [];
-                    for(let i = 0; i < lineArr.length; i++){
-                        textLineArr.push(stringDecoder2(lineArr[i]));
-                    }
-                    document.getElementById("results").innerHTML = ""
-                    for(let i = 0; i < textLineArr.length; i++){
-                        document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
-                        document.getElementById("results").innerHTML += textLineArr[i];
-                        document.getElementById("results").innerHTML += "\n\n"
-                    }
-                })
-                .catch(err => {
-                    console.error('Failed to read clipboard contents: ', err);
-                });
+            .then(text => {
+                lineArr = rmf1splitter(text);
+                textLineArr = [];
+                for (let i = 0; i < lineArr.length; i++) {
+                    textLineArr.push(stringDecoder2(lineArr[i]));
+                }
+                document.getElementById("results").innerHTML = ""
+                for (let i = 0; i < textLineArr.length; i++) {
+                    document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
+                    document.getElementById("results").innerHTML += textLineArr[i];
+                    document.getElementById("results").innerHTML += "\n\n"
+                }
+            })
+            .catch(err => {
+                console.error('Failed to read clipboard contents: ', err);
+            });
     } else {
         return alert("Confirm loading by ticking the checkbox beside the button. Loading RMF will override any lines you have already made.")
     }
 }
 
-function linesProcess(text){
+function linesProcess(text) {
     rmfArray = rmf1splitter(text);
 
     result = ""
 
-    for (let i = 0; i < rmfArray.length; i++){
-        textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0,8)),16);
-        charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8,16)),16);
+    for (let i = 0; i < rmfArray.length; i++) {
+        textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16);
+        charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8, 16)), 16);
         rmfArray[i] = rmfArray[i].substring(16);
         character = [0]
-        for (let j = 0; j < charAmt; j++){
-            character.push(parseInt(changeEndianness2(rmfArray[i].substring(0,8)),16));
+        for (let j = 0; j < charAmt; j++) {
+            character.push(parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16));
             rmfArray[i] = rmfArray[i].substring(8);
         }
 
@@ -849,24 +919,24 @@ function linesProcess(text){
 
         //console.log(rmfArray[i].substring(0,4));
 
-        if (rmfArray[i].substring(0,4) != '0E4E'){
+        if (rmfArray[i].substring(0, 4) != '0E4E') {
             rmfArray[i] = rmfArray[i].substring(0xC);
         }
 
-        if (rmfArray[i].substring(0,4) != '0E4E'){
+        if (rmfArray[i].substring(0, 4) != '0E4E') {
             rmfArray[i] = rmfArray[i].substring(0x4);
         }
         //console.log(rmfArray[i].substring(0,4));
-        if (rmfArray[i].substring(0,4) == '0E4E'){
+        if (rmfArray[i].substring(0, 4) == '0E4E') {
             speak = true;
         }
         rmfArray[i] = rmfArray[i].substring(0x4);
 
-        charSpeakId = character[parseInt(rmfArray[i].substring(0,2))];
+        charSpeakId = character[parseInt(rmfArray[i].substring(0, 2))];
 
-        charCheck = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+        charCheck = characterIds[character[parseInt(rmfArray[i].substring(0, 2))]];
 
-        if (charCheck != null){
+        if (charCheck != null) {
             charSpeak = charCheck;
         } else {
             charSpeak = "";
@@ -876,15 +946,15 @@ function linesProcess(text){
 
         rmfArray[i] = rmfArray[i].substring(0x8);
 
-        lineAmt = rmfArray[i].substring(0,2);
+        lineAmt = rmfArray[i].substring(0, 2);
         rmfArray[i] = rmfArray[i].substring(0x8);
 
-        rmfArray[i] = rmfArray[i].substring(0,rmfArray[i].length-10)
+        rmfArray[i] = rmfArray[i].substring(0, rmfArray[i].length - 10)
 
-        if (speak && charSpeakId != 0){
+        if (speak && charSpeakId != 0) {
             result += charSpeak + ": ";
         }
-        
+
         result += stringDecoder(rmfArray[i]);
 
         result += "\n";
@@ -899,21 +969,21 @@ function stringDecoder2(text) {
     while (text.length > 0) {
         temp = text.substring(0, 4);
         text = text.substring(4);
-        if (temp != ""){
+        if (temp != "") {
             if (temp == "0F20") {
-                    result += "\n\n";
-                } else {
-                    temp = parseInt(changeEndianness2(temp), 16);
-                    
-                        if (temp > 0 && temp < 177 && temp in charDecoding) {
-                            curchar = charDecoding[temp];
-                            if (curchar != null){
-                                result += curchar;
-                            //result += charDecoding[temp];
-                        }
-                    }
+                result += "\n\n";
+            } else {
+                temp = parseInt(changeEndianness2(temp), 16);
 
+                if (temp > 0 && temp < 177 && temp in charDecoding) {
+                    curchar = charDecoding[temp];
+                    if (curchar != null) {
+                        result += curchar;
+                        //result += charDecoding[temp];
+                    }
                 }
+
+            }
         }
     }
     return result;
@@ -945,425 +1015,425 @@ function stringDecoder(text) {
 
 
             }
-        } else if (temp != ""){
+        } else if (temp != "") {
             if (temp == "0F20") {
-                    result += "\n\n";
-                } else {
-                    temp = parseInt(changeEndianness2(temp), 16);
-                    if (document.getElementById("enbjp").checked) {
-                        if (temp > 0 && temp < 457 && temp in charDecoding2) {
-                            result += charDecoding2[temp];
-                        }
-                    } else {
-                        if (temp > 0 && temp < 177 && temp in charDecoding) {
-                            curchar = charDecoding[temp];
-                            if (curchar != null){
-                                result += curchar;
-                            }
-                            //result += charDecoding[temp];
-                        }
+                result += "\n\n";
+            } else {
+                temp = parseInt(changeEndianness2(temp), 16);
+                if (document.getElementById("enbjp").checked) {
+                    if (temp > 0 && temp < 457 && temp in charDecoding2) {
+                        result += charDecoding2[temp];
                     }
-
+                } else {
+                    if (temp > 0 && temp < 177 && temp in charDecoding) {
+                        curchar = charDecoding[temp];
+                        if (curchar != null) {
+                            result += curchar;
+                        }
+                        //result += charDecoding[temp];
+                    }
                 }
+
+            }
         }
-            //  else if (temp != "") {
-            //     switch (temp) {
-            //         case "0100":
-            //             result += " ";
-            //             break;
-            //         case "6300":
-            //             result += "A";
-            //             break;
-            //         case "6400":
-            //             result += "B";
-            //             break;
-            //         case "6500":
-            //             result += "C";
-            //             break;
-            //         case "6600":
-            //             result += "D";
-            //             break;
-            //         case "6700":
-            //             result += "E";
-            //             break;
-            //         case "6800":
-            //             result += "F";
-            //             break;
-            //         case "6900":
-            //             result += "G";
-            //             break;
-            //         case "6A00":
-            //             result += "H";
-            //             break;
-            //         case "6B00":
-            //             result += "I";
-            //             break;
-            //         case "6C00":
-            //             result += "J";
-            //             break;
-            //         case "6D00":
-            //             result += "K";
-            //             break;
-            //         case "6E00":
-            //             result += "L";
-            //             break;
-            //         case "6F00":
-            //             result += "M";
-            //             break;
-            //         case "7000":
-            //             result += "N";
-            //             break;
-            //         case "7100":
-            //             result += "O";
-            //             break;
-            //         case "7200":
-            //             result += "P";
-            //             break;
-            //         case "7300":
-            //             result += "Q";
-            //             break;
-            //         case "7400":
-            //             result += "R";
-            //             break;
-            //         case "7500":
-            //             result += "S";
-            //             break;
-            //         case "7600":
-            //             result += "T";
-            //             break;
-            //         case "7700":
-            //             result += "U";
-            //             break;
-            //         case "7800":
-            //             result += "V";
-            //             break;
-            //         case "7900":
-            //             result += "W";
-            //             break;
-            //         case "7A00":
-            //             result += "X";
-            //             break;
-            //         case "7B00":
-            //             result += "Y";
-            //             break;
-            //         case "7C00":
-            //             result += "Z";
-            //             break;
-            //         case "7D00":
-            //             result += "a";
-            //             break;
-            //         case "7E00":
-            //             result += "b";
-            //             break;
-            //         case "7F00":
-            //             result += "c";
-            //             break;
-            //         case "8000":
-            //             result += "d";
-            //             break;
-            //         case "8100":
-            //             result += "e";
-            //             break;
-            //         case "8200":
-            //             result += "f";
-            //             break;
-            //         case "8300":
-            //             result += "g";
-            //             break;
-            //         case "8400":
-            //             result += "h";
-            //             break;
-            //         case "8500":
-            //             result += "i";
-            //             break;
-            //         case "8600":
-            //             result += "j";
-            //             break;
-            //         case "8700":
-            //             result += "k";
-            //             break;
-            //         case "8800":
-            //             result += "l";
-            //             break;
-            //         case "8900":
-            //             result += "m";
-            //             break;
-            //         case "8A00":
-            //             result += "n";
-            //             break;
-            //         case "8B00":
-            //             result += "o";
-            //             break;
-            //         case "8C00":
-            //             result += "p";
-            //             break;
-            //         case "8D00":
-            //             result += "q";
-            //             break;
-            //         case "8E00":
-            //             result += "r";
-            //             break;
-            //         case "8F00":
-            //             result += "s";
-            //             break;
-            //         case "9000":
-            //             result += "t";
-            //             break;
-            //         case "9100":
-            //             result += "u";
-            //             break;
-            //         case "9200":
-            //             result += "v";
-            //             break;
-            //         case "9300":
-            //             result += "w";
-            //             break;
-            //         case "9400":
-            //             result += "x";
-            //             break;
-            //         case "9500":
-            //             result += "y";
-            //             break;
-            //         case "9600":
-            //             result += "z";
-            //             break;
-            //         case "6200":
-            //             result += "9";
-            //             break;
-            //         case "6100":
-            //             result += "8";
-            //             break;
-            //         case "6000":
-            //             result += "7";
-            //             break;
-            //         case "5F00":
-            //             result += "6";
-            //             break;
-            //         case "5E00":
-            //             result += "5";
-            //             break;
-            //         case "5D00":
-            //             result += "4";
-            //             break;
-            //         case "5C00":
-            //             result += "3";
-            //             break;
-            //         case "5B00":
-            //             result += "2";
-            //             break;
-            //         case "5A00":
-            //             result += "1";
-            //             break;
-            //         case "5900":
-            //             result += "0";
-            //             break;
-            //             /*case "1C00":
-            //             	result += "/";
-            //             	break;
-            //             case "1A00":
-            //             	result += "々";
-            //             	break;*/
-            //         case "1B00":
-            //             result += "ー";
-            //             break;
-            //         case "1D00":
-            //             result += "\\";
-            //             break;
-            //         case "1F00":
-            //             result += "...";
-            //             break;
-            //         case "1800":
-            //             result += "!";
-            //             break;
-            //         case "1700":
-            //             result += "?";
-            //             break;
-            //             /*case "1900":
-            //             	result += "_";
-            //             	break;*/
-            //         case "1300":
-            //             result += ".";
-            //             break;
-            //         case "1200":
-            //             result += ",";
-            //             break;
-            //             /*case "1000":
-            //             	result += "、";
-            //             	break;
-            //             case "1100":
-            //             	result += "。";
-            //             	break;*/
-            //             /*case "1400":
-            //             	result += "・";
-            //             	break;*/
-            //         case "1500":
-            //             result += ":";
-            //             break;
-            //             /*case "1600":
-            //             	result += ";";
-            //             	break;*/
-            //             /*case "1E00":
-            //             	result += "~";
-            //             	break;*/
-            //         case "2000":
-            //             result += "‘";
-            //             break;
-            //         case "2100":
-            //             result += "’";
-            //             break;
-            //         case "2200":
-            //             result += "“";
-            //             break;
-            //         case "2300":
-            //             result += "”";
-            //             break;
-            //         case "2400":
-            //             result += "(";
-            //             break;
-            //         case "2500":
-            //             result += ")";
-            //             break;
-            //         case "2800":
-            //             result += "[";
-            //             break;
-            //         case "2900":
-            //             result += "]";
-            //             break;
-            //         case "3000":
-            //             result += "「";
-            //             break;
-            //         case "3100":
-            //             result += "」";
-            //             break;
-            //         case "3200":
-            //             result += "『";
-            //             break;
-            //         case "3300":
-            //             result += "』";
-            //             break;
-            //         case "3400":
-            //             result += "【";
-            //             break;
-            //         case "3500":
-            //             result += "】";
-            //             break;
-            //         case "3600":
-            //             result += "+";
-            //             break;
-            //         case "3700":
-            //             result += "-";
-            //             break;
-            //         case "3800":
-            //             result += "±";
-            //             break;
-            //         case "3900":
-            //             result += "×";
-            //             break;
-            //         case "3A00":
-            //             result += "÷";
-            //             break;
-            //         case "3B00":
-            //             result += "=";
-            //             break;
-            //         case "3C00":
-            //             result += "≠";
-            //             break;
-            //         case "3D00":
-            //             result += "<";
-            //             break;
-            //         case "3E00":
-            //             result += ">";
-            //             break;
-            //         case "3F00":
-            //             result += "≤";
-            //             break;
-            //         case "4000":
-            //             result += "≥";
-            //             break;
-            //         case "4100":
-            //             result += "￥";
-            //             break;
-            //         case "4200":
-            //             result += "$";
-            //             break;
-            //         case "4300":
-            //             result += "%";
-            //             break;
-            //         case "4400":
-            //             result += "#";
-            //             break;
-            //         case "4500":
-            //             result += "&";
-            //             break;
-            //         case "4600":
-            //             result += "*";
-            //             break;
-            //         case "4700":
-            //             result += "@";
-            //             break;
-            //         case "4800":
-            //             result += "☆";
-            //             break;
-            //         case "4900":
-            //             result += "★";
-            //             break;
-            //         case "4A00":
-            //             result += "○";
-            //             break;
-            //         case "4B00":
-            //             result += "●";
-            //             break;
-            //         case "4C00":
-            //             result += "◎";
-            //             break;
-            //         case "4D00":
-            //             result += "◇";
-            //             break;
-            //         case "4E00":
-            //             result += "◆";
-            //             break;
-            //         case "4F00":
-            //             result += "□";
-            //             break;
-            //         case "5000":
-            //             result += "⬛";
-            //             break;
-            //         case "5100":
-            //             result += "△";
-            //             break;
-            //         case "5200":
-            //             result += "▲";
-            //             break;
-            //         case "5300":
-            //             result += "▽";
-            //             break;
-            //         case "5400":
-            //             result += "▼";
-            //             break;
-            //         case "5500":
-            //             result += "→";
-            //             break;
-            //         case "5600":
-            //             result += "←";
-            //             break;
-            //         case "5700":
-            //             result += "↑";
-            //             break;
-            //         case "5800":
-            //             result += "↓";
-            //             break;
-            //         case "0F20":
-            //             result += "\n\n";
-            //             break;
-            //         case "0A00":
-            //             result += "\n";
-            //             break;
-            //         default:
-            //             //result += "�";
-            //     }
-            // } else {
-            //     break;
-            // }
+        //  else if (temp != "") {
+        //     switch (temp) {
+        //         case "0100":
+        //             result += " ";
+        //             break;
+        //         case "6300":
+        //             result += "A";
+        //             break;
+        //         case "6400":
+        //             result += "B";
+        //             break;
+        //         case "6500":
+        //             result += "C";
+        //             break;
+        //         case "6600":
+        //             result += "D";
+        //             break;
+        //         case "6700":
+        //             result += "E";
+        //             break;
+        //         case "6800":
+        //             result += "F";
+        //             break;
+        //         case "6900":
+        //             result += "G";
+        //             break;
+        //         case "6A00":
+        //             result += "H";
+        //             break;
+        //         case "6B00":
+        //             result += "I";
+        //             break;
+        //         case "6C00":
+        //             result += "J";
+        //             break;
+        //         case "6D00":
+        //             result += "K";
+        //             break;
+        //         case "6E00":
+        //             result += "L";
+        //             break;
+        //         case "6F00":
+        //             result += "M";
+        //             break;
+        //         case "7000":
+        //             result += "N";
+        //             break;
+        //         case "7100":
+        //             result += "O";
+        //             break;
+        //         case "7200":
+        //             result += "P";
+        //             break;
+        //         case "7300":
+        //             result += "Q";
+        //             break;
+        //         case "7400":
+        //             result += "R";
+        //             break;
+        //         case "7500":
+        //             result += "S";
+        //             break;
+        //         case "7600":
+        //             result += "T";
+        //             break;
+        //         case "7700":
+        //             result += "U";
+        //             break;
+        //         case "7800":
+        //             result += "V";
+        //             break;
+        //         case "7900":
+        //             result += "W";
+        //             break;
+        //         case "7A00":
+        //             result += "X";
+        //             break;
+        //         case "7B00":
+        //             result += "Y";
+        //             break;
+        //         case "7C00":
+        //             result += "Z";
+        //             break;
+        //         case "7D00":
+        //             result += "a";
+        //             break;
+        //         case "7E00":
+        //             result += "b";
+        //             break;
+        //         case "7F00":
+        //             result += "c";
+        //             break;
+        //         case "8000":
+        //             result += "d";
+        //             break;
+        //         case "8100":
+        //             result += "e";
+        //             break;
+        //         case "8200":
+        //             result += "f";
+        //             break;
+        //         case "8300":
+        //             result += "g";
+        //             break;
+        //         case "8400":
+        //             result += "h";
+        //             break;
+        //         case "8500":
+        //             result += "i";
+        //             break;
+        //         case "8600":
+        //             result += "j";
+        //             break;
+        //         case "8700":
+        //             result += "k";
+        //             break;
+        //         case "8800":
+        //             result += "l";
+        //             break;
+        //         case "8900":
+        //             result += "m";
+        //             break;
+        //         case "8A00":
+        //             result += "n";
+        //             break;
+        //         case "8B00":
+        //             result += "o";
+        //             break;
+        //         case "8C00":
+        //             result += "p";
+        //             break;
+        //         case "8D00":
+        //             result += "q";
+        //             break;
+        //         case "8E00":
+        //             result += "r";
+        //             break;
+        //         case "8F00":
+        //             result += "s";
+        //             break;
+        //         case "9000":
+        //             result += "t";
+        //             break;
+        //         case "9100":
+        //             result += "u";
+        //             break;
+        //         case "9200":
+        //             result += "v";
+        //             break;
+        //         case "9300":
+        //             result += "w";
+        //             break;
+        //         case "9400":
+        //             result += "x";
+        //             break;
+        //         case "9500":
+        //             result += "y";
+        //             break;
+        //         case "9600":
+        //             result += "z";
+        //             break;
+        //         case "6200":
+        //             result += "9";
+        //             break;
+        //         case "6100":
+        //             result += "8";
+        //             break;
+        //         case "6000":
+        //             result += "7";
+        //             break;
+        //         case "5F00":
+        //             result += "6";
+        //             break;
+        //         case "5E00":
+        //             result += "5";
+        //             break;
+        //         case "5D00":
+        //             result += "4";
+        //             break;
+        //         case "5C00":
+        //             result += "3";
+        //             break;
+        //         case "5B00":
+        //             result += "2";
+        //             break;
+        //         case "5A00":
+        //             result += "1";
+        //             break;
+        //         case "5900":
+        //             result += "0";
+        //             break;
+        //             /*case "1C00":
+        //              result += "/";
+        //              break;
+        //             case "1A00":
+        //              result += "々";
+        //              break;*/
+        //         case "1B00":
+        //             result += "ー";
+        //             break;
+        //         case "1D00":
+        //             result += "\\";
+        //             break;
+        //         case "1F00":
+        //             result += "...";
+        //             break;
+        //         case "1800":
+        //             result += "!";
+        //             break;
+        //         case "1700":
+        //             result += "?";
+        //             break;
+        //             /*case "1900":
+        //              result += "_";
+        //              break;*/
+        //         case "1300":
+        //             result += ".";
+        //             break;
+        //         case "1200":
+        //             result += ",";
+        //             break;
+        //             /*case "1000":
+        //              result += "、";
+        //              break;
+        //             case "1100":
+        //              result += "。";
+        //              break;*/
+        //             /*case "1400":
+        //              result += "・";
+        //              break;*/
+        //         case "1500":
+        //             result += ":";
+        //             break;
+        //             /*case "1600":
+        //              result += ";";
+        //              break;*/
+        //             /*case "1E00":
+        //              result += "~";
+        //              break;*/
+        //         case "2000":
+        //             result += "‘";
+        //             break;
+        //         case "2100":
+        //             result += "’";
+        //             break;
+        //         case "2200":
+        //             result += "“";
+        //             break;
+        //         case "2300":
+        //             result += "”";
+        //             break;
+        //         case "2400":
+        //             result += "(";
+        //             break;
+        //         case "2500":
+        //             result += ")";
+        //             break;
+        //         case "2800":
+        //             result += "[";
+        //             break;
+        //         case "2900":
+        //             result += "]";
+        //             break;
+        //         case "3000":
+        //             result += "「";
+        //             break;
+        //         case "3100":
+        //             result += "」";
+        //             break;
+        //         case "3200":
+        //             result += "『";
+        //             break;
+        //         case "3300":
+        //             result += "』";
+        //             break;
+        //         case "3400":
+        //             result += "【";
+        //             break;
+        //         case "3500":
+        //             result += "】";
+        //             break;
+        //         case "3600":
+        //             result += "+";
+        //             break;
+        //         case "3700":
+        //             result += "-";
+        //             break;
+        //         case "3800":
+        //             result += "±";
+        //             break;
+        //         case "3900":
+        //             result += "×";
+        //             break;
+        //         case "3A00":
+        //             result += "÷";
+        //             break;
+        //         case "3B00":
+        //             result += "=";
+        //             break;
+        //         case "3C00":
+        //             result += "≠";
+        //             break;
+        //         case "3D00":
+        //             result += "<";
+        //             break;
+        //         case "3E00":
+        //             result += ">";
+        //             break;
+        //         case "3F00":
+        //             result += "≤";
+        //             break;
+        //         case "4000":
+        //             result += "≥";
+        //             break;
+        //         case "4100":
+        //             result += "￥";
+        //             break;
+        //         case "4200":
+        //             result += "$";
+        //             break;
+        //         case "4300":
+        //             result += "%";
+        //             break;
+        //         case "4400":
+        //             result += "#";
+        //             break;
+        //         case "4500":
+        //             result += "&";
+        //             break;
+        //         case "4600":
+        //             result += "*";
+        //             break;
+        //         case "4700":
+        //             result += "@";
+        //             break;
+        //         case "4800":
+        //             result += "☆";
+        //             break;
+        //         case "4900":
+        //             result += "★";
+        //             break;
+        //         case "4A00":
+        //             result += "○";
+        //             break;
+        //         case "4B00":
+        //             result += "●";
+        //             break;
+        //         case "4C00":
+        //             result += "◎";
+        //             break;
+        //         case "4D00":
+        //             result += "◇";
+        //             break;
+        //         case "4E00":
+        //             result += "◆";
+        //             break;
+        //         case "4F00":
+        //             result += "□";
+        //             break;
+        //         case "5000":
+        //             result += "⬛";
+        //             break;
+        //         case "5100":
+        //             result += "△";
+        //             break;
+        //         case "5200":
+        //             result += "▲";
+        //             break;
+        //         case "5300":
+        //             result += "▽";
+        //             break;
+        //         case "5400":
+        //             result += "▼";
+        //             break;
+        //         case "5500":
+        //             result += "→";
+        //             break;
+        //         case "5600":
+        //             result += "←";
+        //             break;
+        //         case "5700":
+        //             result += "↑";
+        //             break;
+        //         case "5800":
+        //             result += "↓";
+        //             break;
+        //         case "0F20":
+        //             result += "\n\n";
+        //             break;
+        //         case "0A00":
+        //             result += "\n";
+        //             break;
+        //         default:
+        //             //result += "�";
+        //     }
+        // } else {
+        //     break;
+        // }
     }
     return result;
 }
@@ -3318,286 +3388,286 @@ let charDecoding3 = {
 }
 
 let characters = {
-  "Empty": 0,
-  "Jack": 1,
-  "Ganz": 2,
-  "Ridley": 3,
-  "Rynka": 4,
-  "Flau": 5,
-  "Star": 6,
-  "Sebastian": 7,
-  "Genius": 8,
-  "Rocky": 9,
-  "Gawain": 10,
-  "Light Guardsman": 269,
-  "Elwen": 12,
-  "Gerald": 13,
-  "Caesar": 14,
-  "Alicia": 15,
-  "Dennis": 16,
-  "Gareth": 17,
-  "Gregory": 18,
-  "Walter": 19,
-  "Jarvis": 20,
-  "Aldo": 22,
-  "Gordon": 23,
-  "Bruce": 24,
-  "David": 25,
-  "Conrad": 26,
-  "Rolec": 27,
-  "Daniel": 28,
-  "Carlos": 29,
-  "Gene": 30,
-  "Thanos": 32,
-  "Curtis": 33,
-  "Cecil": 34,
-  "Morgan": 35,
-  "Felix": 36,
-  "Jill": 37,
-  "Ursula": 38,
-  "Derek": 39,
-  "Christoph": 40,
-  "Claudia": 41,
-  "Ardoph": 42,
-  "Dimitri": 43,
-  "Aidan": 44,
-  "Cornelia": 45,
-  "Faraus": 46,
-  "Marietta": 47,
-  "Ernest": 48,
-  "Franklin": 49,
-  "Johan": 50,
-  "Roche": 51,
-  "Kain": 53,
-  "Fernando": 54,
-  "Anastasia": 55,
-  "Dwight": 56,
-  "Godwin": 57,
-  "Achilles": 58,
-  "Flora": 59,
-  "Elena": 60,
-  "Alvin": 61,
-  "Vitas": 62,
-  "Cosmo": 63,
-  "Grant": 64,
-  "Adina": 65,
-  "Miranda": 66,
-  "Edgar": 67,
-  "Clive": 68,
-  "Lulu": 69,
-  "Eugene": 70,
-  "Nyx": 71,
-  "Ortoroz": 72,
-  "Sonata": 73,
-  "Iris": 74,
-  "Nocturne": 75,
-  "Herz": 76,
-  "Alba": 77,
-  "Lily": 78,
-  "Jared": 79,
-  "Pinky": 80,
-  "Interlude": 81,
-  "Solo": 82,
-  "Joaquel": 83,
-  "Eon": 84,
-  "Elmo": 85,
-  "Jiorus": 86,
-  "Sarasenia": 87,
-  "Belflower": 88,
-  "Jasne": 89,
-  "Larks": 90,
-  "Sakurazaki": 91,
-  "Junzaburo": 92,
-  "Natalie": 93,
-  "Nina": 94,
-  "Charlie": 95,
-  "Leonard": 96,
-  "Heavy Guardsman": 278,
-  "Raymond": 99,
-  "Al": 100,
-  "Margaret": 101,
-  "Zion": 102,
-  "Paul": 103,
-  "Toma": 104,
-  "Torenia": 105,
-  "Testa": 106,
-  "Nuse": 107,
-  "Jorn": 108,
-  "Barbena": 109,
-  "Giske": 110,
-  "Yuri": 111,
-  "Warc": 112,
-  "Robin": 113,
-  "Sheila": 114,
-  "Jasmine": 115,
-  "Camuse": 116,
-  "Lantana": 117,
-  "Lyle": 118,
-  "Rose": 119,
-  "Josef": 120,
-  "Virginia": 121,
-  "Morfinn": 122,
-  "Bligh": 123,
-  "Freija": 124,
-  "Nask": 125,
-  "Cherie": 126,
-  "Zeke": 127,
-  "Dan": 128,
-  "Servia": 129,
-  "Lunbar": 130,
-  "Sonia": 131,
-  "Startis": 132,
-  "Brood": 133,
-  "Garbella": 134,
-  "Silvia": 135,
-  "Thyme": 136,
-  "Elef": 137,
-  "Ryan": 138,
-  "Hip": 139,
-  "Nick": 140,
-  "Kira": 141,
-  "Rabi": 142,
-  "Golye": 143,
-  "Butch": 144,
-  "Sarval": 145,
-  "Sunset": 146,
-  "Sora": 147,
-  "Keaton": 148,
-  "Tarkin": 149,
-  "Gonber": 150,
-  "Leban": 151,
-  "Mook": 152,
-  "Wal": 153,
-  "Wyze": 154,
-  "Zeranium": 155,
-  "Glitch": 255,
-  "Pomemelie": 157,
-  "Saron": 158,
-  "Cepheid": 159,
-  "Baade": 160,
-  "Quasar": 161,
-  "Aphelion": 162,
-  "Gonovitch": 163,
-  "Albert": 164,
-  "Vladimir": 165,
-  "Yevgeni": 166,
-  "Oleg": 167,
-  "Grigory": 168,
-  "Brockle": 169,
-  "Dyvad": 170,
-  "Gehrman": 171,
-  "Sergei": 172,
-  "Naom": 173,
-  "Aegenhart": 174,
-  "Marke": 175,
-  "Donovitch": 176,
-  "Zane": 177,
-  "Hap": 178,
-  "Gil": 179,
-  "Shin": 180,
-  "Fan": 181,
-  "Row": 182,
-  "Pitt": 183,
-  "Few": 184,
-  "Alan": 185,
-  "Keane": 186,
-  "Nogueira": 187,
-  "Clarence": 188,
-  "Serva": 189,
-  "Hyann": 190,
-  "Chatt": 191,
-  "Zida": 192,
-  "Franz": 193,
-  "Romaria": 194,
-  "Marsha": 195,
-  "Lufa": 196,
-  "Coco": 197,
-  "Martinez": 198,
-  "Santos": 199,
-  "Rika": 200,
-  "Mikey": 201,
-  "Gob": 202,
-  "Lin": 203,
-  "Brie": 204,
-  "Gonn": 205,
-  "Golly": 206,
-  "Gobrey": 207,
-  "Den": 208,
-  "Ben": 209,
-  "Aesop": 210,
-  "Monki": 211,
-  "Gabe": 212,
-  "Mason": 213,
-  "Goo": 214,
-  "Donkey": 215,
-  "Ricky": 216,
-  "Drew": 217,
-  "Gruel": 218,
-  "Doppio": 219,
-  "Pietro": 220,
-  "Jan": 221,
-  "Marco": 222,
-  "Niko": 223,
-  "Danny": 224,
-  "Dominic": 225,
-  "Bosso": 226,
-  "Georgio": 227,
-  "Luka": 228,
-  "Sonny": 229,
-  "Giovanni": 230,
-  "Polpo": 231,
-  "J.J.": 232,
-  "Leona": 233,
-  "Leann": 234,
-  "Ray C Ross": 235,
-  "Pinta": 236,
-  "Buta": 237,
-  "Valkyrie": 238,
-  "Lezard": 239,
-  "Radian": 240,
-  "Ethereal Queen": 241,
-  "Cairn": 242,
-  "Kelvin": 243,
-  "Gabriel Celesta": 244,
-  "Galvados": 247,
-  "FC Glitch": 248,
-  "Drago": 253,
-  "Bull": 254,
-  "Null": 258,
-  "Library": 259,
-  "Phonograph": 260,
-  "Jack Bookshelf": 261,
-  "Cross": 262,
-  "Stein": 263,
-  "Blackjack": 264,
-  "Event Watcher": 265,
-  "Parsec": 266,
-  "Cody": 279,
-  "Adele": 280,
-  "Howard": 281,
-  "Ravil": 282,
-  "Astor": 283,
-  "Maddock": 284,
-  "Synelia": 285,
-  "Tony": 286,
-  "Patrick": 287,
-  "Putt": 288,
-  "Reynos": 289,
-  "Gobblehope IX": 290,
-  "Nalshay": 291,
-  "Sayna": 292,
-  "Bran": 293,
-  "Stefan": 294,
-  "Mint": 295,
-  "Daria": 296,
-  "Yack": 297,
-  "Lauren": 298,
-  "Theresa": 299,
-  "Garcia": 300,
-  "Dynas": 301,
-  "Epoch": 302,
-  "Roy": 303,
-  "Louis": 304
+    "Empty": 0,
+    "Jack": 1,
+    "Ganz": 2,
+    "Ridley": 3,
+    "Rynka": 4,
+    "Flau": 5,
+    "Star": 6,
+    "Sebastian": 7,
+    "Genius": 8,
+    "Rocky": 9,
+    "Gawain": 10,
+    "Light Guardsman": 269,
+    "Elwen": 12,
+    "Gerald": 13,
+    "Caesar": 14,
+    "Alicia": 15,
+    "Dennis": 16,
+    "Gareth": 17,
+    "Gregory": 18,
+    "Walter": 19,
+    "Jarvis": 20,
+    "Aldo": 22,
+    "Gordon": 23,
+    "Bruce": 24,
+    "David": 25,
+    "Conrad": 26,
+    "Rolec": 27,
+    "Daniel": 28,
+    "Carlos": 29,
+    "Gene": 30,
+    "Thanos": 32,
+    "Curtis": 33,
+    "Cecil": 34,
+    "Morgan": 35,
+    "Felix": 36,
+    "Jill": 37,
+    "Ursula": 38,
+    "Derek": 39,
+    "Christoph": 40,
+    "Claudia": 41,
+    "Ardoph": 42,
+    "Dimitri": 43,
+    "Aidan": 44,
+    "Cornelia": 45,
+    "Faraus": 46,
+    "Marietta": 47,
+    "Ernest": 48,
+    "Franklin": 49,
+    "Johan": 50,
+    "Roche": 51,
+    "Kain": 53,
+    "Fernando": 54,
+    "Anastasia": 55,
+    "Dwight": 56,
+    "Godwin": 57,
+    "Achilles": 58,
+    "Flora": 59,
+    "Elena": 60,
+    "Alvin": 61,
+    "Vitas": 62,
+    "Cosmo": 63,
+    "Grant": 64,
+    "Adina": 65,
+    "Miranda": 66,
+    "Edgar": 67,
+    "Clive": 68,
+    "Lulu": 69,
+    "Eugene": 70,
+    "Nyx": 71,
+    "Ortoroz": 72,
+    "Sonata": 73,
+    "Iris": 74,
+    "Nocturne": 75,
+    "Herz": 76,
+    "Alba": 77,
+    "Lily": 78,
+    "Jared": 79,
+    "Pinky": 80,
+    "Interlude": 81,
+    "Solo": 82,
+    "Joaquel": 83,
+    "Eon": 84,
+    "Elmo": 85,
+    "Jiorus": 86,
+    "Sarasenia": 87,
+    "Belflower": 88,
+    "Jasne": 89,
+    "Larks": 90,
+    "Sakurazaki": 91,
+    "Junzaburo": 92,
+    "Natalie": 93,
+    "Nina": 94,
+    "Charlie": 95,
+    "Leonard": 96,
+    "Heavy Guardsman": 278,
+    "Raymond": 99,
+    "Al": 100,
+    "Margaret": 101,
+    "Zion": 102,
+    "Paul": 103,
+    "Toma": 104,
+    "Torenia": 105,
+    "Testa": 106,
+    "Nuse": 107,
+    "Jorn": 108,
+    "Barbena": 109,
+    "Giske": 110,
+    "Yuri": 111,
+    "Warc": 112,
+    "Robin": 113,
+    "Sheila": 114,
+    "Jasmine": 115,
+    "Camuse": 116,
+    "Lantana": 117,
+    "Lyle": 118,
+    "Rose": 119,
+    "Josef": 120,
+    "Virginia": 121,
+    "Morfinn": 122,
+    "Bligh": 123,
+    "Freija": 124,
+    "Nask": 125,
+    "Cherie": 126,
+    "Zeke": 127,
+    "Dan": 128,
+    "Servia": 129,
+    "Lunbar": 130,
+    "Sonia": 131,
+    "Startis": 132,
+    "Brood": 133,
+    "Garbella": 134,
+    "Silvia": 135,
+    "Thyme": 136,
+    "Elef": 137,
+    "Ryan": 138,
+    "Hip": 139,
+    "Nick": 140,
+    "Kira": 141,
+    "Rabi": 142,
+    "Golye": 143,
+    "Butch": 144,
+    "Sarval": 145,
+    "Sunset": 146,
+    "Sora": 147,
+    "Keaton": 148,
+    "Tarkin": 149,
+    "Gonber": 150,
+    "Leban": 151,
+    "Mook": 152,
+    "Wal": 153,
+    "Wyze": 154,
+    "Zeranium": 155,
+    "Glitch": 255,
+    "Pomemelie": 157,
+    "Saron": 158,
+    "Cepheid": 159,
+    "Baade": 160,
+    "Quasar": 161,
+    "Aphelion": 162,
+    "Gonovitch": 163,
+    "Albert": 164,
+    "Vladimir": 165,
+    "Yevgeni": 166,
+    "Oleg": 167,
+    "Grigory": 168,
+    "Brockle": 169,
+    "Dyvad": 170,
+    "Gehrman": 171,
+    "Sergei": 172,
+    "Naom": 173,
+    "Aegenhart": 174,
+    "Marke": 175,
+    "Donovitch": 176,
+    "Zane": 177,
+    "Hap": 178,
+    "Gil": 179,
+    "Shin": 180,
+    "Fan": 181,
+    "Row": 182,
+    "Pitt": 183,
+    "Few": 184,
+    "Alan": 185,
+    "Keane": 186,
+    "Nogueira": 187,
+    "Clarence": 188,
+    "Serva": 189,
+    "Hyann": 190,
+    "Chatt": 191,
+    "Zida": 192,
+    "Franz": 193,
+    "Romaria": 194,
+    "Marsha": 195,
+    "Lufa": 196,
+    "Coco": 197,
+    "Martinez": 198,
+    "Santos": 199,
+    "Rika": 200,
+    "Mikey": 201,
+    "Gob": 202,
+    "Lin": 203,
+    "Brie": 204,
+    "Gonn": 205,
+    "Golly": 206,
+    "Gobrey": 207,
+    "Den": 208,
+    "Ben": 209,
+    "Aesop": 210,
+    "Monki": 211,
+    "Gabe": 212,
+    "Mason": 213,
+    "Goo": 214,
+    "Donkey": 215,
+    "Ricky": 216,
+    "Drew": 217,
+    "Gruel": 218,
+    "Doppio": 219,
+    "Pietro": 220,
+    "Jan": 221,
+    "Marco": 222,
+    "Niko": 223,
+    "Danny": 224,
+    "Dominic": 225,
+    "Bosso": 226,
+    "Georgio": 227,
+    "Luka": 228,
+    "Sonny": 229,
+    "Giovanni": 230,
+    "Polpo": 231,
+    "J.J.": 232,
+    "Leona": 233,
+    "Leann": 234,
+    "Ray C Ross": 235,
+    "Pinta": 236,
+    "Buta": 237,
+    "Valkyrie": 238,
+    "Lezard": 239,
+    "Radian": 240,
+    "Ethereal Queen": 241,
+    "Cairn": 242,
+    "Kelvin": 243,
+    "Gabriel Celesta": 244,
+    "Galvados": 247,
+    "FC Glitch": 248,
+    "Drago": 253,
+    "Bull": 254,
+    "Null": 258,
+    "Library": 259,
+    "Phonograph": 260,
+    "Jack Bookshelf": 261,
+    "Cross": 262,
+    "Stein": 263,
+    "Blackjack": 264,
+    "Event Watcher": 265,
+    "Parsec": 266,
+    "Cody": 279,
+    "Adele": 280,
+    "Howard": 281,
+    "Ravil": 282,
+    "Astor": 283,
+    "Maddock": 284,
+    "Synelia": 285,
+    "Tony": 286,
+    "Patrick": 287,
+    "Putt": 288,
+    "Reynos": 289,
+    "Gobblehope IX": 290,
+    "Nalshay": 291,
+    "Sayna": 292,
+    "Bran": 293,
+    "Stefan": 294,
+    "Mint": 295,
+    "Daria": 296,
+    "Yack": 297,
+    "Lauren": 298,
+    "Theresa": 299,
+    "Garcia": 300,
+    "Dynas": 301,
+    "Epoch": 302,
+    "Roy": 303,
+    "Louis": 304
 };
 
 let characterIds = {
