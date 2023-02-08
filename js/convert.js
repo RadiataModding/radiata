@@ -900,85 +900,121 @@ function loadRMF() {
 
 function linesProcess(text) {
     rmfArray = rmf1splitter(text);
-
+    customName = [];
     result = ""
+    for (let i = 0; i < rmfArray.length; i++){
+        if (rmfArray[i].includes('0E4E')){
+            customName.push("");
+        } else {
+            customName.push(stringDecoder2(rmfArray[i].substring(0x8*2)));
+        }
+    }
 
     for (let i = 0; i < rmfArray.length; i++) {
-        textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16);
-        charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8, 16)), 16);
-        rmfArray[i] = rmfArray[i].substring(16);
-        character = [0]
-        for (let j = 0; j < charAmt; j++) {
-            character.push(parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16));
-            rmfArray[i] = rmfArray[i].substring(8);
-        }
+        result += "Line " + (i+1) + ":\n\n";
+        if (rmfArray[i].includes('0E4E')){
+            textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16);
+            charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8, 16)), 16);
+            rmfArray[i] = rmfArray[i].substring(16);
+            character = [0]
+            for (let j = 0; j < charAmt; j++) {
+                character.push(parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16));
+                rmfArray[i] = rmfArray[i].substring(8);
+            }
 
-        rmfArray[i] = rmfArray[i].substring(0x54);
+            //rmfArray[i] = rmfArray[i].substring(0x54);
 
-        speak = false;
+            while(rmfArray[i].substring(0, 4) != '0E4E'){
+                rmfArray[i] = rmfArray[i].substring(0x2);
+            }
 
-        //console.log(rmfArray[i].substring(0,4));
+            speak = false;
 
-        if (rmfArray[i].substring(0, 4) != '0E4E') {
-            rmfArray[i] = rmfArray[i].substring(0xC);
-        }
+            //console.log(rmfArray[i].substring(0,4));
 
-        if (rmfArray[i].substring(0, 4) != '0E4E') {
+/*            if (rmfArray[i].substring(0, 4) != '0E4E') {
+                rmfArray[i] = rmfArray[i].substring(0xC);
+            }
+
+            if (rmfArray[i].substring(0, 4) != '0E4E') {
+                rmfArray[i] = rmfArray[i].substring(0x4);
+            }*/
+            //console.log(rmfArray[i].substring(0,4));
+            if (rmfArray[i].substring(0, 4) == '0E4E') {
+                speak = true;
+            }
+
             rmfArray[i] = rmfArray[i].substring(0x4);
-        }
-        //console.log(rmfArray[i].substring(0,4));
-        if (rmfArray[i].substring(0, 4) == '0E4E') {
-            speak = true;
-        }
-        rmfArray[i] = rmfArray[i].substring(0x4);
 
-        charSpeakId = character[parseInt(rmfArray[i].substring(0, 2))];
+            charSpeakId = character[parseInt(rmfArray[i].substring(0, 2))];
 
-        charCheck = characterIds[character[parseInt(rmfArray[i].substring(0, 2))]];
+            charCheck = characterIds[character[parseInt(rmfArray[i].substring(0, 2))]];
 
-        if (charCheck != null) {
-            charSpeak = charCheck;
+            if (charCheck != null) {
+                charSpeak = charCheck;
+            } else {
+                charSpeak = "";
+            }
+
+            //charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+
+            rmfArray[i] = rmfArray[i].substring(0x4);
+
+            nameMode = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
+
+            rmfArray[i] = rmfArray[i].substring(0x4);
+
+            lineAmt = rmfArray[i].substring(0, 2);
+            rmfArray[i] = rmfArray[i].substring(0x4);
+
+            nameCheck = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
+
+            rmfArray[i] = rmfArray[i].substring(0x4);
+
+            rmfArray[i] = rmfArray[i].substring(0, rmfArray[i].length - 10)
+
+            if (nameMode == 1 && charSpeakId != 0) {
+                speakName = charSpeak + ":\n\n";
+                speakName = speakName.toUpperCase();
+                result += speakName;
+            } else if (nameMode == 2 && charSpeakId != 0){
+                speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
+                speakName = speakName.toUpperCase();
+                result += speakName;
+            }
+
+
+            result += stringDecoder2(rmfArray[i]);
+
+            result += "\n";
+            //customName.push("");
         } else {
-            charSpeak = "";
+            result += stringDecoder2(rmfArray[i].substring(0x8*2));
+            result += "\n\n";
+            //customName.push(stringDecoder(rmfArray[i].substring(0x8*2)));
         }
-
-        //charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
-
-        rmfArray[i] = rmfArray[i].substring(0x8);
-
-        lineAmt = rmfArray[i].substring(0, 2);
-        rmfArray[i] = rmfArray[i].substring(0x8);
-
-        rmfArray[i] = rmfArray[i].substring(0, rmfArray[i].length - 10)
-
-        if (speak && charSpeakId != 0) {
-            result += charSpeak + ": ";
-        }
-
-        result += stringDecoder(rmfArray[i]);
-
-        result += "\n";
+        
 
     }
     return result;
 }
 
 function stringDecoder2(text) {
-    result = "";
+    res = "";
     text = text.replace(/\s/g, '');
     while (text.length > 0) {
         temp = text.substring(0, 4);
         text = text.substring(4);
         if (temp != "") {
             if (temp == "0F20") {
-                result += "\n\n";
+                res += "\n\n";
             } else {
                 temp = parseInt(changeEndianness2(temp), 16);
 
                 if (temp > 0 && temp < 177 && temp in charDecoding) {
                     curchar = charDecoding[temp];
                     if (curchar != null) {
-                        result += curchar;
+                        res += curchar;
                         //result += charDecoding[temp];
                     }
                 }
@@ -986,7 +1022,7 @@ function stringDecoder2(text) {
             }
         }
     }
-    return result;
+    return res;
 }
 
 function stringDecoder(text) {
@@ -2437,7 +2473,7 @@ let charDecoding = {
     "67": "%",
     "69": "&",
     "70": "*",
-    "71": "@",
+    //"71": "@",
     // "73": "★",
     // "74": "○",
     // "75": "●",
