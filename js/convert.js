@@ -911,7 +911,8 @@ function linesProcess(text) {
     }
 
     for (let i = 0; i < rmfArray.length; i++) {
-        result += "Line " + (i+1) + ":\n\n";
+        result += "<font color =red>Line " + (i+1) + ":</font>\n\n";
+
         if (rmfArray[i].includes('0E4E')){
             textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16);
             charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8, 16)), 16);
@@ -924,73 +925,73 @@ function linesProcess(text) {
 
             //rmfArray[i] = rmfArray[i].substring(0x54);
 
-            while(rmfArray[i].substring(0, 4) != '0E4E'){
-                rmfArray[i] = rmfArray[i].substring(0x2);
-            }
+            while(rmfArray[i].length > 1){
+                while(rmfArray[i].substring(0, 4) != '0E4E'){
+                    rmfArray[i] = rmfArray[i].substring(0x2);
+                }
 
-            speak = false;
-
-            //console.log(rmfArray[i].substring(0,4));
-
-/*            if (rmfArray[i].substring(0, 4) != '0E4E') {
-                rmfArray[i] = rmfArray[i].substring(0xC);
-            }
-
-            if (rmfArray[i].substring(0, 4) != '0E4E') {
                 rmfArray[i] = rmfArray[i].substring(0x4);
-            }*/
-            //console.log(rmfArray[i].substring(0,4));
-            if (rmfArray[i].substring(0, 4) == '0E4E') {
-                speak = true;
+
+                charSpeakId = character[parseInt(rmfArray[i].substring(0, 2))];
+
+                charCheck = characterIds[character[parseInt(rmfArray[i].substring(0, 2))]];
+
+                if (charCheck != null) {
+                    charSpeak = charCheck;
+                } else {
+                    charSpeak = "";
+                }
+
+                //charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
+
+                rmfArray[i] = rmfArray[i].substring(0x4);
+
+                nameMode = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
+
+                rmfArray[i] = rmfArray[i].substring(0x4);
+
+                lineAmt = rmfArray[i].substring(0, 2);
+                rmfArray[i] = rmfArray[i].substring(0x4);
+
+                nameCheck = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
+
+                rmfArray[i] = rmfArray[i].substring(0x4);
+
+                //rmfArray[i] = rmfArray[i].substring(0, rmfArray[i].length - 10)
+
+                if (nameMode == 1 && charSpeakId != 0) {
+                    speakName = charSpeak + ":\n\n";
+                    //speakName = speakName.toUpperCase();
+                    result += "<font color=blue>" + speakName + "</font>";
+                } else if (nameMode == 2 && charSpeakId != 0){
+                    speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
+                    //speakName = speakName.toUpperCase();
+                    result += "<font color=blue>" + speakName + "</font>";
+                }
+
+                currentText = '';
+
+                while(rmfArray[i].substring(0, 4) != '0F20'){
+                    currentText += rmfArray[i].substring(0,4);
+                    rmfArray[i] = rmfArray[i].substring(0x4);
+
+                }
+
+                result += stringDecoder2(currentText);
+
+                result += "\n\n";
+
+                if(rmfArray[i].length <= 0x15*2){
+                    rmfArray[i] = "";
+                }
+
             }
-
-            rmfArray[i] = rmfArray[i].substring(0x4);
-
-            charSpeakId = character[parseInt(rmfArray[i].substring(0, 2))];
-
-            charCheck = characterIds[character[parseInt(rmfArray[i].substring(0, 2))]];
-
-            if (charCheck != null) {
-                charSpeak = charCheck;
-            } else {
-                charSpeak = "";
-            }
-
-            //charSpeak = characterIds[character[parseInt(rmfArray[i].substring(0,2))]];
-
-            rmfArray[i] = rmfArray[i].substring(0x4);
-
-            nameMode = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
-
-            rmfArray[i] = rmfArray[i].substring(0x4);
-
-            lineAmt = rmfArray[i].substring(0, 2);
-            rmfArray[i] = rmfArray[i].substring(0x4);
-
-            nameCheck = parseInt(changeEndianness2(rmfArray[i].substring(0, 4)), 16);
-
-            rmfArray[i] = rmfArray[i].substring(0x4);
-
-            rmfArray[i] = rmfArray[i].substring(0, rmfArray[i].length - 10)
-
-            if (nameMode == 1 && charSpeakId != 0) {
-                speakName = charSpeak + ":\n\n";
-                speakName = speakName.toUpperCase();
-                result += speakName;
-            } else if (nameMode == 2 && charSpeakId != 0){
-                speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
-                speakName = speakName.toUpperCase();
-                result += speakName;
-            }
-
-
-            result += stringDecoder2(rmfArray[i]);
-
             result += "\n";
+            
             //customName.push("");
         } else {
-            result += stringDecoder2(rmfArray[i].substring(0x8*2));
-            result += "\n\n";
+            result += "<font color=olive>"+stringDecoder2(rmfArray[i].substring(0x8*2));
+            result += "</font>\n\n";
             //customName.push(stringDecoder(rmfArray[i].substring(0x8*2)));
         }
         
