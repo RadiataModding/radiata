@@ -971,9 +971,12 @@ function linesProcess(text) {
 
                 currentText = '';
 
-                while(rmfArray[i].substring(0, 4) != '0F20'){
-                    currentText += rmfArray[i].substring(0,4);
-                    rmfArray[i] = rmfArray[i].substring(0x4);
+                while(rmfArray[i].substring(0, 2) != '0F'){
+                    currentText += rmfArray[i].substring(0,2);
+                    rmfArray[i] = rmfArray[i].substring(0x2);
+                    if(rmfArray[i].length == 0){
+                        break;
+                    }
 
                 }
 
@@ -983,6 +986,13 @@ function linesProcess(text) {
 
                 if(rmfArray[i].length <= 0x15*2){
                     rmfArray[i] = "";
+                }
+
+                while(rmfArray[i].substring(0, 4) != '0E4E'){
+                    rmfArray[i] = rmfArray[i].substring(0x2);
+                    if(rmfArray[i].length == 0){
+                        break;
+                    }
                 }
 
             }
