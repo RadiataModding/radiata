@@ -523,6 +523,13 @@ function lineBuild() {
             res += "00"
             lineArr[linereplace] = res;
 
+        } else {
+            textLineArr.push(text);
+            count = document.getElementById('text').value.length;
+            res = changeEndianness2(count.toString(16).padStart(4, '0')) + "000000000000";
+            res += stringEncoder(document.getElementById('text').value);
+            res += "00"
+            lineArr.push(res);
         }
 
 
@@ -742,12 +749,14 @@ function lineBuild() {
         }
 
     }
-    document.getElementById("results").innerHTML = ""
-    for (let i = 0; i < textLineArr.length; i++) {
-        document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
+    //document.getElementById("results").innerHTML = ""
+    allLine = buildRMF(lineArr);
+    document.getElementById("results").innerHTML = linesProcess(allLine);
+    /*for (let i = 0; i < textLineArr.length; i++) {
+        document.getElementById("results").innerHTML += "<font color=red>Line " + (i + 1) + ":</font>\n";
         document.getElementById("results").innerHTML += textLineArr[i];
         document.getElementById("results").innerHTML += "\n\n"
-    }
+    }*/
 
 }
 
@@ -762,6 +771,7 @@ function download2() {
     let totalSize = 0;
     let currentLength = 0;
     let baseLength = 48;
+    pointerArr = [];
     baseLength += 8 * lineArr.length;
     for (let i = 0; i < lineArr.length; i++) {
         lineArr[i] = lineArr[i].replace(/\s/g, '');
@@ -817,6 +827,58 @@ function download2() {
             console.log('Error: ', err);
         });
     //document.getElementById("results").innerHTML = output;
+}
+
+function buildRMF(rmfArrrrr){
+    if (rmfArrrrr.length == 0) {
+        alert("Nothing added.");
+        return;
+    }
+    let curRMF = rmfArrrrr.slice();
+    let totalSize = 0;
+    let currentLength = 0;
+    let baseLength = 48;
+    pointerArr = [];
+    baseLength += 8 * curRMF.length;
+    for (let i = 0; i < curRMF.length; i++) {
+        curRMF[i] = curRMF[i].replace(/\s/g, '');
+        if (i == 0) {
+            while (((curRMF[i].length / 2) % 4) != 0) {
+                curRMF[i] += "00";
+            }
+            currentLength = baseLength / 2;
+            totalSize += currentLength + (curRMF[0].length / 2);
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        } else {
+            while (((curRMF[i].length / 2) % 4) != 0) {
+                curRMF[i] += "00";
+            }
+            currentLength += (curRMF[i - 1].length / 2);
+            totalSize += curRMF[i].length / 2;
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        }
+    }
+    totalSize = totalSize.toString(16).padStart(8, '0').toUpperCase();
+    totalSize = changeEndianness(totalSize);
+    let lineCount = curRMF.length;
+    lineCount = lineCount.toString(16).padStart(8, '0').toUpperCase();
+    lineCount = changeEndianness(lineCount);
+    let output = "52 4D 46 31 CE 00 00 00 00 00 00 00";
+    output += totalSize;
+    output += lineCount;
+    output += totalSize;
+    for (let i = 0; i < pointerArr.length; i++) {
+        output += pointerArr[i];
+    }
+    for (let i = 0; i < curRMF.length; i++) {
+        output += curRMF[i];
+    }
+    output = output.replace(/\s/g, '');
+    return output;
 }
 
 function hexTrim(text) {
@@ -884,11 +946,12 @@ function loadRMF() {
                     textLineArr.push(stringDecoder2(lineArr[i]));
                 }
                 document.getElementById("results").innerHTML = ""
-                for (let i = 0; i < textLineArr.length; i++) {
-                    document.getElementById("results").innerHTML += "Line " + (i + 1) + ":\n";
+/*                for (let i = 0; i < textLineArr.length; i++) {
+                    document.getElementById("results").innerHTML += "<font color=red>Line " + (i + 1) + ":</font>\n";
                     document.getElementById("results").innerHTML += textLineArr[i];
                     document.getElementById("results").innerHTML += "\n\n"
-                }
+                }*/
+                document.getElementById("results").innerHTML = linesProcess(text);
             })
             .catch(err => {
                 console.error('Failed to read clipboard contents: ', err);
