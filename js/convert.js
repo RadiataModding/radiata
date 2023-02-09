@@ -1030,6 +1030,10 @@ function linesProcess(text) {
                     speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
                     //speakName = speakName.toUpperCase();
                     result += "<font color=blue>" + speakName + "</font>";
+                } else if (nameMode == 5 && charSpeakId != 0){
+                    speakName = "(" + charSpeak + ") ???:\n\n";
+                    //speakName = speakName.toUpperCase();
+                    result += "<font color=blue>" + speakName + "</font>";
                 }
 
                 currentText = '';
