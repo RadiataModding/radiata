@@ -1030,7 +1030,7 @@ function linesProcess(text) {
                     speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
                     //speakName = speakName.toUpperCase();
                     result += "<font color=blue>" + speakName + "</font>";
-                } else if (nameMode == 5 && charSpeakId != 0){
+                } else if ((nameMode == 5 && charSpeakId != 0) || (nameMode == 6 && charSpeakId != 0)){
                     speakName = "(" + charSpeak + ") ???:\n\n";
                     //speakName = speakName.toUpperCase();
                     result += "<font color=blue>" + speakName + "</font>";
@@ -1038,16 +1038,34 @@ function linesProcess(text) {
 
                 currentText = '';
 
-                while(rmfArray[i].substring(0, 2) != '0F'){
-                    currentText += rmfArray[i].substring(0,2);
-                    rmfArray[i] = rmfArray[i].substring(0x2);
+                while(rmfArray[i].substring(0, 2) != '0F' || rmfArray[i].substring(0,6) == '0F1301'){
+                    //Unknown??
+                    if(rmfArray[i].substring(0,8) == '0E240100'){
+                        rmfArray[i] = rmfArray[i].substring(8);
+                    } else if(rmfArray[i].substring(0,8) == '0E240200'){
+                        rmfArray[i] = rmfArray[i].substring(12);
+                    } else if(rmfArray[i].substring(0,4) == '0610'){
+                        rmfArray[i] = rmfArray[i].substring(8);
+                    } else if(rmfArray[i].substring(0,4) == '0A00'){
+                        currentText += rmfArray[i].substring(0,4);
+                        rmfArray[i] = rmfArray[i].substring(16);
+                    } else {
+                        currentText += rmfArray[i].substring(0,2);
+                        rmfArray[i] = rmfArray[i].substring(0x2); 
+                    }
+                    //console.log(rmfArray[i].substring(0,6))
+                    // if(rmfArray[i].substring(0,6) == '0F1301'){
+                    //     rmfArray[i] = rmfArray[i].substring(6);
+                    //     console.log('here');
+                    // }
                     if(rmfArray[i].length == 0){
                         break;
                     }
 
                 }
+                tempRes = stringDecoder2(currentText);
 
-                result += stringDecoder2(currentText);
+                result += tempRes.trim();
 
                 result += "\n\n";
 
@@ -1095,6 +1113,8 @@ function stringDecoder2(text) {
                         res += curchar;
                         //result += charDecoding[temp];
                     }
+                } else if (temp == 32784){
+                    res += charDecoding[temp];
                 }
 
             }
@@ -1560,6 +1580,23 @@ function copyClip(text) {
         .catch(err => {
             console.log('Error: ', err);
         });
+}
+
+function splitRMF(){
+    let rmfs = document.getElementById('text').value;
+    rmfs = rmfs.replace(/\s/g, '');
+    let curRMF = "";
+    let curcount = 0;
+    while(rmfs.length > 0){
+        curcount++;
+        curRMF += '<font color="#2ECC71">' + "FILE " + curcount + "</font>\n\n"; 
+        let curlen = parseInt(changeEndianness2(rmfs.substring(24, 32)), 16) * 2;
+        let current = rmfs.substring(0, curlen);
+        curRMF += linesProcess(current);
+        rmfs = rmfs.substring(curlen);
+        curRMF += "\n\n";
+    }
+    document.getElementById("results").innerHTML = curRMF;
 }
 
 function initialiseCharacter() {
@@ -2496,6 +2533,7 @@ let charEncoding = {
 
 
 let charDecoding = {
+    "32784": "—",
     "1": " ",
     "10": "\n",
     //"16": "､",
@@ -2551,7 +2589,7 @@ let charDecoding = {
     "67": "%",
     "69": "&",
     "70": "*",
-    //"71": "@",
+    "71": "@",
     // "73": "★",
     // "74": "○",
     // "75": "●",
