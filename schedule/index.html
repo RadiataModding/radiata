@@ -1,0 +1,990 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="main.js"></script>
+      <script src ="../js/nav.js"></script>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <title>Recruitment Data | Radiata</title>
+      <link rel="icon" type="image/x-icon" href="../favicon.ico">
+   </head>
+   <body>
+      <nav class="navbar fixed-middle navbar-expand-lg navbar-light bg-transparent" id="navbar">
+      </nav>
+      <br>
+      <div class="container">
+      <h2>
+         Schedule Data for Discord Bot.
+      </h2>
+      <br>
+      <h5>
+         If there are any locations with duplicates <br>for example: <br>08:20 Olacion Order Shrine (2)<br>08:35 Olacion Order Shrine (1)<br>09:10 Path to the Sun<br> You would only keep the first one.<br>
+         (In this example)<br>
+         08:20 Olacion Order Shrine
+         <br>
+         09:10 Path to the Sun
+      </h5>
+      <br>
+      <label id="labeltime1">Character </label>
+        <select id="char1">
+          <option value="03A">Achilles</option>
+          <option value="118">Adele</option>
+          <option value="041">Adina</option>
+          <option value="0AE">Aegenhart</option>
+          <option value="0D2">Aesop</option>
+          <option value="02C">Aidan</option>
+          <option value="064">Al</option>
+          <option value="0B9">Alan</option>
+          <option value="04D">Alba</option>
+          <option value="0A4">Albert</option>
+          <option value="016">Aldo</option>
+          <option value="42F">Alesnoi</option>
+          <option value="00F">Alicia</option>
+          <option value="03D">Alvin</option>
+          <option value="037">Anastasia</option>
+          <option value="0A2">Aphelion</option>
+          <option value="440">Apprentice</option>
+          <option value="47B">Aqua Cell</option>
+          <option value="441">Archdemon</option>
+          <option value="02A">Ardoph</option>
+          <option value="11B">Astor</option>
+          <option value="0A0">Baade</option>
+          <option value="06D">Barbena</option>
+          <option value="460">Beetle</option>
+          <option value="058">Belflower</option>
+          <option value="0D1">Ben</option>
+          <option value="45E">Bichir</option>
+          <option value="3EE">Big Jaws</option>
+          <option value="40D">Birdcage Insect</option>
+          <option value="449">Bison</option>
+          <option value="44A">Bison</option>
+          <option value="44B">Bison</option>
+          <option value="44C">Bison</option>
+          <option value="44D">Bison</option>
+          <option value="44E">Bison</option>
+          <option value="44F">Bison</option>
+          <option value="450">Bison</option>
+          <option value="3F0">Bitty Ant</option>
+          <option value="40E">Bitty Hopper</option>
+          <option value="404">Black Cat</option>
+          <option value="478">Black Goblin</option>
+          <option value="488">Black Tiger</option>
+          <option value="108">Blackjack</option>
+          <option value="3F7">Blauniebel</option>
+          <option value="07B">Bligh</option>
+          <option value="46B">Blood Orc</option>
+          <option value="46C">Blood Orc</option>
+          <option value="408">Blue Crow</option>
+          <option value="43C">Bone Goblin</option>
+          <option value="0E2">Bosso</option>
+          <option value="125">Bran</option>
+          <option value="0CC">Brie</option>
+          <option value="0A9">Brockle</option>
+          <option value="085">Brood</option>
+          <option value="018">Bruce</option>
+          <option value="41D">Bubble Frogger</option>
+          <option value="470">Bubu</option>
+          <option value="45C">Bug-Eye Goldfish</option>
+          <option value="0FE">Bull</option>
+          <option value="484">Burglar</option>
+          <option value="0ED">Buta</option>
+          <option value="420">Buta</option>
+          <option value="090">Butch</option>
+          <option value="464">Butterfly</option>
+          <option value="45D">Butterflyfish</option>
+          <option value="00E">Caesar</option>
+          <option value="0F2">Cairn</option>
+          <option value="074">Camuse</option>
+          <option value="01D">Carlos</option>
+          <option value="3FC">Carnivorat</option>
+          <option value="022">Cecil</option>
+          <option value="09F">Cepheid</option>
+          <option value="458">Char</option>
+          <option value="05F">Charlie</option>
+          <option value="0BF">Chatt</option>
+          <option value="07E">Cherie</option>
+          <option value="402">Chick</option>
+          <option value="028">Christoph</option>
+          <option value="0BC">Clarence</option>
+          <option value="029">Claudia</option>
+          <option value="044">Clive</option>
+          <option value="0C5">Coco</option>
+          <option value="117">Cody</option>
+          <option value="3EB">Colossalizard</option>
+          <option value="453">Common Toad</option>
+          <option value="01A">Conrad</option>
+          <option value="471">Copperfish</option>
+          <option value="02D">Cornelia</option>
+          <option value="03F">Cosmo</option>
+          <option value="3FA">Crocogator</option>
+          <option value="106">Cross</option>
+          <option value="40B">Crow</option>
+          <option value="424">Crunchy Shell</option>
+          <option value="480">Crystal Ball</option>
+          <option value="491">Crystaria</option>
+          <option value="021">Curtis</option>
+          <option value="415">Cute Dog</option>
+          <option value="422">Dagol Tortoise</option>
+          <option value="080">Dan</option>
+          <option value="01C">Daniel</option>
+          <option value="0E0">Danny</option>
+          <option value="128">Daria</option>
+          <option value="47E">Dark Cell</option>
+          <option value="476">Dark Elf</option>
+          <option value="46F">Darksoul</option>
+          <option value="019">David</option>
+          <option value="3F4">Deathclover</option>
+          <option value="0D0">Den</option>
+          <option value="010">Dennis</option>
+          <option value="027">Derek</option>
+          <option value="02B">Dimitri</option>
+          <option value="0E1">Dominic</option>
+          <option value="0D7">Donkey</option>
+          <option value="0B0">Donovitch</option>
+          <option value="0DB">Doppio</option>
+          <option value="0FD">Drago</option>
+          <option value="465">Dragonfly</option>
+          <option value="0D9">Drew</option>
+          <option value="474">Dwarf</option>
+          <option value="038">Dwight</option>
+          <option value="12D">Dynas</option>
+          <option value="0AA">Dyvad</option>
+          <option value="47D">Earth Cell</option>
+          <option value="043">Edgar</option>
+          <option value="089">Elef</option>
+          <option value="03C">Elena</option>
+          <option value="055">Elmo</option>
+          <option value="00C">Elwen</option>
+          <option value="054">Eon</option>
+          <option value="12E">Epoch</option>
+          <option value="030">Ernest</option>
+          <option value="0F1">Ethereal Queen</option>
+          <option value="046">Eugene</option>
+          <option value="109">Event Watcher</option>
+          <option value="0F8">FC Glitch</option>
+          <option value="0B5">Fan</option>
+          <option value="02E">Faraus</option>
+          <option value="024">Felix</option>
+          <option value="425">Female Knight</option>
+          <option value="3EA">Female Smilodon</option>
+          <option value="41F">Fennec Fox</option>
+          <option value="036">Fernando</option>
+          <option value="0B8">Few</option>
+          <option value="435">Fire</option>
+          <option value="47A">Fire Cell</option>
+          <option value="3F2">Flame Ant</option>
+          <option value="414">Flame Lizard</option>
+          <option value="47F">Flash Cell</option>
+          <option value="48F">Flash Monkey</option>
+          <option value="455">Flat-Tail Gecko</option>
+          <option value="005">Flau</option>
+          <option value="03B">Flora</option>
+          <option value="031">Franklin</option>
+          <option value="0C1">Franz</option>
+          <option value="07C">Freija</option>
+          <option value="0D4">Gabe</option>
+          <option value="0F4">Gabriel Celesta</option>
+          <option value="0F7">Galvados</option>
+          <option value="002">Ganz</option>
+          <option value="086">Garbella</option>
+          <option value="12C">Garcia</option>
+          <option value="011">Gareth</option>
+          <option value="00A">Gawain</option>
+          <option value="454">Gecko</option>
+          <option value="0AB">Gehrman</option>
+          <option value="01E">Gene</option>
+          <option value="008">Genius</option>
+          <option value="0E3">Georgio</option>
+          <option value="00D">Gerald</option>
+          <option value="459">Ghar</option>
+          <option value="3F1">Giga Ant</option>
+          <option value="40F">Giga Hopper</option>
+          <option value="0B3">Gil</option>
+          <option value="0E6">Giovanni</option>
+          <option value="06E">Giske</option>
+          <option value="09C">Glitch</option>
+          <option value="0F5">Glitch</option>
+          <option value="0F6">Glitch</option>
+          <option value="0FF">Glitch</option>
+          <option value="42E">Glyptodon</option>
+          <option value="0CA">Gob</option>
+          <option value="122">Gobblehope IX</option>
+          <option value="41C">Goblin Elefant</option>
+          <option value="466">Goblin Elefant</option>
+          <option value="487">Gobpakken</option>
+          <option value="0CF">Gobrey</option>
+          <option value="039">Godwin</option>
+          <option value="463">Gold Beetle</option>
+          <option value="433">Gold Box Turtle</option>
+          <option value="45A">Goldfish</option>
+          <option value="0CE">Golly</option>
+          <option value="08F">Golye</option>
+          <option value="096">Gonber</option>
+          <option value="0CD">Gonn</option>
+          <option value="0A3">Gonovitch</option>
+          <option value="0D6">Goo</option>
+          <option value="017">Gordon</option>
+          <option value="040">Grant</option>
+          <option value="41A">Greek Tortoise</option>
+          <option value="477">Green Goblin</option>
+          <option value="468">Green Orc</option>
+          <option value="469">Green Orc</option>
+          <option value="46A">Green Orc</option>
+          <option value="012">Gregory</option>
+          <option value="0A8">Grigory</option>
+          <option value="46E">Grim Reaper</option>
+          <option value="0DA">Gruel</option>
+          <option value="0B2">Hap</option>
+          <option value="062">Heavy Guardsman</option>
+          <option value="10E">Heavy Guardsman</option>
+          <option value="10F">Heavy Guardsman</option>
+          <option value="110">Heavy Guardsman</option>
+          <option value="111">Heavy Guardsman</option>
+          <option value="112">Heavy Guardsman</option>
+          <option value="113">Heavy Guardsman</option>
+          <option value="114">Heavy Guardsman</option>
+          <option value="115">Heavy Guardsman</option>
+          <option value="116">Heavy Guardsman</option>
+          <option value="428">Heavy Guardsman</option>
+          <option value="46D">Hellraiser</option>
+          <option value="445">Hemud</option>
+          <option value="401">Hen</option>
+          <option value="04C">Herz</option>
+          <option value="08B">Hip</option>
+          <option value="48E">Hollywoody</option>
+          <option value="48C">Holy Quetzal</option>
+          <option value="119">Howard</option>
+          <option value="3FF">Hunterwolf</option>
+          <option value="0BE">Hyann</option>
+          <option value="3F6">Ice Lizard</option>
+          <option value="482">Iceburg</option>
+          <option value="051">Interlude</option>
+          <option value="04A">Iris</option>
+          <option value="3F9">Ivory Goat</option>
+          <option value="0E8">J.J.</option>
+          <option value="001" selected>Jack</option>
+          <option value="105">Jack Bookshelf</option>
+          <option value="0DD">Jan</option>
+          <option value="04F">Jared</option>
+          <option value="014">Jarvis</option>
+          <option value="073">Jasmine</option>
+          <option value="059">Jasne</option>
+          <option value="025">Jill</option>
+          <option value="056">Jiorus</option>
+          <option value="053">Joaquel</option>
+          <option value="032">Johan</option>
+          <option value="06C">Jorn</option>
+          <option value="078">Josef</option>
+          <option value="05C">Junazburo</option>
+          <option value="035">Kain</option>
+          <option value="0BA">Keane</option>
+          <option value="094">Keaton</option>
+          <option value="0F3">Kelvin</option>
+          <option value="3F3">Killer Queen</option>
+          <option value="3EF">King Serpent</option>
+          <option value="08D">Kira</option>
+          <option value="075">Lantana</option>
+          <option value="05A">Larks</option>
+          <option value="12A">Lauren</option>
+          <option value="0EA">Leann</option>
+          <option value="409">Leaping Crow</option>
+          <option value="097">Leban</option>
+          <option value="434">Lemon Box Turtle</option>
+          <option value="0E9">Leona</option>
+          <option value="060">Leonard</option>
+          <option value="0EF">Lezard</option>
+          <option value="103">Library</option>
+          <option value="475">Light Elf</option>
+          <option value="00B">Light Guardsman</option>
+          <option value="015">Light Guardsman</option>
+          <option value="01F">Light Guardsman</option>
+          <option value="034">Light Guardsman</option>
+          <option value="061">Light Guardsman</option>
+          <option value="10B">Light Guardsman</option>
+          <option value="10C">Light Guardsman</option>
+          <option value="10D">Light Guardsman</option>
+          <option value="427">Light Guardsman</option>
+          <option value="04E">Lily</option>
+          <option value="0CB">Lin</option>
+          <option value="410">Little Oily</option>
+          <option value="479">Living Totem</option>
+          <option value="130">Louis</option>
+          <option value="0C4">Lufa</option>
+          <option value="0E4">Luka</option>
+          <option value="045">Lulu</option>
+          <option value="082">Lunbar</option>
+          <option value="076">Lyle</option>
+          <option value="11C">Maddock</option>
+          <option value="426">Male Knight</option>
+          <option value="3E9">Male Smilodon</option>
+          <option value="0DE">Marco</option>
+          <option value="065">Margaret</option>
+          <option value="02F">Marietta</option>
+          <option value="0AF">Marke</option>
+          <option value="0C3">Marsha</option>
+          <option value="0C6">Martinez</option>
+          <option value="0D5">Mason</option>
+          <option value="48B">Matango</option>
+          <option value="43E">Melissa</option>
+          <option value="43F">Melissa II</option>
+          <option value="419">Metal Tortoise</option>
+          <option value="0C9">Mikey</option>
+          <option value="3FE">Militarat</option>
+          <option value="127">Mint</option>
+          <option value="042">Miranda</option>
+          <option value="41E">Mist Frogger</option>
+          <option value="457">Mole</option>
+          <option value="0D3">Monki</option>
+          <option value="098">Mook</option>
+          <option value="07A">Morfinn</option>
+          <option value="023">Morgan</option>
+          <option value="418">Mount Tortoise</option>
+          <option value="42A">Mountain Goat</option>
+          <option value="42B">Mountain Goat</option>
+          <option value="42C">Mountain Goat</option>
+          <option value="439">Mountain Goat</option>
+          <option value="43A">Mountain Goat</option>
+          <option value="447">Mud Bone</option>
+          <option value="448">Mud Dile</option>
+          <option value="443">Mud Fighter</option>
+          <option value="444">Mud Mage</option>
+          <option value="442">Mud Pawn</option>
+          <option value="451">Mud Ponbabar</option>
+          <option value="123">Nalshay</option>
+          <option value="0AD">Naom</option>
+          <option value="07D">Nask</option>
+          <option value="05D">Natalie</option>
+          <option value="08C">Nick</option>
+          <option value="0DF">Niko</option>
+          <option value="05E">Nina</option>
+          <option value="04B">Nocturne</option>
+          <option value="0BB">Nogueira</option>
+          <option value="100">Null</option>
+          <option value="101">Null</option>
+          <option value="102">Null</option>
+          <option value="06B">Nuse</option>
+          <option value="047">Nyx</option>
+          <option value="403">Ogre</option>
+          <option value="411">Oily Bug</option>
+          <option value="0A7">Oleg</option>
+          <option value="048">Ortoroz</option>
+          <option value="406">Owl</option>
+          <option value="3FD">Pararat</option>
+          <option value="10A">Parsec</option>
+          <option value="11F">Patrick</option>
+          <option value="067">Paul</option>
+          <option value="48A">Phantom</option>
+          <option value="104">Phonograph</option>
+          <option value="0DC">Pietro</option>
+          <option value="40A">Pigeon Crow</option>
+          <option value="050">Pinky</option>
+          <option value="0EC">Pinta</option>
+          <option value="0B7">Pitt</option>
+          <option value="481">Pointura</option>
+          <option value="3F5">Poisonous Lizard</option>
+          <option value="0E7">Polpo</option>
+          <option value="09D">Pomemelie</option>
+          <option value="120">Putt</option>
+          <option value="0A1">Quasar</option>
+          <option value="436">Quetzalcoatl</option>
+          <option value="08E">Rabi</option>
+          <option value="0F0">Radian</option>
+          <option value="11A">Ravil</option>
+          <option value="0EB">Ray C Ross</option>
+          <option value="063">Raymond</option>
+          <option value="407">Red Crow</option>
+          <option value="121">Reynos</option>
+          <option value="0D8">Ricky</option>
+          <option value="003">Ridley</option>
+          <option value="0C8">Rika</option>
+          <option value="3FB">Ripple Bat</option>
+          <option value="071">Robin</option>
+          <option value="430">Robo Dwarf B</option>
+          <option value="431">Robo Dwarf R</option>
+          <option value="43D">RoboStar</option>
+          <option value="033">Roche</option>
+          <option value="43B">Rockdigger</option>
+          <option value="009">Rocky</option>
+          <option value="01B">Rolec</option>
+          <option value="412">Rolly Polly</option>
+          <option value="0C2">Romaria</option>
+          <option value="400">Rooster</option>
+          <option value="077">Rose</option>
+          <option value="437">Round Knight</option>
+          <option value="438">Round Knight</option>
+          <option value="0B6">Row</option>
+          <option value="12F">Roy</option>
+          <option value="08A">Ryan</option>
+          <option value="004">Rynka</option>
+          <option value="05B">Sakurazaki</option>
+          <option value="0C7">Santos</option>
+          <option value="057">Sarasenia</option>
+          <option value="09E">Saron</option>
+          <option value="091">Sarval</option>
+          <option value="124">Sayna</option>
+          <option value="007">Sebastian</option>
+          <option value="0AC">Sergei</option>
+          <option value="0BD">Serva</option>
+          <option value="081">Servia</option>
+          <option value="072">Sheila</option>
+          <option value="3F8">Shell Lizard</option>
+          <option value="446">Shemud</option>
+          <option value="0B4">Shin</option>
+          <option value="492">Shrine Knight</option>
+          <option value="087">Silvia</option>
+          <option value="483">Skullhead</option>
+          <option value="456">Skyfish</option>
+          <option value="486">Skypulsar</option>
+          <option value="052">Solo</option>
+          <option value="049">Sonata</option>
+          <option value="083">Sonia</option>
+          <option value="0E5">Sonny</option>
+          <option value="093">Sora</option>
+          <option value="40C">Sparrow</option>
+          <option value="413">Speckled Bug</option>
+          <option value="461">Spider</option>
+          <option value="421">Spray Snake</option>
+          <option value="462">Stag Beetle</option>
+          <option value="006">Star</option>
+          <option value="084">Startis</option>
+          <option value="126">Stefan</option>
+          <option value="107">Stein</option>
+          <option value="472">Subordinate Mage</option>
+          <option value="092">Sunset</option>
+          <option value="11D">Synelia</option>
+          <option value="416">Tall Beast</option>
+          <option value="095">Tarkin</option>
+          <option value="41B">Tawny Rat</option>
+          <option value="06A">Testa</option>
+          <option value="020">Thanos</option>
+          <option value="12B">Theresa</option>
+          <option value="429">Therosaurus</option>
+          <option value="490">Thundercorn</option>
+          <option value="088">Thyme</option>
+          <option value="068">Toma</option>
+          <option value="11E">Tony</option>
+          <option value="069">Torenia</option>
+          <option value="467">Trap Octopus</option>
+          <option value="452">Tree Frog</option>
+          <option value="473">Treeman</option>
+          <option value="485">Trent</option>
+          <option value="3ED">Tsuchinoko</option>
+          <option value="3EC">Tusky Mammoth</option>
+          <option value="417">Twin Horn</option>
+          <option value="026">Ursula</option>
+          <option value="0EE">Valkyrie</option>
+          <option value="079">Virginia</option>
+          <option value="03E">Vitas</option>
+          <option value="0A5">Vladimir</option>
+          <option value="099">Wal</option>
+          <option value="013">Walter</option>
+          <option value="070">Warc</option>
+          <option value="45B">Water Bubblefish</option>
+          <option value="45F">Water Strider</option>
+          <option value="423">Whip Turtle</option>
+          <option value="489">Whirlwind</option>
+          <option value="405">White Cat</option>
+          <option value="48D">Willow</option>
+          <option value="47C">Wind Cell</option>
+          <option value="42D">Wolf</option>
+          <option value="09A">Wyze</option>
+          <option value="129">Yack</option>
+          <option value="0A6">Yevgeni</option>
+          <option value="06F">Yuri</option>
+          <option value="0B1">Zane</option>
+          <option value="07F">Zeke</option>
+          <option value="09B">Zeranium</option>
+          <option value="432">Zerotone</option>
+          <option value="0C0">Zida</option>
+          <option value="066">Zion</option>
+        </select>
+<br>
+      <div id="scheduleOption">
+      <label>Time</label>
+      <select id="hour1">
+         <option>00</option>
+         <option>01</option>
+         <option>02</option>
+         <option>03</option>
+         <option>04</option>
+         <option>05</option>
+         <option>06</option>
+         <option>07</option>
+         <option>08</option>
+         <option>09</option>
+         <option>10</option>
+         <option>11</option>
+         <option>12</option>
+         <option>13</option>
+         <option>14</option>
+         <option>15</option>
+         <option>16</option>
+         <option>17</option>
+         <option>18</option>
+         <option>19</option>
+         <option>20</option>
+         <option>21</option>
+         <option>22</option>
+         <option>23</option>
+      </select>
+      <select id="min1">
+         <option>00</option>
+         <option>01</option>
+         <option>02</option>
+         <option>03</option>
+         <option>04</option>
+         <option>05</option>
+         <option>06</option>
+         <option>07</option>
+         <option>08</option>
+         <option>09</option>
+         <option>10</option>
+         <option>11</option>
+         <option>12</option>
+         <option>13</option>
+         <option>14</option>
+         <option>15</option>
+         <option>16</option>
+         <option>17</option>
+         <option>18</option>
+         <option>19</option>
+         <option>20</option>
+         <option>21</option>
+         <option>22</option>
+         <option>23</option>
+         <option>24</option>
+         <option>25</option>
+         <option>26</option>
+         <option>27</option>
+         <option>28</option>
+         <option>29</option>
+         <option>30</option>
+         <option>31</option>
+         <option>32</option>
+         <option>33</option>
+         <option>34</option>
+         <option>35</option>
+         <option>36</option>
+         <option>37</option>
+         <option>38</option>
+         <option>39</option>
+         <option>40</option>
+         <option>41</option>
+         <option>42</option>
+         <option>43</option>
+         <option>44</option>
+         <option>45</option>
+         <option>46</option>
+         <option>47</option>
+         <option>48</option>
+         <option>49</option>
+         <option>50</option>
+         <option>51</option>
+         <option>52</option>
+         <option>53</option>
+         <option>54</option>
+         <option>55</option>
+         <option>56</option>
+         <option>57</option>
+         <option>58</option>
+         <option>59</option>
+      </select>
+      <label id="labelloc1">Location</label>
+      <select id="location1">
+         <option>Abandoned Building</option>
+         <option>Abandoned Building 1st Floor</option>
+         <option>Abandoned Building 2nd Floor</option>
+         <option>Abandoned Building Basement</option>
+         <option>Achilles &amp; Eugene's Place</option>
+         <option>Adele's Residence</option>
+         <option>Adien Region</option>
+         <option>Aldo's Place</option>
+         <option>Algandars Castle</option>
+         <option>Alicia's Place</option>
+         <option>Alkaico General Store</option>
+         <option>Alvin's Place</option>
+         <option>Anastasia's Place</option>
+         <option>Anastasia's Room</option>
+         <option>Audience Chamber</option>
+         <option>Ballroom</option>
+         <option>Bandit Town Alley</option>
+         <option>Banquet Hall</option>
+         <option>Barn 1st Floor</option>
+         <option>Barn 2nd Floor</option>
+         <option>Basement</option>
+         <option>Beast Pit</option>
+         <option>Bedroom</option>
+         <option>Begin Eatery</option>
+         <option>Begin Eatery 2nd Floor</option>
+         <option>Belflower's Bedroom</option>
+         <option>Belflower's Room</option>
+         <option>Belmont General Store</option>
+         <option>Belmont General Store Bedroom</option>
+         <option>Black Rose General Store</option>
+         <option>BLACK SCREEN</option>
+         <option>Black Town of Night and Lust</option>
+         <option>Blacksmith Brockle</option>
+         <option>Blacksmith Dyvad</option>
+         <option>Blacksmith Gehrmann</option>
+         <option>Blade Pharmacy</option>
+         <option>Blade Pharmacy Vault Room</option>
+         <option>Bligh</option>
+         <option>Blood Orc</option>
+         <option>Blue Town of Water and Wisdom</option>
+         <option>Borgandiazo</option>
+         <option>Boulder Frog Inn</option>
+         <option>Boulder Frog Inn Hall</option>
+         <option>Boulder Frog Inn Room 101</option>
+         <option>Boulder Frog Inn Room 102</option>
+         <option>Bran &amp; Wal</option>
+         <option>Brewery</option>
+         <option>Bruce's Place</option>
+         <option>Cache Apartments 1st Floor</option>
+         <option>Cache Apartments 2nd Floor</option>
+         <option>Caesar's Place</option>
+         <option>Cafeteria</option>
+         <option>Carl's Pub</option>
+         <option>Castle Gate</option>
+         <option>Cecil's Place</option>
+         <option>Cell</option>
+         <option>Cellar</option>
+         <option>Cherie's Place</option>
+         <option>Chic Records</option>
+         <option>Chief's Room</option>
+         <option>City of Flowers</option>
+         <option>City of Flowers Meeting Area</option>
+         <option>City of White Nights</option>
+         <option>Clive's Place</option>
+         <option>Club Vampire</option>
+         <option>Club Vampire 2nd Floor</option>
+         <option>Coliseum</option>
+         <option>Coliseum Locker Room</option>
+         <option>Coliseum Passage</option>
+         <option>Conference Hall</option>
+         <option>Confessional</option>
+         <option>Corridor of Delusions</option>
+         <option>Corridor of Peril</option>
+         <option>Cosmo's Room</option>
+         <option>Cross's Room</option>
+         <option>Cuatour Region</option>
+         <option>Curtis's Place</option>
+         <option>Daniel's Place</option>
+         <option>Dan's Place</option>
+         <option>David's Place</option>
+         <option>Dawnbay Diner</option>
+         <option>Dead End Armory</option>
+         <option>Desneuf Region</option>
+         <option>Desneuf Region-Ocho Region</option>
+         <option>Dichett Region</option>
+         <option>Dichett Region-Dorse Region</option>
+         <option>Distortion Corridor</option>
+         <option>Dormitory</option>
+         <option>Dormitory Room 101</option>
+         <option>Dormitory Room 102</option>
+         <option>Dorse Region</option>
+         <option>Dorse Region-Adien Region</option>
+         <option>Dova Region</option>
+         <option>Dova Region-Adien Region</option>
+         <option>Dragon Lair Cave</option>
+         <option>Dungeon Passage</option>
+         <option>Dungeon Stairs</option>
+         <option>Dwarf Tunnel</option>
+         <option>DwarFun General Store</option>
+         <option>Dwight's Place</option>
+         <option>Dwight's Room</option>
+         <option>Dynas's Room</option>
+         <option>Dysett Region</option>
+         <option>Dysett Region-Septem Region</option>
+         <option>Earth Valley</option>
+         <option>Echidna Gate Guard Post</option>
+         <option>Edgar &amp; Cosmo's Place</option>
+         <option>Eisenhower Pharmacy</option>
+         <option>Elder's Residence</option>
+         <option>Elder's Residence 1st Floor</option>
+         <option>Elder's Residence 2nd Floor</option>
+         <option>Elder's Residence 3rd Floor</option>
+         <option>Elder's Residence Bedroom</option>
+         <option>Elder's Residence Entrance</option>
+         <option>Elder's Residence Kitchen</option>
+         <option>Elder's Residence Livingroom</option>
+         <option>Elder's Room</option>
+         <option>Elena &amp; Adina's Place</option>
+         <option>Elevator</option>
+         <option>Elf Region</option>
+         <option>Elf Region-Cuatour Region</option>
+         <option>Employee's Room</option>
+         <option>Eon's Place</option>
+         <option>Event Checking Room</option>
+         <option>Faid General Store</option>
+         <option>Faid General Store Vault Room</option>
+         <option>Fernando's Place</option>
+         <option>Fernando's Room</option>
+         <option>Fire Mountain</option>
+         <option>Fire Mountain Crater</option>
+         <option>Flau's Place</option>
+         <option>Flora &amp; Synelia's Place</option>
+         <option>Forest Metropolis 1st Floor</option>
+         <option>Forest Metropolis 2nd Floor</option>
+         <option>Forest Metropolis 3rd Floor</option>
+         <option>Fort Helencia Accessories</option>
+         <option>Fort Helencia Anteroom</option>
+         <option>Fort Helencia Courtyard</option>
+         <option>Fort Helencia Entrance</option>
+         <option>Fort Helencia Jack's Room</option>
+         <option>Fort Helencia Passage</option>
+         <option>Fort Helencia Pharmacy</option>
+         <option>Fort Helencia Shelter</option>
+         <option>Ganz's Home</option>
+         <option>Ganz's Room</option>
+         <option>Garcia</option>
+         <option>Gareth &amp; Rolec's Place</option>
+         <option>Gepald Apartments 1st Floor</option>
+         <option>Gepald Apartments 2nd Floor</option>
+         <option>Gerald's Place</option>
+         <option>Goblin Cemetery</option>
+         <option>Goblin Haven</option>
+         <option>Goblin Trio</option>
+         <option>Godwin's Place</option>
+         <option>Godwin's Room</option>
+         <option>Gold Dragon Castle</option>
+         <option>Gordon's Place</option>
+         <option>Grant's Place</option>
+         <option>Gregory's Place</option>
+         <option>Guards' Room</option>
+         <option>Heliforde Gate Guard Post</option>
+         <option>Howard &amp; Stefan</option>
+         <option>Infirmary</option>
+         <option>Information</option>
+         <option>Installation Center</option>
+         <option>Interview Room</option>
+         <option>Jack's Place</option>
+         <option>Jared's Place</option>
+         <option>Jarvis's Place</option>
+         <option>Jasne's Room</option>
+         <option>Jiorus's Bedroom</option>
+         <option>Jiorus's Closet</option>
+         <option>Jiorus's Room</option>
+         <option>Junzaburo's Room</option>
+         <option>Kitchen</option>
+         <option>Knight Meeting Room</option>
+         <option>Lantana's Place</option>
+         <option>Larks's Bedroom</option>
+         <option>Larks's Room</option>
+         <option>Leopearl Apartments 1st Floor</option>
+         <option>Leopearl Apartments 2nd Floor</option>
+         <option>Leopearl Apartments 3rd Floor</option>
+         <option>Levante General Store</option>
+         <option>Library</option>
+         <option>Lockup</option>
+         <option>Lounge</option>
+         <option>Lucian's Room</option>
+         <option>Lunbar's Place</option>
+         <option>Lupus Gate Guard Post</option>
+         <option>Lyle's Mansion</option>
+         <option>Mage Town Alley</option>
+         <option>Marke's Place</option>
+         <option>Men's Toilet</option>
+         <option>Mook</option>
+         <option>Moon Tower</option>
+         <option>Moon Tower Interior</option>
+         <option>Moon Tower Laboratory</option>
+         <option>Moon Tower Research Lab</option>
+         <option>Morfinn's Clinic</option>
+         <option>Morfinn's Clinic 2nd Floor</option>
+         <option>Morfinn's Clinic Examination Room</option>
+         <option>Morfinn's Clinic Med Storeroom</option>
+         <option>Mortal Tree Hallway</option>
+         <option>Mysterious Creatures Inn</option>
+         <option>Mysterious Creatures Inn 2nd Floor</option>
+         <option>Natalie's Room</option>
+         <option>Nocturne's Place</option>
+         <option>Nowem Region</option>
+         <option>Nowem Region-Cuatour Region</option>
+         <option>Nowem Region-Tria Region</option>
+         <option>Nuevo Village</option>
+         <option>Observatory</option>
+         <option>Ocho Region</option>
+         <option>Ocho Region-Adien Region</option>
+         <option>OK Hand Accessories</option>
+         <option>Olacion Order Chapel</option>
+         <option>Olacion Order Shrine</option>
+         <option>Orso Apartments 1st Floor</option>
+         <option>Orso Apartments 2nd Floor</option>
+         <option>Ortoroz &amp; Silvia's Place</option>
+         <option>Outside Mage Guild</option>
+         <option>Parsec's Chamber</option>
+         <option>Path of Insanity and Fanaticism</option>
+         <option>Path of Swords and Wisdom</option>
+         <option>Path of the Spider</option>
+         <option>Path of the Spider Charnel</option>
+         <option>Path of the Spider Hidden Passage</option>
+         <option>Path of the Spider Hidden Room</option>
+         <option>Path to the Beast Pit</option>
+         <option>Path to the Sun</option>
+         <option>Paul's Place</option>
+         <option>Peaceful Pony Inn</option>
+         <option>Peaceful Pony Inn 2nd Floor</option>
+         <option>Peaceful Pony Inn Diner</option>
+         <option>Peaceful Pony Inn Room 201</option>
+         <option>Peaceful Pony Inn Room 202</option>
+         <option>Peaceful Pony Inn Room 203</option>
+         <option>President's Office</option>
+         <option>President's Office - Moon Tower</option>
+         <option>Priest Guild Center</option>
+         <option>Priest Town Alley</option>
+         <option>Private House</option>
+         <option>Radiata Castle 1st Floor Hall</option>
+         <option>Radiata Castle 2nd Floor Hall</option>
+         <option>Radiata Castle 3rd Floor Hall</option>
+         <option>Radiata Castle 4th Floor Hall</option>
+         <option>Radiata Castle 5th Floor</option>
+         <option>Radiata Castle 5th Floor Hall</option>
+         <option>Radiata Castle Arena</option>
+         <option>Radiata Castle Basement</option>
+         <option>Radiata Castle Basement Hall</option>
+         <option>Radiata Castle Big Tower</option>
+         <option>Radiata Castle near Alcon Gate</option>
+         <option>Radiata Castle near Echidna Gate</option>
+         <option>Radiata Castle near Heliforde Gate</option>
+         <option>Radiata Castle near Lupus Gate</option>
+         <option>Radiata Castle North Gate</option>
+         <option>Radiata Castle Outskirts</option>
+         <option>Radiata Castle Small Tower</option>
+         <option>Radiata Castle South Gate</option>
+         <option>Radiata Castle Supply Store</option>
+         <option>Radiata Echidna Gate Entrance</option>
+         <option>Radiata Faucon Gate Entrance</option>
+         <option>Radiata Heliforde Gate Entrance</option>
+         <option>Radiata Lupus Gate Entrance</option>
+         <option>Reception</option>
+         <option>Red Lotus Metropolis</option>
+         <option>Red Lotus Metropolis 2nd Floor</option>
+         <option>Red Lotus Metropolis Party Room</option>
+         <option>Ridley's Room</option>
+         <option>Rocky's Place</option>
+         <option>Room</option>
+         <option>Room 101</option>
+         <option>Room 102</option>
+         <option>Room 103</option>
+         <option>Room 201</option>
+         <option>Room 202</option>
+         <option>Room 203</option>
+         <option>Room 301</option>
+         <option>Room 302</option>
+         <option>Room 303</option>
+         <option>Royal Elevator Lobby</option>
+         <option>Royal Family Exclusive Elevator</option>
+         <option>Rynka's Place</option>
+         <option>Sakurazaki's Room</option>
+         <option>San Patty Accessories</option>
+         <option>San Patty Accessories 2nd Floor</option>
+         <option>Sarasenia's Bedroom</option>
+         <option>Sarasenia's Room</option>
+         <option>Sarval</option>
+         <option>Sediche Region</option>
+         <option>Sediche Region-Nowem Region</option>
+         <option>Septem Cave</option>
+         <option>Septem Region</option>
+         <option>Septem Region-Adien Region</option>
+         <option>Sergei's Place</option>
+         <option>Servia's Place</option>
+         <option>Sewer</option>
+         <option>Shangri La</option>
+         <option>Shed</option>
+         <option>Shrine of Fray</option>
+         <option>Solieu Village</option>
+         <option>Solo's Place</option>
+         <option>Space of Chaos</option>
+         <option>Space of Imperium</option>
+         <option>Star Tower</option>
+         <option>Star Tower - President's Office</option>
+         <option>Star Tower Interior</option>
+         <option>Star Tower Research Lab</option>
+         <option>Star's Room</option>
+         <option>Startis &amp; Butch's Place</option>
+         <option>Storeroom</option>
+         <option>Study</option>
+         <option>Summoning Room</option>
+         <option>Swords and Silver Coins Inn</option>
+         <option>Swords and Silver Coins Inn 2nd Floor</option>
+         <option>Swords and Silver Coins Inn Room 101</option>
+         <option>Swords and Silver Coins Inn Room 201</option>
+         <option>Swords and Silver Coins Inn Room 203</option>
+         <option>Tarkin's Residence Bedroom</option>
+         <option>Tarkin's Residence Livingroom</option>
+         <option>Teagle Apartments 1st Floor</option>
+         <option>Teagle Apartments 2nd Floor</option>
+         <option>Teagle Apartments 3rd Floor</option>
+         <option>The Hecton Squad Locker Room</option>
+         <option>The Last Word Book Store</option>
+         <option>The Last Word Book Store Vault Room</option>
+         <option>The Quarto Squad Locker Room</option>
+         <option>The Quintom Squad Locker Room</option>
+         <option>The Survivor Armory</option>
+         <option>The Survivor Room</option>
+         <option>The Triton Squad Locker Room</option>
+         <option>The Vampire Casino</option>
+         <option>The Zweit Squad Locker Room</option>
+         <option>Theater Vancoor 1st Floor</option>
+         <option>Theater Vancoor 2nd Floor</option>
+         <option>Theater Vancoor 3rd Floor</option>
+         <option>Theater Vancoor 4th Floor</option>
+         <option>Theater Vancoor Basement 1st Floor</option>
+         <option>Theater Vancoor Basement 2nd Floor</option>
+         <option>Tigers Apartments 1st Floor</option>
+         <option>Tigers Apartments 2nd Floor</option>
+         <option>Toilet</option>
+         <option>Trainee's Room</option>
+         <option>Training Facility</option>
+         <option>Treasury</option>
+         <option>Tria Region</option>
+         <option>Tria Region-Dova Region</option>
+         <option>Tria Village</option>
+         <option>Triston Armory</option>
+         <option>Universal Tree Hallway</option>
+         <option>Vacant House</option>
+         <option>Vancoor Square</option>
+         <option>Vareth Magic Institute</option>
+         <option>Vareth Magic Institute 2nd Floor</option>
+         <option>Vashtel Liquor Store</option>
+         <option>Vault</option>
+         <option>Vaultroom</option>
+         <option>Verontier Armory</option>
+         <option>Verontier Armory Bedroom</option>
+         <option>Verontier Armory Storeroom</option>
+         <option>Vitas &amp; Miranda's Place</option>
+         <option>Vitas's Room</option>
+         <option>Void Community Basement</option>
+         <option>Void Community Hall</option>
+         <option>Void Community Office</option>
+         <option>Void Community The Abyss</option>
+         <option>Void Community Torture Room</option>
+         <option>Void Community Vault Room</option>
+         <option>Waiting Room</option>
+         <option>Waldo General Store</option>
+         <option>Walter &amp; Sheila's Place</option>
+         <option>Warrior Guild Facade</option>
+         <option>Warrior Guild Training Facility</option>
+         <option>Warrior Town Alley</option>
+         <option>Watchman's Room</option>
+         <option>White Town of Stars and Faith</option>
+         <option>Wind Powered Elevator</option>
+         <option>Wind Valley</option>
+         <option>Yellow Town of the Sun and Glory</option>
+         <option>Yuri's Place</option>
+         <option>Zeranium's Place</option></select>
+      <br id="lb1">
+
+   </div>
+   <button onclick="add()">Add</button>
+   <button onclick="remove()">Remove</button>
+      <button onclick="createData()">Download</button>
+      <pre id = "results"></pre>
+      </div>
+   </body>
+</html>
