@@ -72,16 +72,25 @@ function createData(){
    let imageFile = name+"_Front.png";
    let sch = "";
    //* **00:00** `Path of the Spider Charnel`\n
-   for(let i = 1; i <= scheduleAmt; i++){
+   if (scheduleAmt == 1){
         sch += "* **";
-        sch += document.getElementById("hour"+i).value;
-        sch += ":";
-        sch += document.getElementById("min"+i).value;
+        sch += "All Day";
         sch += "** `";
-        sch += document.getElementById("location"+i).value;
+        sch += document.getElementById("location1").value;
         sch += "`\n";
+   } else {
+        for(let i = 1; i <= scheduleAmt; i++){
+            sch += "* **";
+            sch += document.getElementById("hour"+i).value;
+            sch += ":";
+            sch += document.getElementById("min"+i).value;
+            sch += "** `";
+            sch += document.getElementById("location"+i).value;
+            sch += "`\n";
+        }
+ 
    }
-
+   
    let char = {name: name, id: id, img: imageFile, schedule: sch};
 
 
