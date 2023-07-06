@@ -50,20 +50,17 @@ function remove(){
     if (amt <= 1){
         return alert("Must have at least one.");
     }
-    id1 = "min" + amt;
-    id2 = "hour" + amt;
-    id3 = "location" + amt;
-    id4 = "labeltime" + amt;
-    id5 = "labelloc" + amt;
-    id6 = "lb" + amt;
-    id7 = "dataloc" + amt;
-    removeElement(id1);
-    removeElement(id2);
-    removeElement(id3);
-    removeElement(id4);
-    removeElement(id5);
-    removeElement(id6);
-    removeElement(id7);
+    let id = []
+    id.push("min" + amt);
+    id.push("hour" + amt);
+    id.push("location" + amt);
+    id.push("labeltime" + amt);
+    id.push("labelloc" + amt);
+    id.push("lb" + amt);
+    id.push("dataloc" + amt);
+    for (let i = 0; i < id.length; i++){
+        removeElement(id[i]);
+    }
     scheduleAmt--;
 }
 
