@@ -44,7 +44,9 @@ function add(){
 
 function remove(){
     scheduleElements = document.getElementById("scheduleOption");
-    amt = scheduleElements.getElementsByTagName('select').length/3;
+    amt = scheduleElements.getElementsByTagName('select').length;
+    amt += scheduleElements.getElementsByTagName('datalist').length;
+    amt /= 3;
     if (amt <= 1){
         return alert("Must have at least one.");
     }
@@ -54,12 +56,14 @@ function remove(){
     id4 = "labeltime" + amt;
     id5 = "labelloc" + amt;
     id6 = "lb" + amt;
+    id7 = "dataloc" + amt;
     removeElement(id1);
     removeElement(id2);
     removeElement(id3);
     removeElement(id4);
     removeElement(id5);
     removeElement(id6);
+    removeElement(id7);
     scheduleAmt--;
 }
 
