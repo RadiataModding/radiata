@@ -1108,13 +1108,13 @@ function stringDecoder2(text) {
                 temp = parseInt(changeEndianness2(temp), 16);
                 //temp > 0 && temp < 457 && 
                 if (temp in charDecoding) {
-                    curchar = charDecoding[temp];
+                    curchar = charDecoding2[temp];
                     if (curchar != null) {
                         res += curchar;
                         //result += charDecoding[temp];
                     }
                 } else if (temp == 32784){
-                    res += charDecoding[temp];
+                    res += charDecoding2[temp];
                 }
 
             }
@@ -3004,6 +3004,7 @@ let charDecoding = {
 }
 
 let charDecoding2 = {
+    "32784": "—",
     "1": " ",
     "10": "\n",
     "3872": "\n\n",
