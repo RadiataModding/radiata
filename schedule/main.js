@@ -1,5 +1,15 @@
 let schedule = [];
 let scheduleAmt = 1;
+document.addEventListener("DOMContentLoaded", function(event){
+  let currentA = document.getElementById('location1');
+currentA.addEventListener("keypress", function(event){
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("addEle").click();
+    }
+})
+});
+
 
 function add(){
     scheduleElements = document.getElementById("scheduleOption");
@@ -38,6 +48,14 @@ function add(){
     //previousValue3 = document.getElementById("location"+previousValue).value;
     document.getElementById("hour"+amt).value = previousValue1
     document.getElementById("min"+amt).value = previousValue2
+    let currentE = document.getElementById('location'+amt);
+    currentE.addEventListener("keypress", function(event){
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("addEle").click();
+    }
+})
+    document.getElementById('location'+amt).focus();
     //document.getElementById("location"+amt).value = previousValue3
     //scheduleElements.innerHTML += scheduleHTML;
 }
