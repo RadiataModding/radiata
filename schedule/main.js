@@ -114,8 +114,12 @@ function createData(){
    
    let char = {name: name, id: id, img: imageFile, schedule: sch};
 
-
-   downloadObjectAsJson(char, name+"-Schedule");
+   if (document.getElementById("altsched").checked){
+    downloadObjectAsJson(char, name+"-Schedule2");
+   } else {
+    downloadObjectAsJson(char, name+"-Schedule");
+   }
+   
 
 }
 
