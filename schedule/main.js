@@ -35,10 +35,10 @@ function add(){
     previousValue = amt - 1;
     previousValue1 = document.getElementById("hour"+previousValue).value;
     previousValue2 = document.getElementById("min"+previousValue).value;
-    previousValue3 = document.getElementById("location"+previousValue).value;
+    //previousValue3 = document.getElementById("location"+previousValue).value;
     document.getElementById("hour"+amt).value = previousValue1
     document.getElementById("min"+amt).value = previousValue2
-    document.getElementById("location"+amt).value = previousValue3
+    //document.getElementById("location"+amt).value = previousValue3
     //scheduleElements.innerHTML += scheduleHTML;
 }
 
