@@ -9,23 +9,18 @@ toggleChanges()
 function toggleChanges(){
   let option = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Length (Hex)\"><\/textarea>";
   let option2 = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Code\"><\/textarea>";
+  let option3 = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Length (Hex)\"><\/textarea><br><textarea id=\"text2\" style=\"width: 200px; height: 50px;\" placeholder=\"Code to run before skip\"><\/textarea>";
 $("#currentMode").change(function () {
   if ($(this).val() == 2) {
     document.getElementById('skipinsert').innerHTML = option2;
-  } else {
+  } else if ($(this).val() == 3) {
+   document.getElementById('skipinsert').innerHTML = option3;
+  }
+  else {
    document.getElementById('skipinsert').innerHTML = option;
    toggleChanges()
   }
 });
-}
-
-
-function checkSkip(){
-   if (document.getElementById("currentMode").value == 2){
-      return false
-   } else{
-      return true
-   }
 }
 
 
@@ -189,8 +184,17 @@ function buildrmf() {
 
 
 function build(){
-   if (!checkSkip()){
+   if (document.getElementById("currentMode").value == 2){
       return build2()
+   } else if (document.getElementById("currentMode").value == 3) {
+      return build3()
+   }
+   let offset = 0;
+   if(document.getElementById("slz").checked){
+      offset += 0x10;
+   }
+   if(document.getElementById("kods").checked){
+      offset += 0x24
    }
    let fade = '6701008078001310670100801E001000';
    let freeze = '230301800100000006000000010000008A000100';
@@ -205,7 +209,7 @@ function build(){
    let skip1 = '02030080';
 
 
-   let skipLength = parseInt(document.getElementById("text").value, 16) >> 2;
+   let skipLength = (parseInt(document.getElementById("text").value, 16) - offset) >> 2;
    skipLength = skipLength.toString(16).padStart(4, '0').toUpperCase();
    skipLength = changeEndianness(skipLength);
 
@@ -277,6 +281,71 @@ function build2(){
    itemSkip = itemSkip.toString(16).padStart(4, '0').toUpperCase();
    itemSkip = changeEndianness(itemSkip);
    let finalString = item1 + item2 + itemSkip + item3 + buildString + skipCode;
+   document.getElementById("code1").innerHTML = "Paste somewhere at start of event...\n" + finalString;
+   return
+}
+
+function build3(){
+   let offset = 0;
+   if(document.getElementById("slz").checked){
+      offset += 0x10;
+   }
+   if(document.getElementById("kods").checked){
+      offset += 0x24
+   }
+   let fade = '6701008078001310670100801E001000';
+   let freeze = '230301800100000006000000010000008A000100';
+   // check if want fade and/or freeze
+   let item1 = '0203008002000010ACA69D4001000000';
+   let item2 = '02010000';
+   let item3 = '0000';
+   let talk1 = '89010480';
+   let talk2 = talk.toString(16).padStart(2, 0).toUpperCase();
+   let talk3 = '0000000301000004000000';
+   let watch1 = '02030080';
+   let watch2 = '00050000000001000000';
+   let skip1 = '02030080';
+
+   let skipCode = document.getElementById("text2").value;
+   skipCode = skipCode.replace(/\s/g, '');
+
+   while (((skipCode.length / 2) % 4) != 0) {
+       skipCode += "00";
+   }
+
+   let skipCodeLength = skipCode.length / 2;
+   skipCodeLength += 0x10;
+   skipCodeLength = skipCodeLength >> 2;
+   skipCodeLength = skipCodeLength.toString(16).padStart(4, '0').toUpperCase();
+   skipCodeLength = changeEndianness(skipCodeLength);
+
+
+   let skipLength = (parseInt(document.getElementById("text").value, 16) - offset) >> 2;
+   skipLength = skipLength.toString(16).padStart(4, '0').toUpperCase();
+   skipLength = changeEndianness(skipLength);
+
+   let skip2 = skipLength
+   let skip3 = '00050000000002000000';
+
+   let buildString = '';
+
+   if(document.getElementById("freeze").checked){
+      buildString += freeze;
+   }
+   if(document.getElementById("fade").checked){
+      buildString += fade;
+   }
+   buildString += talk1 + talk2 + talk3;
+   buildString += watch1;
+   buildString += skipCodeLength;
+   buildString += watch2;
+   buildString += skipCode;
+   buildString += skip1 + skip2 + skip3;
+   let itemSkip = buildString.length / 2;
+   itemSkip = itemSkip >> 2;
+   itemSkip = itemSkip.toString(16).padStart(4, '0').toUpperCase();
+   itemSkip = changeEndianness(itemSkip);
+   let finalString = item1 + item2 + itemSkip + item3 + buildString;
    document.getElementById("code1").innerHTML = "Paste somewhere at start of event...\n" + finalString;
    return
 }
