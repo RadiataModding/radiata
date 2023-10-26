@@ -11,6 +11,7 @@ function toggleChanges(){
   let option2 = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Code\"><\/textarea>";
   let option3 = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Length (Hex)\"><\/textarea><br><textarea id=\"text2\" style=\"width: 200px; height: 50px;\" placeholder=\"Code to run before skip\"><\/textarea>";
   let option4 = "<textarea id=\"text\" style=\"width: 200px; height: 50px;\" placeholder=\"Skip Length (Hex)\"><\/textarea><br><select id = \"locid\">\r\n<\/select>\r\n";
+  let option5 = "<select id = \"locid\">\r\n<\/select>\r\n";
 $("#currentMode").change(function () {
   if ($(this).val() == 2) {
     document.getElementById('skipinsert').innerHTML = option2;
@@ -26,7 +27,17 @@ $("#currentMode").change(function () {
        opt.innerHTML = i + " - " + locations[i-1];
        select.appendChild(opt);
    }
-  }
+  } else if ($(this).val() == 5) {
+   document.getElementById('skipinsert').innerHTML = option5;
+   select = document.getElementById('locid');
+
+   for (var i = 1; i<=999; i++){
+       var opt = document.createElement('option');
+       opt.value = i;
+       opt.innerHTML = i + " - " + locations[i-1];
+       select.appendChild(opt);
+   }
+  } 
   else {
    document.getElementById('skipinsert').innerHTML = option;
    toggleChanges()
@@ -37,6 +48,7 @@ $("#currentMode").change(function () {
 
 
 let talk = 0;
+let talk2 = 0;
 
 function loadRMF() {
     //load = confirm("This will override any lines made. Continue?");
@@ -44,7 +56,12 @@ function loadRMF() {
         navigator.clipboard.readText()
             .then(text => {
                 lineArr = rmf1splitter(text);
-                buildrmf(lineArr)
+                if (document.getElementById('currentMode').value == '5'){
+                  buildrmf2(lineArr);
+                } else {
+                  buildrmf(lineArr);  
+                }
+                
             })
             .catch(err => {
                 console.error('Failed to read clipboard contents: ', err);
@@ -193,6 +210,86 @@ function buildrmf() {
     //document.getElementById("results").innerHTML = output;
 }
 
+function buildrmf2() {
+    cutsceneSkip = '1E00000001000000010000000F2500001E000E200100000002206A695F800221000000000320330B6616050107100003042064FFA8000F281F0000000E4E0100010060000000750084008B0091008800800001006B000100840081007D00800001007E007D007F00870001008A008B00930001008B008E000A00042058FFD0008F0084008B0091008800800001006B000100810094008C0088008B008E00810001007D0001007E0085009000010089008B008E00810017000F207800030000';
+    cutsceneSkip2 = '3600000001000000000000000F25000036000E200100020002206A695F800221000000000320330B66160501071000030420000088000E4E01000000400000000F24000002006A0081007D008000010064007D007F0087000000670094008C0088008B008E00810000000000';
+    cutsceneSkip = cutsceneSkip.replace(/\s/g, '');
+    check = '6A0081007D008000010064007D007F0087000000670094008C0088008B008E008100';
+    if (lineArr.length == 0) {
+        alert("Nothing added.");
+        return;
+    }
+    for (let x in lineArr){
+      if (lineArr[x].includes(check)){
+         alert("Cutscene skip text already in RMF file! Found at : 0x" + parseInt(x, 10).toString(16).padStart(2, 0).toUpperCase());
+         talk = parseInt(x, 10)
+         talk2 = talk - 1
+         document.getElementById('talkid').innerHTML = "Talk line: 0x" + talk2.toString(16).padStart(2, 0).toUpperCase() + "\n" + "Talk line 2: 0x" + talk.toString(16).padStart(2, 0).toUpperCase();
+         document.getElementById('rmf').innerHTML = "Cutscene skip already in RMF!";
+         return
+      }
+    }
+    lineArr.push(cutsceneSkip);
+    lineArr.push(cutsceneSkip2);
+    let totalSize = 0;
+    let currentLength = 0;
+    let baseLength = 48;
+    pointerArr = [];
+    baseLength += 8 * lineArr.length;
+    for (let i = 0; i < lineArr.length; i++) {
+        lineArr[i] = lineArr[i].replace(/\s/g, '');
+        if (i == 0) {
+            while (((lineArr[i].length / 2) % 4) != 0) {
+                lineArr[i] += "00";
+            }
+            currentLength = baseLength / 2;
+            totalSize += currentLength + (lineArr[0].length / 2);
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase()
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        } else {
+            while (((lineArr[i].length / 2) % 4) != 0) {
+                lineArr[i] += "00";
+            }
+            currentLength += (lineArr[i - 1].length / 2);
+            totalSize += lineArr[i].length / 2;
+            let temp = currentLength.toString(16).padStart(8, '0').toUpperCase();
+            temp = changeEndianness(temp);
+            pointerArr.push(temp);
+        }
+    }
+    totalSize = totalSize.toString(16).padStart(8, '0').toUpperCase();
+    totalSize = changeEndianness(totalSize);
+    let lineCount = lineArr.length;
+    lineCount = lineCount.toString(16).padStart(8, '0').toUpperCase();
+    lineCount = changeEndianness(lineCount);
+    let output = "52 4D 46 31 CE 00 00 00 00 00 00 00";
+    output += totalSize;
+    output += lineCount;
+    output += totalSize;
+    for (let i = 0; i < pointerArr.length; i++) {
+        output += pointerArr[i];
+    }
+    for (let i = 0; i < lineArr.length; i++) {
+        output += lineArr[i];
+    }
+    output = output.replace(/\s/g, '');
+    talk = lineArr.length - 1;
+    talk2 = lineArr.length - 2;
+    document.getElementById('talkid').innerHTML = "Talk line: 0x" + talk2.toString(16).padStart(2, 0).toUpperCase() + "\n" + "Talk line 2: 0x" + talk.toString(16).padStart(2, 0).toUpperCase();
+    document.getElementById('rmf').innerHTML = "New RMF file: \n" + output;
+    /*navigator.clipboard.writeText(output)
+        .then(() => {
+            pointerArr = [];
+            alert("Data copied to clipboard.");
+        })
+        .catch(err => {
+            pointerArr = [];
+            console.log('Error: ', err);
+        });*/
+    //document.getElementById("results").innerHTML = output;
+}
+
 
 function build(){
    if (document.getElementById("currentMode").value == 2){
@@ -201,6 +298,8 @@ function build(){
       return build3()
    } else if (document.getElementById("currentMode").value == 4) {
       return build4()
+   } else if (document.getElementById("currentMode").value == 5) {
+      return build5()
    }
    let offset = 0;
    if(document.getElementById("slz").checked){
@@ -433,4 +532,48 @@ function build4(){
    return
 }
 
+function build5(){
+   let talk1 = '89010480';
+   let talk2 = talk.toString(16).padStart(2, 0).toUpperCase();
+   let talk3 = '0000000301000004000000';
+   let talk4 = talk2.toString(16).padStart(2, 0).toUpperCase();
+   let watch1 = '02030080';
+   let watch2 = '040000050000000001000000';
+   let skip1 = '02030080';
+   let loc = parseInt(document.getElementById("locid").value, 10);
+   loc = loc.toString(16).padStart(4, '0').toUpperCase();
+   loc = changeEndianness(loc);
+   let skipCode = "67 01 00 80 3C 00 13 00 03 01 00 00 03 00 00 00 40 01 01 80";
+   skipCode += loc;
+   skipCode += "00 00 03 01 00 00 02 00 20 00 03 01 00 00 02 00 20 00 10 01 00 80 0E 01 01 00 02 03 00 80 02 00 00 01 84 12 01 00 00 00 00 00 10 01 00 80 58 12 01 00 1C 01 02 80 00 00 01 00 44 00 33 00 03 01 00 80 02 00 DA 04 03 02 00 80 07 00 00 00 00 00 0B 00 03 02 00 80 07 00 00 00 00 00 0F 00 03 02 00 00 07 00 00 00 00 00 03 00 39 00 80 80 C1 02 03 00 AC 26 00 00";
+   skipCode += loc;
+   skipCode += "00 00 67 01 00 80 3C 00 10 00 03 01 00 00 03 00 00 00";
+
+
+   skipCode = skipCode.replace(/\s/g, '');
+
+
+   let skipCodeLength = skipCode.length / 2;
+   skipCodeLength = skipCodeLength >> 2;
+   skipCodeLength = skipCodeLength.toString(16).padStart(4, '0').toUpperCase();
+   skipCodeLength = changeEndianness(skipCodeLength);
+
+
+   let skip2 = skipCodeLength
+   let skip3 = '00050000000002000000';
+
+   let buildString = '';
+
+   buildString += talk1 + talk2 + talk3;
+   buildString += talk1 + talk4 + talk3;
+   buildString += watch1;
+   buildString += watch2;
+   buildString += skip1;
+   buildString += skip2;
+   buildString += skip3;
+   buildString += skipCode;
+
+   document.getElementById("code1").innerHTML = "Paste somewhere at start of event...\n" + buildString;
+   return
+}
 let locations = ["Nuevo Village", "Septem Region-Adien Region", "Dova Region-Adien Region", "Dorse Region-Adien Region", "Ocho Region-Adien Region", "Adele's Residence", "Dorse Region-Adien Region", "Adien Region", "Area 01 Plains", "Adien Region", "Adien Region", "Dwarf Tunnel", "Dova Region", "Dova Region", "Area 02 Tunnel Worm", "Area 02 Tunnel Resting Spot", "Area 02 Singed Plains", "Area 02 Tunnel", "Area 02 Dwarf Village Square", "Earth Valley", "Elder's Residence 1st Floor", "Elder's Residence 2nd Floor", "Elder's Residence 3rd Floor", "DwarFun General Store", "Triston Armory", "Boulder Frog Inn", "Boulder Frog Inn Hall", "Boulder Frog Inn Room 101", "Boulder Frog Inn Room 102", "Vashtel Liquor Store", "Dawnbay Diner", "Treasury", "Blacksmith Dyvad", "Blacksmith Brockle", "Blacksmith Gehrmann", "Sergei's Place", "Dormitory Room 101", "Dormitory", "Dormitory Room 102", "Marke's Place", "Map Name", "ERROR", "ERROR", "ERROR", "ERROR", "Dova Region", "Dova Region", "Dova Region", "Dova Region", "ERROR", "ERROR", "ERROR", "ERROR", "Cuatour Region", "Cuatour Region", "Area 02 Plains", "Area 02 Cliff", "Area 02 Mountain Path", "Area 04 Village Square", "Cuatour Region", "Tria Village", "Tria Village", "Cuatour Region", "Tria Village", "MAP 065", "Nowem Region-Cuatour Region", "Elf Region-Cuatour Region", "Radiata Faucon Gate Entrance", "Area 04 Plains", "Elder's Residence Entrance", "Elder's Residence Kitchen", "Elder's Residence Livingroom", "Elder's Residence Bedroom", "Tarkin's Residence Livingroom", "Tarkin's Residence Bedroom", "Barn 1st Floor", "Barn 2nd Floor", "ERROR", "Dysett Region-Septem Region", "Septem Region", "Septem Cave", "Septem Cave", "Septem Cave", "Septem Cave", "Septem Cave", "Septem Region", "Septem Cave", "Septem Cave", "Septem Region", "Area 07 Cave (With water)", "Area 07 Cave (No water)", "Area 07 Cave Lake Bottom", "Area 07 Savanna", "Area 07 Cliff", "ERROR", "Septem Region", "Area 07 Castle Summoning Room", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Area 16 Cliff", "Desneuf Region", "Borgandiazo", "Borgandiazo", "Borgandiazo", "Borgandiazo", "Borgandiazo", "Borgandiazo", "Dorse Region", "Dorse Region", "Shangri La", "Shangri La", "Shangri La", "Shangri La", "Algandars Castle", "Shed", "Area 07 Castle Room", "Area 12 Jungle", "Dungeon Passage", "Dungeon Passage", "Dungeon Stairs", "Dungeon Passage", "Radiata Castle Big Tower", "Coliseum", "Radiata Castle Basement", "Guards' Room", "Guards' Room", "Guards' Room", "Radiata Castle 1st Floor Hall", "Lounge", "Radiata Castle 1st Floor Hall", "Wind Powered Elevator", "Radiata Castle 1st Floor Hall", "Information", "Men's Toilet", "Mook", "Radiata Castle 1st Floor Hall", "Radiata Castle North Gate", "Radiata Castle 2nd Floor Hall", "Employee's Room", "Employee's Room", "Kitchen", "Banquet Hall", "Library", "Radiata Castle 2nd Floor Hall", "Radiata Castle 2nd Floor Hall", "Radiata Castle 3rd Floor Hall", "Employee's Room", "Radiata Castle Exterior", "MAP 161", "Radiata Castle 3rd Floor Hall", "Trainee's Room", "Trainee's Room", "Radiata Castle Basement Hall", "Radiata Castle Small Tower", "MAP 167", "Radiata Castle 3rd Floor Hall", "Radiata Castle 4th Floor Hall", "Radiata Castle Supply Store", "Ridley's Room", "Radiata Castle 2nd Floor Hall", "Radiata Castle South Gate", "Larks's Room", "Larks's Bedroom", "Private House", "Study", "Cross's Room", "Lucian's Room", "Radiata Castle 3rd Floor Hall", "Ganz's Room", "Knight Meeting Room", "Dynas's Room", "Radiata Castle 4th Floor Hall", "Radiata Castle 4th Floor Hall", "Radiata Castle 4th Floor Hall", "Jasne's Room", "Royal Elevator Lobby", "Royal Family Exclusive Elevator", "Radiata Castle 5th Floor", "Radiata Castle 5th Floor", "Conference Hall", "Jiorus's Room", "Jiorus's Bedroom", "Jiorus's Closet", "Sarasenia's Room", "Sarasenia's Bedroom", "Belflower's Room", "Belflower's Bedroom", "Audience Chamber", "Radiata Castle 5th Floor Hall", "MAP 202", "Radiata Castle Basement Hall", "Radiata Castle Basement Hall", "Radiata Castle Basement Hall", "Radiata Castle Basement", "Radiata Castle Basement Hall", "Training Facility", "Storeroom", "Radiata Castle Basement Hall", "Waiting Room", "Waiting Room", "Waiting Room", "Waiting Room", "Sakurazaki's Room", "Junzaburo's Room", "Coliseum Passage", "Radiata Castle Basement Hall", "Storeroom", "Dichett Region", "Fire Mountain", "Parsec's Chamber", "Fire Mountain Crater", "Vaultroom", "Ballroom", "Lockup", "Lockup", "Lockup", "Area 34 Fire Mountain", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Algandars Castle", "Summoning Room", "Area 03 Boulder Plains", "Desneuf Region-Ocho Region", "Ocho Region", "Ocho Region", "Ocho Region", "City of Flowers", "Area 11 Light Elf Village", "Private House", "Private House", "City of Flowers Meeting Area", "Private House", "Elder's Residence", "Private House", "Elf Region", "Elf Region", "Elf Region", "Area 16 Orc Village Interior", "Area 16 Orc Village Outer Walls", "Area 16 Orc Village Bottom Floor Hall", "Dichett Region-Dorse Region", "Map Name", "Area 11 Forest", "Area 11 Shallow Lake", "Area 34 Cave Parsec's Room", "Area 34 Fire Mountain Cave", "Cellar", "Forest Metropolis 1st Floor", "Forest Metropolis 1st Floor", "Forest Metropolis 1st Floor", "Kitchen", "Brewery", "Forest Metropolis 2nd Floor", "Room", "Room", "Forest Metropolis 2nd Floor", "Room", "Room", "Forest Metropolis 3rd Floor", "Elder's Room", "Storeroom", "Nowem Region", "Nowem Region", "Nowem Region", "Nowem Region", "Nowem Region", "Area 09D Elf Village", "Area 09 Valley", "Area 09 Forest", "Sediche Region-Nowem Region", "Wind Valley", "Wind Valley", "Wind Valley", "Wind Valley", "Nowem Region", "Map Name", "Goblin Haven", "Sediche Region", "Sediche Region", "Sediche Region", "Sediche Region", "Sediche Region", "Sediche Region", "Goblin Haven", "Area 22B Goblin Village Square", "Area 22 Mushroom Forest (Upper Path)", "Area 22 Mushroom Forest (Path)", "Goblin Haven", "Room", "Map Name", "Fort Helencia Anteroom", "Nowem Region-Tria Region", "Tria Region", "Fort Helencia Courtyard", "Fort Helencia Accessories", "Fort Helencia Pharmacy", "Tria Region", "Tria Region", "Solieu Village", "Tria Region", "Fort Helencia Entrance", "Fort Helencia Courtyard", "Fort Helencia Anteroom", "Fort Helencia Entrance", "Fort Helencia Anteroom", "Fort Helencia Anteroom", "Fort Helencia Passage", "Fort Helencia Shelter", "Area 03 Plains", "Area 03 Village", "Area 03 In from of Boulder", "Area 03 Boulder Plains", "Area 03 Boulder Interior", "Fort Helencia Anteroom", "Fort Helencia Jack's Room", "Area 03 Grapevine", "Dorse Region", "Dorse Region", "Dorse Region", "Dorse Region", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "Goblin Cemetery", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "Area 12 Goblin Cemetery Room", "Area 12 Goblin Village Square", "Area 12 Goblin Cemetery Main Room", "Area 12 Tunnel", "Area 12 Savanna (No Fort)", "---", "Watchman's Room", "Cell", "Garcia", "Cell", "Cell", "Bran & Wal", "Cell", "Cell", "Sarval", "Bligh", "Howard & Stefan", "Cell", "Natalie's Room", "Infirmary", "Coliseum Locker Room", "Radiata Castle 2nd Floor Hall", "Radiata Castle 3rd Floor Hall", "Radiata Castle 3rd Floor Hall", "Radiata Castle Arena", "Radiata Castle Outskirts", "Dysett Region", "Dysett Region", "Gold Dragon Castle", "Gold Dragon Castle", "City of White Nights", "Area 36 Desert", "Dysett Region", "Area 13 Spiral Corridor", "City of White Nights", "Map Name", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider Charnel", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider", "Path of the Spider Hidden Room", "Path of the Spider Hidden Passage", "Path of the Spider", "Map Name", "---", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Tria Region-Dova Region", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Dwarf Tunnel", "Ganz's Home", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "ERROR", "Map Name", "Warrior Guild Training Facility", "Radiata Castle near Alcon Gate", "Radiata Castle near Echidna Gate", "Radiata Castle near Heliforde Gate", "Radiata Castle near Lupus Gate", "Sewer (1st Floor: With water)", "Sewer (1st Floor: No water)", "Sewer (2nd Floor: With water)", "Sewer (2nd Floor: No water)", "Map Name", "Radiata Lupus Gate Entrance", "Yellow Town of the Sun and Glory", "Warrior Guild facade", "Warrior Town Alley", "Theater Vancoor 1st Floor", "Interview Room", "Toilet", "Theater Vancoor 2nd Floor", "Training Facility", "The Triton Squad Locker Room", "The Quarto Squad Locker Room", "Theater Vancoor 3rd Floor", "The Zweit Squad Locker Room", "Theater Vancoor 4th Floor", "Chief's Room", "Treasury", "Theater Vancoor Basement 1st Floor", "Infirmary", "The Hecton Squad Locker Room", "The Quintom Squad Locker Room", "Theater Vancoor Basement 2nd Floor", "Cell", "Storeroom", "Star's Room", "Yellow Town of the Sun and Glory", "Swords and Silver Coins Inn", "Swords and Silver Coins Inn 2nd Floor", "Swords and Silver Coins Inn Room 201", "Swords and Silver Coins Inn Room 101", "Swords and Silver Coins Inn Room 203", "Begin Eatery", "Begin Eatery 2nd Floor", "The Survivor Armory", "San Patty Accessories", "San Patty Accessories 2nd Floor", "Lupus Gate Guard Post", "Jarvis's Place", "Tigers Apartments 1st Floor", "Yuri's Place", "Vacant House", "Tigers Apartments 2nd Floor", "Room 102", "Room 103", "Room 202", "Room 203", "The Survivor Room", "Radiata Heliforde Gate Entrance", "Radiata Heliforde Gate Entrance", "Radiata Echidna Gate Entrance", "---", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "White Town of Stars and Faith", "Morfinn's Clinic Med Storeroom", "Morfinn's Clinic", "Morfinn's Clinic Examination Room", "Morfinn's Clinic 2nd Floor", "Eisenhower Pharmacy", "Room", "The Last Word Book Store", "The Last Word Book Store Vault Room", "Waldo General Store", "Storeroom", "Peaceful Pony Inn", "Peaceful Pony Inn Diner", "MAP 573", "Peaceful Pony Inn Room 201", "Peaceful Pony Inn Room 202", "Peaceful Pony Inn Room 203", "Peaceful Pony Inn 2nd Floor", "Heliforde Gate Guard Post", "Elena & Adina's Place", "Private House", "Grant's Place", "Edgar & Cosmo's Place", "Flora & Synelia's Place", "Rocky's Place", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Olacion Order Shrine", "Olacion Order Chapel", "Anastasia's Place", "Dwight's Place", "Godwin's Place", "Fernando's Place", "Anastasia's Room", "Fernando's Room", "Dwight's Room", "Godwin's Room", "Vitas's Room", "Cosmo's Room", "Treasury", "Confessional", "Olacion Order Mortal Tree Hallway", "Olacion Order Hallway", "Confessional", "Priest Guild Center", "Reception", "Basement", "Treasury", "Priest Town Alley", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Distortion Corridor", "Path of Insanity and Fanaticism", "Distortion Corridor", "MAP 622", "Cherie's Place", "Cecil's Place", "Alvin's Place", "Abandoned Building", "Clive's Place", "Clive's Place", "Abandoned Building 1st Floor", "Abandoned Building 2nd Floor", "Abandoned Building Basement", "Distortion Corridor", "Distortion Corridor", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Path to the Beast Pit", "Olacion Order Shrine", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Shrine of Fray", "Vareth Magic Institute 2nd Floor", "Star Tower Research Lab", "Star Tower Research Lab", "Star Tower Research Lab", "Moon Tower Research Lab", "Moon Tower Research Lab", "Moon Tower Research Lab", "President's Office", "Observatory", "Cafeteria", "Infirmary", "Storeroom", "Elevator", "Star Tower", "Moon Tower", "Room 201", "Star Tower Interior", "Moon Tower Interior", "Library", "Star Tower - President's Office", "President's Office - Moon Tower", "MAP 671", "Shrine of Fray", "Shrine of Fray", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Vancoor Square", "ERROR", "Belmont General Store", "Belmont General Store Bedroom", "Verontier Armory", "Verontier Armory Bedroom", "Verontier Armory Storeroom", "Walter & Sheila's Place", "Daniel's Place", "Carl's Pub", "Dragon Lair Cave", "Dragon Lair Cave", "Distortion Corridor", "Map Name", "Map Name", "Map Name", "Map Name", "Map Name", "Map Name", "Map Name", "Map Name", "Map Name", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Path to the Sun", "---", "Gregory's Place", "Alicia's Place", "Gerald's Place", "Caesar's Place", "Dragon Lair Cave", "Space of Imperium", "Corridor of Peril", "Corridor of Peril", "Beast Pit", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Space of Chaos", "Corridor of Delusions", "Corridor of Delusions", "Map Name", "Map Name", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Lyle's Mansion", "Lyle's Mansion", "Path of Swords and Wisdom", "ERROR", "Blade Pharmacy", "Blade Pharmacy Vault Room", "Blade Pharmacy Vault Room", "Lantana's Place", "Gordon's Place", "Gareth & Rolec's Place", "David's Place", "Vitas & Miranda's Place", "Achilles & Eugene's Place", "Aldo's Place", "Paul's Place", "Bruce's Place", "Jack's Place", "Dragon Lair Cave", "Dragon Lair Cave", "Map Name", "Map Name", "Map Name", "Map Name", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "Dragon Lair Cave", "---", "---", "---", "Beast Pit", "---", "Alkaico General Store", "Storeroom", "Storeroom", "Club Vampire", "MAP 776", "Club Vampire 2nd Floor", "The Vampire Casino", "Void Community Basement", "Void Community Vault Room", "Void Community Office", "Void Community The Abyss", "MAP 783", "Void Community Torture Room", "Void Community Hall", "Servia's Place", "Bedroom", "Ortoroz & Silvia's Place", "Dan's Place", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Faid General Store", "Faid General Store Vault Room", "Vault", "Private House", "Red Lotus Metropolis Party Room", "Room", "Room", "Room", "Red Lotus Metropolis", "Red Lotus Metropolis 2nd Floor", "Room 101", "Room 102", "Room 201", "Room 202", "Gepald Apartments 1st Floor", "Gepald Apartments 2nd Floor", "Startis & Butch's Place", "Startis & Butch's Place", "Zeranium's Place", "Black Town of Night and Lust", "Bandit Town Alley", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Nocturne's Place", "Nocturne's Place", "Beast Pit", "---", "---", "---", "---", "---", "---", "---", "Beast Pit", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Beast Pit", "---", "Mysterious Creatures Inn", "Room 201", "Room 202", "Room 203", "Mysterious Creatures Inn 2nd Floor", "---", "---", "Levante General Store", "Storeroom", "Dead End Armory", "---", "---", "---", "---", "---", "---", "---", "---", "Chic Records", "---", "Beast Pit", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Beast Pit", "---", "Flau's Place", "Flau's Place", "Rynka's Place", "Rynka's Place", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Beast Pit", "---", "Lunbar's Place", "Solo's Place", "Eon's Place", "Jared's Place", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "---", "Blue Town of Water and Wisdom", "Mage Town Alley", "Blue Town of Water and Wisdom", "Outside Mage Guild", "Black Rose General Store", "Storeroom", "OK Hand Accessories", "Vault", "Teagle Apartments 1st Floor", "Room 101", "Room 102", "Room 103", "Teagle Apartments 2nd Floor", "Room 201", "Room 202", "Room 203", "Teagle Apartments 3rd Floor", "Room 301", "Room 302", "Room 303", "Leopearl Apartments 1st Floor", "Room 101", "Room 102", "Room 103", "Leopearl Apartments 2nd Floor", "Room 201", "Room 202", "Room 203", "Leopearl Apartments 3rd Floor", "Room 301", "Room 302", "Room 303", "Orso Apartments 1st Floor", "Room 103", "Room 102", "Room 101", "Orso Apartments 2nd Floor", "Room 203", "Room 202", "Room 201", "Curtis's Place", "Cache Apartments 1st Floor", "Room 101", "Room 102", "Room 103", "Cache Apartments 2nd Floor", "Room 203", "Room 202", "Moon Tower Laboratory", "Vareth Magic Institute", "Echidna Gate Guard Post", "---", "MAP 990", "Installation Center", "---", "---", "Event Checking Room", "Black Screen/Scenery", "ERROR", "ERROR", "ERROR", "ERROR"];
