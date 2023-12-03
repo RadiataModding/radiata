@@ -50,7 +50,7 @@ function startConvert() {
             let textArr = curtext.split(/\n/);
             for (let i = 0; i < textArr.length; i++) {
                 document.getElementById("results").innerHTML += "\n";
-                document.getElementById("results").innerHTML += "Line " + (i + 1) + ":";
+                document.getElementById("results").innerHTML += "Line " + (i) + " (Hex: " + i.toString(16).toUpperCase().padStart(2,'0') +") :";
                 document.getElementById("results").innerHTML += "\n";
                 document.getElementById("results").innerHTML += posCalculator(textArr[i]);
                 document.getElementById("results").innerHTML += "\n";
@@ -974,8 +974,7 @@ function linesProcess(text) {
     }
 
     for (let i = 0; i < rmfArray.length; i++) {
-        result += "<font color =red>Line " + (i+1) + ":</font>\n\n";
-
+        result += "<font color =red>Line " + (i) + " (Hex: " + i.toString(16).toUpperCase().padStart(2,'0') +"):</font>\n\n";
         if (rmfArray[i].includes('0E4E')){
             textAmt = parseInt(changeEndianness2(rmfArray[i].substring(0, 8)), 16);
             charAmt = parseInt(changeEndianness2(rmfArray[i].substring(8, 16)), 16);
