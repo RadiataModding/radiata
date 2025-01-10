@@ -1,0 +1,24 @@
+body {
+    background-color: #f4f4f4;
+}
+
+#game-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px;
+}
+#result {
+    margin-bottom: 20px;
+}
+#image {
+    width: 400px;
+    height: 400px;
+    background-color: none;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
