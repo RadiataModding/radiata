@@ -91,19 +91,21 @@ function showResult(message, color) {
 
 function loadNextImage() {
     if (images.length === 0 && skippedImages.length === 0) {
-        for (let i = 0; i <= timeout.length; i++) {
-            clearTimeout(timeout[i]);
+        if (!gameOver){
+            for (let i = 0; i <= timeout.length; i++) {
+                clearTimeout(timeout[i]);
+            }
+            
+            resultElement.textContent = `Game Over! You've guessed ${correctCount}/${correctCount + incorrectCount} characters correctly. Refresh to start over.`;
+            if (correctCount > incorrectCount){
+                resultElement.className = `alert alert-success`;
+            } else {
+                resultElement.className = `alert alert-danger`;
+            }
+            remainElement.textContent = `0 remaining`;
+            gameOver = true;
+            stopStopwatch();
         }
-        
-        resultElement.textContent = `Game Over! You've guessed ${correctCount}/${correctCount + incorrectCount} characters correctly. Refresh to start over.`;
-        if (correctCount > incorrectCount){
-            resultElement.className = `alert alert-success`;
-        } else {
-            resultElement.className = `alert alert-danger`;
-        }
-        remainElement.textContent = `0 remaining`;
-        gameOver = true;
-        stopStopwatch();
         return;
     }
 
@@ -137,26 +139,29 @@ function loadNextImage() {
 
 
 function handleSubmit() {
-    const selectedOption = dropdownElement.value;
-    if (!selectedOption) {
-        showResult("Please select an option!", "text-danger");
-        return;
-    }
-    for (let i = 0; i <= timeout.length; i++) {
-        clearTimeout(timeout[i]);
-    }
+    if (!gameOver){
 
-    if (selectedOption === currentAnswer) {
-        correctCount++;
-        showResult(`Correct! The answer was ${currentAnswer}.`, "alert-success");
-    } else {
-        incorrectCount++;
-        showResult(`Incorrect! The answer was ${currentAnswer}.`, "alert-danger");
+        const selectedOption = dropdownElement.value;
+        if (!selectedOption) {
+            showResult("Please select an option!", "text-danger");
+            return;
+        }
+        for (let i = 0; i <= timeout.length; i++) {
+            clearTimeout(timeout[i]);
+        }
+
+        if (selectedOption === currentAnswer) {
+            correctCount++;
+            showResult(`Correct! The answer was ${currentAnswer}.`, "alert-success");
+        } else {
+            incorrectCount++;
+            showResult(`Incorrect! The answer was ${currentAnswer}.`, "alert-danger");
+        }
+        
+        updateStats();
+        loadNextImage();
+        updateReamin();
     }
-    
-    updateStats();
-    loadNextImage();
-    updateReamin();
 }
 
 function handleSkip() {
