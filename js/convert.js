@@ -1057,15 +1057,15 @@ function linesProcess(text) {
                     if (nameMode == 1 && charSpeakId != 0) {
                         speakName = charSpeak + ":\n\n";
                         //speakName = speakName.toUpperCase();
-                        result += "<font color=blue>" + speakName + "</font>";
+                        result += "<font color=lightblue>" + speakName + "</font>";
                     } else if (nameMode == 2 && charSpeakId != 0){
                         speakName = "(" + charSpeak + ") " + customName[nameCheck] + ":\n\n";
                         //speakName = speakName.toUpperCase();
-                        result += "<font color=blue>" + speakName + "</font>";
+                        result += "<font color=lightblue>" + speakName + "</font>";
                     } else if ((nameMode == 5 && charSpeakId != 0) || (nameMode == 6 && charSpeakId != 0)){
                         speakName = "(" + charSpeak + ") ???:\n\n";
                         //speakName = speakName.toUpperCase();
-                        result += "<font color=blue>" + speakName + "</font>";
+                        result += "<font color=lightblue>" + speakName + "</font>";
                     }
 
                     currentText = '';

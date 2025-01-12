@@ -86,17 +86,24 @@ function download(){
    let bgmCheck = false;
 
 
-   if (document.getElementById('bgm').value != '00'){
+   if (document.getElementById('bgm').value != 'FFFF'){
       bgmCheck = true;
       count++;
    }
 
-   if (document.getElementById('arena').value != '00'){
+   if (document.getElementById('arena').value != 'FFFF'){
       arenaCheck = true;
       count++;
    }
-
-   let pnach = 'comment=Radiata Stories Battle Creator by: Radiata - https://www.youtube.com/c/Radiata\n\n';
+   let pnach = "";
+   
+   if(!document.getElementById('legacy').checked){
+      pnach += "[Battle"+ "\\Custom Battle]\n";
+      pnach += "author=@Radiata\n";
+      pnach += "description=Custom battle. Initiate by doing the first 'Defeat Enemy' battle in the training dummy.\n"
+   } else {
+      pnach = 'comment=Radiata Stories Battle Creator by: @Radiata - https://www.youtube.com/@Radiata\n\n';
+   }
    pnach += 'patch=1,EE,E0' + count.toString(16).padStart(2, '0').toUpperCase() + '0473,extended,0037FB94\n';
    count--;
    pnach += 'patch=1,EE,E0' + count.toString(16).padStart(2, '0').toUpperCase() + '00A0,extended,0037FB9C\n';
@@ -144,7 +151,7 @@ function download(){
 
    let a = document.createElement('a');
    a.href = "data:application/octet-stream,"+encodeURIComponent(pnach);
-   a.download = '47B9B2FD.pnach';
+   a.download = '47B9B2FD - Battle.pnach';
    a.click();
    document.getElementById("results").innerHTML = "Downloaded. Data has been cleared.";
    battles = [];
